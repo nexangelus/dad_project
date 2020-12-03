@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,15 +18,10 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('login',                [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
 
-Route::get('departments',           [DepartmentController::class, 'index']);
 
-Route::get('users',                 [UserController::class, 'index']);
-Route::get('users/emailavailable',  [UserController::class, 'emailAvailable']);
-Route::get('users/{user}',          [UserController::class, 'show']);
-Route::post('users',                [UserController::class, 'store']);
-Route::put('users/{user}',          [UserController::class, 'update']);
-Route::delete('users/{user}',       [UserController::class, 'destroy']);
+
+Route::middleware('auth:sanctum')->get('test', [UserController::class, 'test']);
+Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']);

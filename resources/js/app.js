@@ -2,34 +2,26 @@ require('./bootstrap')
 
 window.Vue = require('vue')
 
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
+
+import LoginComponent from './components/login'
+
+//Vue.component('users', UsersComponent);
+
+const routes = [
+    {path: '/login', component: LoginComponent},
+];
+
+const router = new VueRouter({routes})
+
 const app = new Vue({
     el: '#app',
-    data: {
-        title: 'List Users',
-        editingUser: false,
-        showSuccess: false,
-        showFailure: false,
-        successMessage: '',
-        failMessage: '',
-        currentUser: {},
-        users: [],
-        departments: []
-    },
-    methods: {
-        editUser: function (user) {
-
-        },
-        deleteUser: function (user) {
-
-        },
-        saveUser: function () {
-
-        },
-        cancelEdit: function () {
-
-        }
-    },
-    mounted () {
+    router,
+    data: {},
+    methods: {},
+    mounted() {
 
     }
 })
