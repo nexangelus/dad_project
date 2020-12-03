@@ -28,8 +28,20 @@
                 v-on:click.prevent="login"
             >Login</a>
         </div>
-
-        <a href="#" @click.prevent="myself">Myself</a>
+        <div class="temporary-login">
+            <p>Managers:
+                <a class="btn btn-outline-success" v-for="n in 3" v-on:click.prevent="log(`manager_${n}`)">{{ n }}</a>
+            </p>
+            <p>Cook:
+                <a class="btn btn-outline-success" v-for="n in 6" v-on:click.prevent="log(`cook_${n}`)">{{ n }}</a>
+            </p>
+            <p>Delivery:
+                <a class="btn btn-outline-success" v-for="n in 12" v-on:click.prevent="log(`deliveryman_${n}`)">{{ n }}</a>
+            </p>
+            <p>Customer:
+                <a class="btn btn-outline-success" v-for="n in 10" v-on:click.prevent="log(`customer_${n}`)">{{ n }}</a>
+            </p>
+        </div>
     </div>
 </template>
 <script>
@@ -46,24 +58,27 @@ export default {
         login() {
             axios.get('/sanctum/csrf-cookie').then(response => {
                 axios.post('/api/login', this.credentials).then(response => {
-                    console.log('User has logged in')
-                    console.dir(response.data)
-
+                    Vue.toasted.success(`Logged in successfully: ${response.data.name}`)
+                    // TODO Redirect to other page
+                }).catch(error => {
+                    Vue.toasted.error(error.response.data.message)
                 })
-                    .catch(error => {
-                        console.log('Invalid Authentication')
-                    })
             })
         },
+        log(user) {
+            this.credentials.email = `${user}@mail.pt`
+            this.credentials.password = "123"
+            this.login()
+        }
+        /*,
         myself() {
             axios.get('/api/users/me').then(response => {
                 console.log('User currently logged:')
                 console.dir(response.data)
+            }).catch(error => {
+                console.log('Invalid Request')
             })
-                .catch(error => {
-                    console.log('Invalid Request')
-                })
-        }
+        }*/
     }
 }
 </script>
