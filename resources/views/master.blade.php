@@ -9,11 +9,15 @@
         <!-- Latest compiled and minified CSS & JS -->
         <link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
         @yield('extrastyles')
-        </head>
-        <body>
-        <div class="container" id="app">
-            @yield('content')
+    </head>
+    <body>
+        <div id="app">
+            @yield('navbar')
+            <div class="container">
+                @yield('content')
+            </div>
         </div>
+
      @yield('pagescript')
     </body>
 </html>

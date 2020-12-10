@@ -2,8 +2,11 @@
 
 @section('title', 'Vue.js App')
 
-@section('content')
+@section('navbar')
+    <navbar-component></navbar-component>
+@endsection
 
+@section('content')
     <router-view></router-view>
 
 @endsection
