@@ -2,8 +2,10 @@ require('./bootstrap')
 
 window.Vue = require('vue')
 
+import Toasted from 'vue-toasted';
 import VueRouter from 'vue-router';
 
+Vue.use(Toasted, {duration: 3000})
 Vue.use(VueRouter);
 
 import LoginComponent from './components/login'
