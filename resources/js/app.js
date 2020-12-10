@@ -15,7 +15,7 @@ import IndexPage from './pages/index'
 //Vue.component('users', UsersComponent);
 
 const routes = [
-    {path: '/login', component: LoginComponent},
+    {name: 'Login', path: '/login', component: LoginComponent},
     {path: '/', component: IndexPage},
 ];
 

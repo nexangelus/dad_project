@@ -13,13 +13,31 @@
                     <a class="nav-link" href="#">Link</a>
                 </li>
             </ul>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <router-link class="nav-link" to="Login">Login</router-link>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="" @click.prevent="logout()">Logout</a>
+                </li>
+            </ul>
+
         </div>
     </nav>
 </template>
 
 <script>
 export default {
-name: "navbar"
+    name: "navbar",
+    methods: {
+        logout() {
+            axios.post('/api/logout', this.credentials).then(response => {
+                Vue.toasted.success(`Logged in successfully: ${response.data.name}`)
+            }).catch(error => {
+                Vue.toasted.error(error.response.data.message)
+            })
+        },
+    }
 }
 </script>
 
