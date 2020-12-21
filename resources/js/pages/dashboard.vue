@@ -1,10 +1,12 @@
 <template>
-    <div>teste: {{test.name}}</div>
+    <CookDashboard/>
 </template>
 
 <script>
+import CookDashboard from "../components/dashboard/cook";
 export default {
     name: "dashboard",
+    components: {CookDashboard},
     auth: {
         required: true
     },
