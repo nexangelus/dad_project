@@ -32,7 +32,7 @@ export default {
     methods: {
         logout() {
             axios.post('/api/logout', this.credentials).then(response => {
-                Vue.toasted.success(`Logged out successfully: ${response.data.name}`)
+                Vue.toasted.success(`${response.data.msg}`)
             }).catch(error => {
                 Vue.toasted.error(error.response.data.message)
             })
