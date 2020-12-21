@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserRequest extends FormRequest
@@ -25,10 +26,12 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required|regex:/^[A-Za-záàâãéèêíóôõúçÁÀÂÃÉÈÍÓÔÕÚÇ ]+$/',
-            'email' => 'required|email|unique:users,email,' . $this->user->id,
-            'password' => 'nullable|string|min:6|confirmed',
-            'age' => 'required|integer|min:18|max:75',
-            'department_id' => 'required|integer',
+            'email' => 'required|email|unique:users,email,'.$this->id,
+            'type' => 'required|in:EC,EM,ED,C',
+
+            'address' => 'required_if:type,C',
+            'phone' => ['required_if:type,C', new PhoneNumber],
+            'nif' => 'integer|digits:9'
         ];
     }
 }

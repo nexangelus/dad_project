@@ -9,11 +9,14 @@ use App\Http\Resources\User as UserResource;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
 
     public function test() {
-        return User::all();
+        $a = User::find(5);
+        return new UserResource($a);
     }
 
     public function register(StoreUserRequest $request) {
@@ -41,7 +44,39 @@ class UserController extends Controller {
     }
 
     public function me(Request $request) {
-        return $request->user();
-        // Alternative: return Auth::user();
+        return new UserResource($request->user());
+    }
+
+    public function changePassword(Request $request) {
+        $user = $request->user();
+        $error = ["message" => "The given data was invalid", "errors" => []];
+        if(!Hash::check($request->old, $user->password)) {
+            $error["errors"]["old"] = ["The old password is incorrect."];
+        } else if($request->new1 != $request->new2) {
+            $error["errors"]["new"] = ["The new passwords do not match."];
+        } else if (strlen($request->new1) < 3) {
+            $error["errors"]["new"] = ["The password must be at least 3 characters."];
+        } else {
+            $user->password = bcrypt($request->new1);
+            $user->save();
+            return ["status" => "OK"];
+        }
+
+        return response($error, 422);
+
+    }
+
+    public function update(UpdateUserRequest $request) {
+        $user = $request->user();
+        $user->fill($request->validated());
+        $user->save();
+
+        if($user->type == "C") {
+            $customer = Customer::find($user->id);
+            $customer->fill($request->validated());
+            $customer->save();
+        }
+
+        return new UserResource($request->user());
     }
 }

@@ -22,8 +22,11 @@ use App\Http\Controllers\Api\UserController;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
 Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
+
 Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']);
-Route::middleware('auth:sanctum')->post('user/photo', [UserController::class, 'uploadPhoto']);
+Route::middleware('auth:sanctum')->post('users/photo', [UserController::class, 'uploadPhoto']);
+Route::middleware('auth:sanctum')->put('users/password', [UserController::class, 'changePassword']);
+Route::middleware('auth:sanctum')->put('users', [UserController::class, 'update']);
 
 
 Route::get('test', [UserController::class, 'test']);

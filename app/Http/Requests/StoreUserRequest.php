@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUserRequest extends FormRequest
@@ -28,7 +29,7 @@ class StoreUserRequest extends FormRequest
             'email' => 'required|email|unique:users',
             'password' => 'required|min:3',
             'address' => 'required',
-            'phone' => 'required',
+            'phone' => ['required', new PhoneNumber],
             'nif' => 'integer|digits:9'
         ];
     }

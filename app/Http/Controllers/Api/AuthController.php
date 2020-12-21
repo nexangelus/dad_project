@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User as UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +15,7 @@ class AuthController extends Controller {
             if($user['blocked']) {
                 return response()->json(['message' => 'Forbidden: Account is blocked.'], 403);
             }
-            return Auth::user();
+            return new UserResource(Auth::user());
         } else {
             return response()->json(['message' => 'Invalid Credentials'], 401);
         }

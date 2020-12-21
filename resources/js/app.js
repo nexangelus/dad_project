@@ -11,9 +11,7 @@ Vue.use(VueRouter);
 
 import NavbarComponent from './components/navbar'
 
-import routes from './routes';
-
-const router = new VueRouter({routes})
+const router = new VueRouter({routes: require('./routes').default})
 
 router.beforeEach((to, from, next) => {
     if(to.matched && to.matched[0] && to.matched[0].components.default.auth) {
