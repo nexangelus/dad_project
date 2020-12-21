@@ -44,6 +44,9 @@
 </template>
 <script>
 export default {
+    auth: {
+        required: false
+    },
     data: function () {
         return {
             credentials: {
@@ -56,6 +59,7 @@ export default {
         login() {
             axios.get('/sanctum/csrf-cookie').then(response => {
                 axios.post('/api/login', this.credentials).then(response => {
+                    this.$store.commit('setUser', response.data);
                     Vue.toasted.success(`Logged in successfully: ${response.data.name}`)
                     this.$router.push('dashboard')
                 }).catch(error => {

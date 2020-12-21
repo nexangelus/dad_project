@@ -1,17 +1,22 @@
 <template>
     <div class="row justify-content-center">
-        <div class="col-4 text-center"><h1>Welcome</h1><h2>to</h2><h1>Food@Home</h1></div>
+        <div class="col-4 text-center"><h1>Welcome</h1>
+            <h2>to</h2>
+            <h1>Food@Home</h1></div>
     </div>
 </template>
 
 <script>
 export default {
-name: "index",
+    auth: {
+        required: false
+    },
+    name: "index",
 }
 </script>
 
 <style scoped>
-.row{
+.row {
     background-image: url('../../../public/img/jakub-kapusnak-sDbj1dFlFPU-unsplash.jpg');
     background-position: center;
     background-repeat: no-repeat;
@@ -22,9 +27,11 @@ name: "index",
     left: 0;
     margin: 0;
 }
-.col-4{
+
+.col-4 {
     padding-top: 15%;
 }
+
 @keyframes appear {
     0% {
         opacity: 0;

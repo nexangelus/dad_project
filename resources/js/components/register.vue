@@ -49,6 +49,9 @@
 
 <script>
 export default {
+    auth: {
+        required: false
+    },
     data: function () {
         return {
             user: {

@@ -1,27 +1,32 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <router-link class="navbar-brand" to="/">Food@Home</router-link>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">Food@Home</a>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+        <div class="collapse navbar-collapse" id="mainNavbar"> <!-- LIMIT OF 10 ITEMS IN THIS MENU -->
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0 navbar-borders">
+                <li class="nav-item" v-if="$store.state.user">
+                    <router-link class="nav-link" to="dashboard">Dashboard</router-link>
                 </li>
             </ul>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <router-link class="nav-link" to="Login">Login</router-link>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="" @click.prevent="logout()">Logout</a>
-                </li>
-            </ul>
-
+            <div class="my-2 my-lg-0 navbar-borders">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0 navbar-borders">
+                    <li class="nav-item dropdown" v-if="$store.state.user">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Profile
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <router-link class="dropdown-item" to="customer/list">My Profile</router-link>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" @click.prevent="logout()" href="#">Logout</a>
+                        </div>
+                    </li>
+                    <li class="nav-item" v-else>
+                        <router-link class="nav-link" to="login">Login</router-link>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 </template>
@@ -32,6 +37,7 @@ export default {
     methods: {
         logout() {
             axios.post('/api/logout', this.credentials).then(response => {
+                this.$store.commit("clearUser");
                 Vue.toasted.success(`${response.data.msg}`)
             }).catch(error => {
                 Vue.toasted.error(error.response.data.message)
@@ -42,4 +48,8 @@ export default {
 </script>
 
 <style scoped>
+.navbar-borders {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
 </style>
