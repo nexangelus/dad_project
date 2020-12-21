@@ -94,6 +94,7 @@ export default {
         },
         finishedRegister(user) {
             Vue.toasted.success(`Logged in successfully: ${user.name}`)
+            this.$router.push('dashboard')
         }
     }
 }

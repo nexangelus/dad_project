@@ -57,7 +57,7 @@ export default {
             axios.get('/sanctum/csrf-cookie').then(response => {
                 axios.post('/api/login', this.credentials).then(response => {
                     Vue.toasted.success(`Logged in successfully: ${response.data.name}`)
-                    // TODO Redirect to other page
+                    this.$router.push('dashboard')
                 }).catch(error => {
                     Vue.toasted.error(error.response.data.message)
                 })
