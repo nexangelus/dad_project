@@ -18,10 +18,14 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
-Route::post('login',                [AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [UserController::class, 'register']);
+
 Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
 
 
 
-Route::middleware('auth:sanctum')->get('test', [UserController::class, 'test']);
+Route::get('test', [UserController::class, 'test']);
 Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']);
+//Route::middleware('auth:sanctum')->put('users/photo', [UserController::class, 'uploadPhoto']);
+Route::post('user/photo', [UserController::class, 'uploadPhoto']);

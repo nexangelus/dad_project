@@ -1,6 +1,7 @@
 <template>
     <div class="jumbotron">
         <h2>Login</h2>
+        <router-link to="/register">Create an account</router-link>
         <div class="form-group">
             <label for="inputEmail">Email</label>
             <input
@@ -23,10 +24,7 @@
             />
         </div>
         <div class="form-group">
-            <a
-                class="btn btn-default"
-                v-on:click.prevent="login"
-            >Login</a>
+            <a class="btn btn-default" v-on:click.prevent="login">Login</a>
         </div>
         <div class="temporary-login">
             <p>Managers:
