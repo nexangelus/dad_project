@@ -1,18 +1,11 @@
-import IndexPage from "./pages/index";
-
-import LoginComponent from "./components/login";
-import RegisterComponent from "./components/register";
-
-import DashboardPage from "./pages/dashboard";
-
-
-
+//import IndexPage from "/pages/index";
 
 export default [
-    {path: '/', component: IndexPage},
+    {name: 'main', path: '/', component: require('./pages/index').default},
 
-    {name: 'login', path: '/login', component: LoginComponent},
-    {name: 'register', path: '/register', component: RegisterComponent},
+    {name: 'login', path: '/login', component: require('./pages/login').default},
+    {name: 'register', path: '/register', component: require('./pages/register').default},
 
-    {name: 'dashboard', path: '/dashboard', component: DashboardPage},
+    {name: 'dashboard', path: '/dashboard', component: require('./pages/dashboard').default},
+    {name: 'profile', path: '/profile', component: require('./pages/profile').default}
 ];

@@ -54,13 +54,7 @@ export default {
     },
     data: function () {
         return {
-            user: {
-                address: "123",
-                email: "asda@aasd",
-                name: "aasd",
-                password: "asd",
-                phone: "123123123"
-            },
+            user: {},
             errors: [],
             file: null,
         }
@@ -75,6 +69,7 @@ export default {
 
             axios.post('/api/register', this.user).then(r => {
                 axios.post('/api/login', {email: this.user.email, password: this.user.password}).then(response => {
+                    this.$store.commit('setUser', response.data);
                     if(this.file) {
                         let formData = new FormData();
                         formData.append("file", this.file)
@@ -86,7 +81,6 @@ export default {
                     }
                 })
                 this.errors = [];
-                console.log(r);
             }).catch(error => {
                 this.errors = error.response.data.errors;
                 Vue.toasted.error(error.response.data.message)
