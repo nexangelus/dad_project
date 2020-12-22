@@ -2,12 +2,14 @@ require('./bootstrap')
 
 window.Vue = require('vue')
 
+
 import Toasted from 'vue-toasted';
 import VueRouter from 'vue-router';
 import store from './stores/global-store';
 
 Vue.use(Toasted, {duration: 3000})
 Vue.use(VueRouter);
+Vue.use(require('vue-moment'));
 
 import NavbarComponent from './components/navbar'
 

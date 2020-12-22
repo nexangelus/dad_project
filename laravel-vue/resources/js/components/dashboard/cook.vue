@@ -10,19 +10,19 @@
                 </tr>
                 <tr>
                     <th scope="row">Costumer Name</th>
-                    <td>{{ order.costumerName }}</td>
+                    <td>{{ order.customer_id }}</td>
                 </tr>
                 <tr>
                     <th scope="row">Started at</th>
-                    <td>moment</td>
-                </tr>
-                <tr>
-                    <th scope="row">Time since started preparing</th>
-                    <td>moment</td>
+                    <td>{{ order.created_at | moment("h:mm:ss ,dddd, MMMM Do YYYY") }}</td>
                 </tr>
                 <tr>
                     <th scope="row">Costumer Notes</th>
                     <td>{{ order.notes }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Time since started preparing</th>
+                    <td>{{ time }}</td>
                 </tr>
                 <tr>
                     <th scope="row">Order Items</th>
@@ -42,14 +42,11 @@
                         </table>
                     </td>
                 </tr>
-
-
-
                 </tbody>
             </table>
             <a href="#" class="btn btn-primary">Button</a>
         </div>
-        <div class="card-body text-center"" v-else> <!-- if order exits  -->
+        <div class="card-body text-center" v-else> <!-- if order exits  -->
             <h2 class="card-title">Order not assigned</h2>
             <p class="card-text">Waiting for order to be assign.</p>
             <a href="#" class="btn btn-primary">Button</a>
@@ -62,9 +59,32 @@ export default {
     name: "cookDashboard",
     data: function () {
         return {
-            order: {}
+            order: {},
+            time: null,
         }
     },
+    mounted() {
+        axios.get('/api/cook/work', this.credentials).then(response => {
+            console.log(response)
+            this.time = new Date() //response.data.current_status_at
+            this.order = response.data
+            this.teste = this.$moment(this.time).fromNow()
+        })
+        this.timer()
+        //TODO get order items
+    },
+    methods: {
+        timer(){
+            this.$moment.relativeTimeThreshold('s');
+            this.teste = this.$moment(this.time).fromNow();
+            this.teste2 = this.teste.format('dddd, MMMM Do YYYY, h:mm:ss a');
+            //TODO formatar timer para mostrar quanto tempo começou  1 min, 37 secs ago
+            setTimeout(()=>{
+                 this.timer()
+            },1000)
+        }
+    }
+
 }
 </script>
 

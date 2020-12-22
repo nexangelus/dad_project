@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,9 @@ Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']
 Route::middleware('auth:sanctum')->post('users/photo', [UserController::class, 'uploadPhoto']);
 Route::middleware('auth:sanctum')->put('users/password', [UserController::class, 'changePassword']);
 Route::middleware('auth:sanctum')->put('users', [UserController::class, 'update']);
+
+//Cook
+Route::middleware('auth:sanctum')->get('cook/work', [CookController::class, 'getWorkToDo']);
 
 
 Route::get('test', [UserController::class, 'test']);

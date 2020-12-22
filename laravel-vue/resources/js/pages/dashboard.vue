@@ -1,5 +1,5 @@
 <template>
-    <CookDashboard/>
+    <CookDashboard v-if="user.type == 'EC'"/>
 </template>
 
 <script>
@@ -16,7 +16,7 @@ export default {
         }
     },
     computed: {
-        test() {
+        user() {
             return this.$store.state.user || {};
         }
     },
