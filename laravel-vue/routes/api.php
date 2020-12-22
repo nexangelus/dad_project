@@ -19,7 +19,7 @@ use App\Http\Controllers\Api\CookController;
 |
 */
 
-//User
+//region User
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
 Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
@@ -28,10 +28,10 @@ Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']
 Route::middleware('auth:sanctum')->post('users/photo', [UserController::class, 'uploadPhoto']);
 Route::middleware('auth:sanctum')->put('users/password', [UserController::class, 'changePassword']);
 Route::middleware('auth:sanctum')->put('users', [UserController::class, 'update']);
-
-//Cook
+//endregion
+//region Cook
 Route::middleware('auth:sanctum')->get('cook/work', [CookController::class, 'getWorkToDo']);
-
+//endregion
 
 Route::get('test', [UserController::class, 'test']);
 
