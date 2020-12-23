@@ -2,22 +2,24 @@ require('./bootstrap')
 
 window.Vue = require('vue')
 
-
 import Toasted from 'vue-toasted';
-
-Vue.use(Toasted, {duration: 3000})
-
 import VueRouter from 'vue-router';
 import store from './stores/global-store';
+import VueSocketIO from "vue-socket.io";
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+
+Vue.use(Toasted, {duration: 3000})
 
 Vue.use(VueRouter);
 Vue.use(require('vue-moment'));
 
-import VueSocketIO from "vue-socket.io";
 Vue.use(new VueSocketIO({
     debug: true,
     connection: require('./../../config').default.WEBSOCKET_URL
 }))
+
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 
 import NavbarComponent from './components/navbar'
 
@@ -75,8 +77,6 @@ const app = new Vue({
                     axios.post('/api/users/socketID', {"socketID": this.$socket.id})
                 }
             });
-            console.log(this.$store.state.user);
-            console.error("CONNECTED SOCKET", this.$socket.id);
         },
         connect_error(e) {
             this.$toasted.error("Could not connect to Socket Server, trying again..", {duration: 1000})

@@ -109,7 +109,7 @@ export default {
         }
     },
     methods: {
-        save() {
+        save() { // TODO client side form validation
             this.$emit("finish")
         },
         fileChanged(e) {

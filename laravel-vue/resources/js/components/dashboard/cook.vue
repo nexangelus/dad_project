@@ -22,7 +22,7 @@
                 </tr>
                 <tr>
                     <th scope="row">Time since started preparing</th>
-                    <td>{{ time }}</td>
+                    <td><time-since :date="+this.$moment(order.current_status_at)"></time-since></td>
                 </tr>
                 <tr>
                     <th scope="row">Order Items</th>
@@ -51,8 +51,10 @@
 </template>
 
 <script>
+import TimeSince from "../timeSince";
 export default {
     name: "cookDashboard",
+    components: {TimeSince},
     data: function () {
         return {
             order: {},
