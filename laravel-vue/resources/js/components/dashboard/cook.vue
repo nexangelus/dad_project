@@ -10,11 +10,11 @@
                 </tr>
                 <tr>
                     <th scope="row">Costumer Name</th>
-                    <td>{{ order.customer_id }}</td>
+                    <td>{{ order.customerName }}</td>
                 </tr>
                 <tr>
                     <th scope="row">Started at</th>
-                    <td>{{ order.created_at | moment("h:mm:ss ,dddd, MMMM Do YYYY") }}</td>
+                    <td>{{ order.current_status_at | moment("h:mm:ss ,dddd, MMMM Do YYYY") }}</td>
                 </tr>
                 <tr>
                     <th scope="row">Costumer Notes</th>
@@ -29,14 +29,8 @@
                     <td>
                         <table class="table table-striped">
                             <tbody>
-                                <tr>
-                                    <td>Each item</td>
-                                </tr>
-                                <tr>
-                                    <td>Each item</td>
-                                </tr>
-                                <tr>
-                                    <td>Each item</td>
+                                <tr v-for="item in order.order_items">
+                                    <td>{{ item }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -44,7 +38,9 @@
                 </tr>
                 </tbody>
             </table>
-            <a href="#" class="btn btn-primary">Button</a>
+            <div class="text-center">
+                <a href="#" class="btn btn-primary align-items-center">Done</a>
+            </div>
         </div>
         <div class="card-body text-center" v-else> <!-- if order exits  -->
             <h2 class="card-title">Order not assigned</h2>
@@ -67,7 +63,7 @@ export default {
         axios.get('/api/cook/work', this.credentials).then(response => {
             console.log(response)
             this.time = new Date() //response.data.current_status_at
-            this.order = response.data
+            this.order = response.data.data
             this.teste = this.$moment(this.time).fromNow()
         })
         this.timer()

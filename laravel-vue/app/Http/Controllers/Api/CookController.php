@@ -5,16 +5,19 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Http\Resources\Order as OrderResource;
 
 class CookController extends Controller {
+
     public function getWorkToDo(Request $request) {
 
         $user = $request->user();
         $amPreparing = Order::query()->where(['prepared_by' => $user->id, 'status' => 'P'])->first();
         if ($amPreparing == null) {
+
             return $this->checkWorkAndAssign($user->id);
         }
-        return $amPreparing;
+        return new OrderResource($amPreparing);
     }
 
     public function setOrderReady(Request $request) {

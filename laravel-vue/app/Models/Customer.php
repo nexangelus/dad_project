@@ -52,13 +52,13 @@ class Customer extends Model {
      * @return BelongsTo
      */
     public function user() {
-        return $this->belongsTo('App\User', 'id');
+        return $this->belongsTo('App\Models\User', 'id');
     }
 
     /**
      * @return HasMany
      */
     public function orders() {
-        return $this->hasMany('App\Order');
+        return $this->hasMany('App\Models\Order');
     }
 }
