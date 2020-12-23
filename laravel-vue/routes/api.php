@@ -28,10 +28,13 @@ Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']
 Route::middleware('auth:sanctum')->post('users/photo', [UserController::class, 'uploadPhoto']);
 Route::middleware('auth:sanctum')->put('users/password', [UserController::class, 'changePassword']);
 Route::middleware('auth:sanctum')->put('users', [UserController::class, 'update']);
+Route::middleware('auth:sanctum')->post('users/socketID', [UserController::class, 'notifyNewSocketID']);
 //endregion
 //region Cook
 Route::middleware('auth:sanctum')->get('cook/work', [CookController::class, 'getWorkToDo']);
 //endregion
+
+// middleware, policies, authorization, auth:sanctum obrigatório
 
 Route::get('test', [UserController::class, 'test']);
 

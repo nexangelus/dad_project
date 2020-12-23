@@ -4,32 +4,41 @@ window.Vue = require('vue')
 
 
 import Toasted from 'vue-toasted';
+
+Vue.use(Toasted, {duration: 3000})
+
 import VueRouter from 'vue-router';
 import store from './stores/global-store';
 
-Vue.use(Toasted, {duration: 3000})
 Vue.use(VueRouter);
 Vue.use(require('vue-moment'));
+
+import VueSocketIO from "vue-socket.io";
+Vue.use(new VueSocketIO({
+    debug: true,
+    connection: require('./../../config').default.WEBSOCKET_URL
+}))
 
 import NavbarComponent from './components/navbar'
 
 const router = new VueRouter({routes: require('./routes').default})
 
 router.beforeEach((to, from, next) => {
-    if(to.matched && to.matched[0] && to.matched[0].components.default.auth) {
+    let errorMessage = null
+    if (to.matched && to.matched[0] && to.matched[0].components.default.auth) {
         const auth = to.matched[0].components.default.auth;
-        if(auth.required === true) {
+        if (auth.required === true) {
             const user = store.state.user ? store.state.user : JSON.parse(localStorage.getItem('user'));
-            if(user == null) { // user is not logged in
-                Vue.toasted.error('You need to be logged in to access this page')
-                return next(false);
-            } else if(auth.allowed && Array.isArray(auth.allowed)) { // file has specific roles
-                if(auth.allowed.includes(user.type)) { // user is in allowed roles
+            if (user == null) { // user is not logged in,
+                errorMessage = 'You need to be logged in to access this page'
+            } else if (auth.allowed && Array.isArray(auth.allowed)) { // file has specific roles
+                if (auth.allowed.includes(user.type)) { // user is in allowed roles
                     return next(true);
                 } else { // not allowed
-                    Vue.toasted.error('You dont have the permissions to access this page')
-                    return next(false);
+                    errorMessage = 'You dont have the permissions to access this page';
                 }
+            } else {
+                return next(true);
             }
         } else {
             return next(true);
@@ -39,7 +48,11 @@ router.beforeEach((to, from, next) => {
         console.error(`ATTENTION: ROUTE WITHOUT AUTHENTICATION PARAMETERS:`, to);
         return next(true);
     }
-    next(true);
+
+    if (from.matched.length === 0) {
+        Vue.toasted.error(errorMessage)
+        router.push("/");
+    }
 })
 
 const app = new Vue({
@@ -53,5 +66,23 @@ const app = new Vue({
     },
     mounted() {
 
+    },
+    sockets: {
+        connect() {
+            // TODO não deveria estar aqui só no login
+            axios.get('/sanctum/csrf-cookie').then(() => {
+                if(this.$store.state.user) {
+                    axios.post('/api/users/socketID', {"socketID": this.$socket.id})
+                }
+            });
+            console.log(this.$store.state.user);
+            console.error("CONNECTED SOCKET", this.$socket.id);
+        },
+        connect_error(e) {
+            this.$toasted.error("Could not connect to Socket Server, trying again..", {duration: 1000})
+        },
+        pm(msg) {
+            this.$toasted.info(msg);
+        }
     }
 })

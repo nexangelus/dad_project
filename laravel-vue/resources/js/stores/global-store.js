@@ -18,19 +18,17 @@ export default new Vuex.Store({
     },
     actions: {
         rebuildData(context, vue) {
-            this.state.user = JSON.parse(localStorage.getItem('user'))
+            context.commit('setUser', JSON.parse(localStorage.getItem('user')));
 
             if (localStorage.getItem('user') === null) {
                 context.commit('clearUser');
             } else {
-                context.commit('setUser', JSON.parse(localStorage.getItem('user')));
+                //context.commit('setUser', JSON.parse(localStorage.getItem('user')));
                 axios.get('/api/users/me').then(r => {
                     context.commit('setUser', r.data.data);
-                    // TODO Perguntar se é possível executar o "beforeEnter" nas routes aqui, ou seja para
-                    //  aplicar as regras de permissões para entrar em páginas automaticamente quando houver
-                    //  verificação do servidor novamente
                 }).catch(r => {
                     context.commit('clearUser');
+                    // TODO redirecionar para o inicio
                 })
             }
         },

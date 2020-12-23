@@ -55,9 +55,15 @@ export default {
             }
         }
     },
+    computed: {
+        socketID() {
+            return this.$socket ? this.$socket.id : null;
+        }
+    },
     methods: {
         login() {
-            axios.get('/sanctum/csrf-cookie').then(response => {
+           // axios.get('/sanctum/csrf-cookie').then(response => {
+                this.credentials.socketID = this.socketID;
                 axios.post('/api/login', this.credentials).then(response => {
                     this.$store.commit('setUser', response.data.data);
                     Vue.toasted.success(`Logged in successfully: ${response.data.data.name}`)
@@ -65,7 +71,7 @@ export default {
                 }).catch(error => {
                     Vue.toasted.error(error.response.data.message)
                 })
-            })
+            //})
         },
         log(user) {
             this.credentials.email = `${user}@mail.pt`

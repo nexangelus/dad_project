@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Utils\SocketIO;
 use Illuminate\Http\Request;
 use App\Http\Resources\User as UserResource;
 use App\Http\Requests\StoreUserRequest;
@@ -11,6 +12,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Env;
 
 class UserController extends Controller {
 
@@ -78,5 +80,17 @@ class UserController extends Controller {
         }
 
         return new UserResource($request->user());
+    }
+
+    public function notifyNewSocketID(Request $request) {
+        $validated = $request->validate([
+            'socketID' => 'required'
+        ]);
+
+        $socketID = $request->socketID;
+
+        SocketIO::notifySocketIDChanged($request->user(), $socketID);
+
+        return ["status" => "OK"];
     }
 }
