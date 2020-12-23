@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Cook;
 use App\Models\Order;
 use Illuminate\Http\Request;
 

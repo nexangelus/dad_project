@@ -1,24 +1,26 @@
 <?php
 
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property integer $id
- * @property string $address
- * @property string $phone
- * @property string $nif
+ * @property string $name
+ * @property string $type
+ * @property string $description
+ * @property string $photo_url
+ * @property float $price
  * @property string $created_at
  * @property string $updated_at
  * @property string $deleted_at
- * @property User $user
- * @property Order[] $orders
+ * @property OrderItem[] $orderItems
  */
-class Customer extends Model {
+class Product extends Model {
     use HasFactory;
 
     public function __construct($object = null) {
@@ -37,28 +39,21 @@ class Customer extends Model {
     protected $keyType = 'integer';
 
     /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
      * @var array
      */
-    protected $fillable = ['address', 'phone', 'nif'];
-
-    /**
-     * @return BelongsTo
-     */
-    public function user() {
-        return $this->belongsTo('App\User', 'id');
-    }
+    protected $fillable = [
+        'name',
+        'type',
+        'description',
+        'photo_url',
+        'price',
+    ];
 
     /**
      * @return HasMany
      */
-    public function orders() {
-        return $this->hasMany('App\Order');
+    public function orderItems()
+    {
+        return $this->hasMany('App\Models\OrderItem');
     }
 }
