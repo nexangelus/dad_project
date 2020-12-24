@@ -2,3 +2,5 @@
 .idea/
 
 laravel-vue/config.js
+
+laravel-vue/public/css/
