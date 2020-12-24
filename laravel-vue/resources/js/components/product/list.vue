@@ -13,7 +13,6 @@
                 <div v-else>
                     <p>No image</p><p> available</p>
                 </div>
-
             </template>
             <template #cell(action)="data">
                 <div class="input-group mb-3">
@@ -42,14 +41,6 @@ export default {
     name: "list",
     data: function () {
         return {
-            fields: [
-                {key: 'photo_url', label: ''},
-                {key: 'name', sortable: true},
-                'description',
-                'type',
-                'price',
-                'action'
-            ],
             items: null
         }
     },
@@ -61,6 +52,21 @@ export default {
     },
     computed: {
         ...mapGetters(['cart']),
+        ...mapGetters(['user']),
+        fields: function () {
+            let data = [
+                {key: 'photo_url', label: ''},
+                {key: 'name', sortable: true},
+                'description',
+                'type',
+                'price'
+            ]
+            if(this.user){
+                data.push('action')
+            }
+            return data
+        }
+
     },
     methods: {
         addToCart(product){
@@ -75,7 +81,7 @@ export default {
             this.$store.commit('removeProduct', product);
         }
     }
-    //TODO filtro e img responsive e function para validar input do client
+    //TODO filtro e get pela store
 }
 </script>
 
