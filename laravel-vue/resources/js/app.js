@@ -7,11 +7,16 @@ import VueRouter from 'vue-router';
 import store from './stores/global-store';
 import VueSocketIO from "vue-socket.io";
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faBicycle, faUtensils, faInfo } from '@fortawesome/free-solid-svg-icons'
+library.add(faBicycle, faUtensils, faInfo)
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.use(Toasted, {duration: 3000})
 
 Vue.use(VueRouter);
 Vue.use(require('vue-moment'));
+
 
 Vue.use(new VueSocketIO({
     debug: true,
@@ -20,6 +25,10 @@ Vue.use(new VueSocketIO({
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.config.productionTip = false
 
 import NavbarComponent from './components/navbar'
 

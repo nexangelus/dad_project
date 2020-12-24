@@ -16,6 +16,11 @@ export default new Vuex.Store({
             localStorage.setItem('user', JSON.stringify(state.user))
         },
     },
+    getters: {
+        user(state) {
+            return state.user;
+        }
+    },
     actions: {
         rebuildData(context, vue) {
             context.commit('setUser', JSON.parse(localStorage.getItem('user')));

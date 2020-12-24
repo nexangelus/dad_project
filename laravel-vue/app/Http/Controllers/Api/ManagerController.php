@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderForManagerResource;
+use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ManagerController extends Controller {
@@ -19,4 +22,13 @@ class ManagerController extends Controller {
      * - criar/atualizar/apagar empregados
      * - apagar um cliente
      */
+
+    // TODO apenas o manager pode aceder a isto
+    public function getDashboardData(Request $request) {
+        $orders = Order::query()->whereIn("status", ['H', 'P', 'R', 'T'])->get();
+        $cooks = User::query()->where(["type" => "EC"])->whereNotNull("logged_at")->get();
+        $delivery = User::query()->where(["type" => "ED"])->whereNotNull("logged_at")->get();
+
+        return ["orders" => OrderForManagerResource::collection($orders), "cooks" => $cooks, "delivery" => $delivery];
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ManagerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,11 @@ Route::middleware('auth:sanctum')->post('users/socketID', [UserController::class
 //endregion
 //region Cook
 Route::middleware('auth:sanctum')->get('cooks/work', [CookController::class, 'getWorkToDo']);
+//endregion
+
+
+//region Manager
+Route::middleware('auth:sanctum')->get('managers/dashboard', [ManagerController::class, 'getDashboardData']);
 //endregion
 
 // middleware, policies, authorization, auth:sanctum obrigatório
