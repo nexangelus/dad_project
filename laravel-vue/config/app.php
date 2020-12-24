@@ -2,6 +2,8 @@
 
 return [
 
+    'websocketUrl' => env('WEBSOCKET_URL', "DEFAULT URL"),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

@@ -22,7 +22,7 @@ class SocketIO {
 
     ////////////
     private static function postHTTP($endpoint, $data) {
-        $url = env("WEBSOCKET_URL") . "" . $endpoint;
+        $url = config('app.websocketUrl') . "" . $endpoint;
         Http::post($url, $data);
     }
 

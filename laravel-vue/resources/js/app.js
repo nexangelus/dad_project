@@ -40,6 +40,7 @@ router.beforeEach((to, from, next) => {
         const auth = to.matched[0].components.default.auth;
         if (auth.required === true) {
             const user = store.state.user ? store.state.user : JSON.parse(localStorage.getItem('user'));
+            console.log("[routerBeforeEach] user = ", user);
             if (user == null) { // user is not logged in,
                 errorMessage = 'You need to be logged in to access this page'
             } else if (auth.allowed && Array.isArray(auth.allowed)) { // file has specific roles
@@ -81,11 +82,11 @@ const app = new Vue({
     sockets: {
         connect() {
             // TODO não deveria estar aqui só no login
-            axios.get('/sanctum/csrf-cookie').then(() => {
+           // axios.get('/sanctum/csrf-cookie').then(() => {
                 if(this.$store.state.user) {
                     axios.post('/api/users/socketID', {"socketID": this.$socket.id})
                 }
-            });
+            //});
         },
         connect_error(e) {
             this.$toasted.error("Could not connect to Socket Server, trying again..", {duration: 1000})

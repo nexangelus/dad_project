@@ -29,11 +29,14 @@ export default new Vuex.Store({
                 context.commit('clearUser');
             } else {
                 //context.commit('setUser', JSON.parse(localStorage.getItem('user')));
+                console.log("[store.rebuildData] checking users me");
                 axios.get('/api/users/me').then(r => {
+                    console.log("[store.rebuildData] success: ", r);
                     context.commit('setUser', r.data.data);
                 }).catch(r => {
+                    console.error("[store.rebuildData] failed: ", r);
                     context.commit('clearUser');
-                    // TODO redirecionar para o inicio
+                    this.$router.push("/");
                 })
             }
         },
