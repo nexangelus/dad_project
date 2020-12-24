@@ -8,8 +8,8 @@ import store from './stores/global-store';
 import VueSocketIO from "vue-socket.io";
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBicycle, faUtensils, faInfo } from '@fortawesome/free-solid-svg-icons'
-library.add(faBicycle, faUtensils, faInfo)
+import { faBicycle, faUtensils, faInfo, faCartPlus, faShoppingCart, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+library.add(faBicycle, faUtensils, faInfo, faCartPlus, faShoppingCart, faTimesCircle)
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.use(Toasted, {duration: 3000})
