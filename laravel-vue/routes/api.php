@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CookController;
+use App\Http\Controllers\Api\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,10 +32,13 @@ Route::middleware('auth:sanctum')->put('users', [UserController::class, 'update'
 Route::middleware('auth:sanctum')->post('users/socketID', [UserController::class, 'notifyNewSocketID']);
 //endregion
 //region Cook
-Route::middleware('auth:sanctum')->get('cook/work', [CookController::class, 'getWorkToDo']);
+Route::middleware('auth:sanctum')->get('cooks/work', [CookController::class, 'getWorkToDo']);
 //endregion
 
 // middleware, policies, authorization, auth:sanctum obrigatório
 
+
+//Product
+Route::get('products', [ProductController::class, 'getAllProducts']);
 Route::get('test', [UserController::class, 'test']);
 

@@ -2,7 +2,8 @@
     <div class="row justify-content-center">
         <div class="col-4 text-center"><h1>Welcome</h1>
             <h2>to</h2>
-            <h1>Food@Home</h1></div>
+            <h1>Food@Home</h1>
+        </div>
     </div>
 </template>
 
