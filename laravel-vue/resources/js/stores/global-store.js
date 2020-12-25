@@ -5,7 +5,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         user: null,
-        cart: {}
+        cart: new Array()
     },
     mutations: {
         clearUser(state) {
@@ -17,21 +17,29 @@ export default new Vuex.Store({
             localStorage.setItem('user', JSON.stringify(state.user))
         },
         clearCart(state) {
-            state.cart = {}
+            state.cart = new Array()
             localStorage.removeItem('cart')
         },
         addToCart(state, product) {
-            if(state.cart[product.id] == null){
-                state.cart[product.id] = product.quantity
-            }else{
-                this.updateCart(state, product)
+            if (product.quantity >0){
+                let object = state.cart.find(obj => {
+                    return  obj.id === product.id
+                })
+                if (object == null) {
+                    state.cart.push({'id':product.id, 'quantity': parseInt(product.quantity)})
+                } else {
+                    object.quantity += product.quantity
+                }
+
+                localStorage.setItem('cart', JSON.stringify(state.cart))
             }
         },
-        updateCart(state, product){
-            state.cart[product.id] = product.quantity
-        },
-        removeProduct(state, product){
-          state.cart.splice(product.id,1)
+        removeProduct(state, product) {
+            let index = state.cart.findIndex(obj => {
+                return obj.id === product.id
+            })
+            state.cart.splice(index)
+            localStorage.setItem('cart', JSON.stringify(state.cart))
         },
         setCart(state, cart) {
             state.cart = cart
@@ -45,12 +53,11 @@ export default new Vuex.Store({
         cart(state) {
             return state.cart
         }
-
     },
     actions: {
         rebuildData(context, vue) {
             context.commit('setUser', JSON.parse(localStorage.getItem('user')))
-            context.commit('')
+            context.commit('setCart', JSON.parse(localStorage.getItem('cart'))|| [])
 
             if (localStorage.getItem('user') === null) {
                 context.commit('clearUser')
@@ -67,5 +74,12 @@ export default new Vuex.Store({
                 })
             }
         },
+        addCart(context, product) {
+            product.quantity = parseInt(product.quantity)
+
+            if (product.quantity > 0) {
+                context.commit('addToCart', product)
+            }
+        }
     }
 })
