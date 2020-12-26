@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Order;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -14,10 +15,11 @@ class OrderResource extends JsonResource
      */
     public function toArray($request)
     {
+        /* @var Order $this */
         $items = $this->orderItems;
         $list = [];
         foreach ($items as $value){
-            $list[] = $value->product->name;
+            $list[] = ["name" => $value->product->name, "quantity" => $value->quantity];
         }
         $data = [
             'id' => $this->id,

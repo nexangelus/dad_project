@@ -69,7 +69,7 @@
                         <p v-if="details.current_status_at"><strong>Current Status:</strong> {{details.current_status_at | moment("L LT")}}  (<time-since :date="details.current_status_at" />) </p>
                         <strong>Order Items:</strong>
                         <ul>
-                            <li v-for="item in details.order_items">{{item}}</li>
+                            <li v-for="item in details.order_items">{{item.name}} <small>x{{item.quantity}}</small></li>
                         </ul>
                     </div>
                 </b-popover>
