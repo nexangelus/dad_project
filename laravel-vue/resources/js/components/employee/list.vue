@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Cooks</h2>
+        <h2>Employees</h2>
         <div class="row">
             <div class="col-sm-7">
                 <b-form-input v-model="filter" type="search" placeholder="Type to Search" size="sm" class="col-sm-10 offset-sm-1" />
@@ -48,14 +48,14 @@
                     <ul>
                         <li>Full Name: {{row.item.name}}</li>
                         <li>Email: {{row.item.email}}</li>
-                        <li v-if="row.item.status === 'busy'">Currently working on: <span><i id="popover-reactive-1">hover for description</i></span></li>
-                        <li>Logged in At: {{$moment(row.item.logged_at).format("L LT")}}</li>
+                        <li v-if="row.item.status === 'busy'">Currently working on: <span><i id="popover-reactive-1" v-bind:id="`popover-details-${row.item.id}`">hover for details</i></span></li>
+                        <li>Logged in At: {{$moment(row.item.logged_at).format("L LT")}} (<time-since :date="row.item.logged_at"/>)</li>
                         <li v-if="row.item.available_at">Last Available At: {{$moment(row.item.available_at).format("L LT")}}</li>
                         <li>Created At: {{$moment(row.item.created_at).format("L LT")}}</li>
                         <li>Updated At: {{$moment(row.item.updated_at).format("L LT")}}</li>
                     </ul>
                 </b-card>
-                <b-popover target="popover-reactive-1" triggers="hover" placement="auto" container="my-container" ref="popover" @show="getCookWorkingOn(row.item.id)">
+                <b-popover v-if="row.item.status === 'busy'" v-bind:target="`popover-details-${row.item.id}`" triggers="hover" placement="auto" container="my-container" ref="popover" @show="getCookWorkingOn(row.item.id, row.item.type)">
                     <template #title>
                         Details
                     </template>
@@ -64,8 +64,13 @@
                         <strong>Loading...</strong>
                     </div>
                     <div v-if="details">
-                        <strong>ID: </strong>
-                        {{details}}
+                        <p><strong>ID:</strong> {{details.id}}</p>
+                        <p><strong>Customer Name:</strong> {{details.customerName}}</p>
+                        <p v-if="details.current_status_at"><strong>Current Status:</strong> {{details.current_status_at | moment("L LT")}}  (<time-since :date="details.current_status_at" />) </p>
+                        <strong>Order Items:</strong>
+                        <ul>
+                            <li v-for="item in details.order_items">{{item}}</li>
+                        </ul>
                     </div>
                 </b-popover>
             </template>
@@ -78,9 +83,10 @@
 import StatusBanner from "../badges-status/order-status-banner";
 import EmployeeStatusBanner from "../badges-status/employee-status-banner";
 import IconUserType from "../iconUserType";
+import TimeSince from "../timeSince";
 export default {
     name: "list",
-    components: {IconUserType, EmployeeStatusBanner, StatusBanner},
+    components: {TimeSince, IconUserType, EmployeeStatusBanner, StatusBanner},
     props: {
         list: {
             type: Array,
@@ -140,9 +146,10 @@ export default {
             this.rows = filtered.length;
             this.currentPage = 1;
         },
-        getCookWorkingOn(id) {
+        getCookWorkingOn(id, type) {
             this.details = false;
-            axios.get(`/api/managers/dashboard/cook/${id}`).then(r => {
+            type = type === "EC" ? "cook" : "delivery";
+            axios.get(`/api/managers/dashboard/${type}/${id}`).then(r => {
                 this.details = r.data.data;
             })
         }
@@ -156,5 +163,8 @@ h2 {
 }
 img {
     max-height: 60px;
+}
+p {
+    margin: 0;
 }
 </style>
