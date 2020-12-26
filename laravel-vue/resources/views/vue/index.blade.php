@@ -1,6 +1,6 @@
 @extends('master')
 
-@section('title', 'Vue.js App')
+@section('title', 'Food@Home Dashboard')
 
 @section('navbar')
     <navbar-component></navbar-component>
