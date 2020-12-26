@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CooksForManagerResource extends JsonResource {
+class EmployeesForManagerResource extends JsonResource {
     /**
      * Transform the resource into an array.
      *
@@ -19,6 +19,7 @@ class CooksForManagerResource extends JsonResource {
             'email' => $this->email,
             'photo_url' => asset('storage/fotos/'.$this->photo_url),
             'blocked' => $this->blocked,
+            'type' => $this->type,
             'available_at' => $this->available_at,
             'created_at' => $this->created_at,
             'deleted_at' => $this->deleted_at,

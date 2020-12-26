@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CooksForManagerResource;
+use App\Http\Resources\EmployeesForManagerResource;
 use App\Http\Resources\OrderForManagerResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -27,35 +27,30 @@ class ManagerController extends Controller {
 
     // TODO apenas o manager pode aceder a isto
     public function getDashboardData(Request $request) {
-        /* @var User[] $cooks */
-
         $orders = Order::query();
-        $cooks = User::query()->where(["type" => "EC"]);
-        $delivery = User::query()->where(["type" => "ED"]);
+        $employees = User::query()->whereIn("type", ["EM", "ED", "EC"]);
 
         if($request->query('all', true)){
             $orders = $orders->whereIn("status", ['H', 'P', 'R', 'T']);
-            $cooks = $cooks->whereNotNull("logged_at");
-            $delivery = $delivery->whereNotNull("logged_at");
+            $employees = $employees->whereNotNull("logged_at");
         }
 
         $orders = $orders->get();
-        $cooks = $cooks->get();
-        $delivery = $delivery->get();
+        $employees = $employees->get();
 
-        foreach ($cooks as $i => $cook) {
-            if($cook->logged_at != null) {
+        foreach ($employees as $i => $cook) {
+            if($cook->logged_at != null && $cook->type == "EC") {
                 $order = Order::query()->where(['prepared_by' => $cook->id])->orderBy('id', "desc")->limit(1)->first();
                 if($order != null && $order->status == 'P') {
-                    $cooks[$i]['status'] = "busy";
+                    $employees[$i]['status'] = "busy";
                 } else {
-                    $cooks[$i]['status'] = "wait";
+                    $employees[$i]['status'] = "wait";
                 }
             }
         }
 
 
-        return ["orders" => OrderForManagerResource::collection($orders), "cooks" => CooksForManagerResource::collection($cooks), "delivery" => $delivery];
+        return ["orders" => OrderForManagerResource::collection($orders), "employees" => EmployeesForManagerResource::collection($employees)];
     }
 
     public function getCooksWorking() {

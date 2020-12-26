@@ -8,8 +8,8 @@ import store from './stores/global-store';
 import VueSocketIO from "vue-socket.io";
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBicycle, faUtensils, faInfo, faCartPlus, faShoppingCart, faTimesCircle, faSearch} from '@fortawesome/free-solid-svg-icons'
-library.add(faBicycle, faUtensils, faInfo, faCartPlus, faShoppingCart, faTimesCircle, faSearch)
+import { faBicycle, faUtensils, faInfo, faCartPlus, faShoppingCart, faTimesCircle, faSearch, faUserCog, faUser} from '@fortawesome/free-solid-svg-icons'
+library.add(faBicycle, faUtensils, faInfo, faCartPlus, faShoppingCart, faTimesCircle, faSearch, faUserCog, faUser)
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import moment from 'moment'
 require('moment/locale/pt');

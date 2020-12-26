@@ -27,7 +27,7 @@
         <b-table striped hover :items="list" :fields="fields" :per-page="perPage" :current-page="currentPage"
                  :filter="filter" @filtered="onFiltered" show-empty responsive="" sort-by="current_status_at">
             <template #cell(working)="data">
-                <font-awesome-icon v-bind:icon="data.item.working.type === 'EC' ? 'utensils' : 'bicycle'" />
+                <icon-user-type :type="data.item.working.type" />
                 {{data.item.working.name.split(" ")[0]}}
             </template>
             <template #cell(status)="data">
@@ -59,9 +59,10 @@
 
 <script>
 import StatusBanner from "../badges-status/order-status-banner";
+import IconUserType from "../iconUserType";
 export default {
     name: "list",
-    components: {StatusBanner},
+    components: {IconUserType, StatusBanner},
     props: {
         list: {
             type: Array,

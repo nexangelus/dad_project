@@ -29,8 +29,11 @@
             <template #cell(photo_url)="data">
                 <img :src="data.value" />
             </template>
+            <template #cell(type)="data">
+                <icon-user-type :type="data.item.type"/>
+            </template>
             <template #cell(blocked)="data">
-                <cook-status-banner :data="data.item" />
+                <employee-status-banner :data="data.item" />
             </template>
             <template #cell(created_at)="data">
                 {{ (data.item.available_at ? data.item.available_at : (data.item.updated_at ? data.item.updated_at : data.item.created_at)) | moment("L LT")}}
@@ -73,10 +76,11 @@
 
 <script>
 import StatusBanner from "../badges-status/order-status-banner";
-import CookStatusBanner from "../badges-status/cook-status-banner";
+import EmployeeStatusBanner from "../badges-status/employee-status-banner";
+import IconUserType from "../iconUserType";
 export default {
     name: "list",
-    components: {CookStatusBanner, StatusBanner},
+    components: {IconUserType, EmployeeStatusBanner, StatusBanner},
     props: {
         list: {
             type: Array,
@@ -99,6 +103,10 @@ export default {
             }, {
                 key: 'photo_url',
                 label: 'Photo',
+            }, {
+                key: 'type',
+                label: 'Type',
+                formatter: (value) => value.split(" ")[0],
             }, {
                 key: 'name',
                 label: 'Name',

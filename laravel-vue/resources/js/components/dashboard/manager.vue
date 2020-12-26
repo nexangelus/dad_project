@@ -7,15 +7,10 @@
                     <h5>Orders</h5>
                     <h4>{{ orders.length }}</h4>
                 </div>
-                <div class="col-sm-6 select" @click="select('cooks')"
-                     v-bind:class="{'enabled': selected === 'cooks'}">
-                    <h6>Cooks</h6>
-                    <h5>{{ cooks.length }}</h5>
-                </div>
-                <div class="col-sm-6 select" @click="select('delivery')"
-                     v-bind:class="{'enabled': selected === 'delivery'}">
-                    <h6>Delivery</h6>
-                    <h5>{{ delivs.length }}</h5>
+                <div class="col-sm-12 select" @click="select('employees')"
+                     v-bind:class="{'enabled': selected === 'employees'}">
+                    <h6>Employees</h6>
+                    <h5>{{ employees.length }}</h5>
                 </div>
             </div>
             <div class="text-center">
@@ -25,13 +20,11 @@
                 </label>
                 <p v-show="isFetchingData">Fetching Data...</p>
             </div>
-
         </div>
         <div class="col-sm-9">
             <div class="content">
                 <order-list v-show="selected==='orders'" :list="orders" />
-                <cook-list v-show="selected==='cooks'" :list="cooks" :cooksStatus="cooksStatus"/>
-                <deliveryman-list v-show="selected==='delivery'" :list="delivs"/>
+                <employee-list v-show="selected==='employees'" :list="employees"/>
             </div>
         </div>
     </div>
@@ -39,17 +32,15 @@
 
 <script>
 import OrderList from "../order/list";
-import CookList from "../cook/list";
-import DeliverymanList from "../deliveryman/list";
+import EmployeeList from "../employee/list";
 export default {
     name: "manager",
-    components: {CookList, OrderList, DeliverymanList},
+    components: {OrderList, EmployeeList},
     data() {
         return {
             selected: "orders",
             orders: [],
-            cooks: [],
-            delivs: [],
+            employees: [],
             showAll: false,
             isFetchingData: false,
             cooksStatus: [],
@@ -57,9 +48,6 @@ export default {
     },
     created() {
         this.getData();
-        axios.get('/api/managers/dashboard/cooksWorking').then(r => {
-            this.cooksStatus = r.data;
-        })
     },
     methods: {
         select(type) {
@@ -70,11 +58,10 @@ export default {
         },
         getData() {
             this.isFetchingData = true;
-            this.orders = this.cooks = this.delivs = [];
+            this.orders = this.employees = [];
             axios.get('/api/managers/dashboard' + (this.showAll ? "?all" : "")).then(r => {
                 this.orders = r.data.orders;
-                this.cooks = r.data.cooks;
-                this.delivs = r.data.delivery;
+                this.employees = r.data.employees;
                 this.isFetchingData = false;
             }).catch(r => {
                 this.isFetchingData = false;
@@ -111,10 +98,6 @@ export default {
 
 .select:first-child {
     border-bottom: 1px solid rgba(86, 61, 124, .2)
-}
-
-.select:last-child {
-    border-left: 1px solid rgba(86, 61, 124, .2)
 }
 
 .enabled {
