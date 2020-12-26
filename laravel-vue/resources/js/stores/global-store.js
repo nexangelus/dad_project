@@ -26,11 +26,10 @@ export default new Vuex.Store({
                     return  obj.id === product.id
                 })
                 if (object == null) {
-                    state.cart.push({'id':product.id, 'quantity': parseInt(product.quantity)})
+                    state.cart.push({'id':product.id,'name':product.name, 'quantity': parseInt(product.quantity)})
                 } else {
-                    object.quantity += product.quantity
+                    object.quantity += 1
                 }
-
                 localStorage.setItem('cart', JSON.stringify(state.cart))
             }
         },
@@ -43,6 +42,17 @@ export default new Vuex.Store({
         },
         setCart(state, cart) {
             state.cart = cart
+            localStorage.setItem('cart', JSON.stringify(state.cart))
+        },
+        decrementProductFromCart(state, product) {
+            let object = state.cart.find(obj => {
+                return  obj.id === product.id
+            })
+            object.quantity -= 1
+
+            if (object.quantity === 0){
+                this.removeProduct(state, product)
+            }
             localStorage.setItem('cart', JSON.stringify(state.cart))
         }
     },
@@ -74,12 +84,13 @@ export default new Vuex.Store({
                 })
             }
         },
-        addCart(context, product) {
-            product.quantity = parseInt(product.quantity)
-
-            if (product.quantity > 0) {
-                context.commit('addToCart', product)
+        decrementProductFromCart(context, product){
+            if (product.quantity-1 === 0){
+                context.commit('removeProduct', product)
+            }else {
+                context.commit('decrementProductFromCart', product)
             }
+
         }
     }
 })

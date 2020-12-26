@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ item.name }}</h5>
                     <p>Type: {{ item.type }}</p>
-                    <p>{{ item.price }} €</p>
+                    <p>Unit Price: {{ item.price }} €</p>
                     <b-button v-b-popover.hover.bottom="item.description" variant="primary">
                         Description
                     </b-button>
@@ -38,7 +38,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -59,24 +58,10 @@ export default {
         })
     },
     computed: {
-        ...mapGetters(['cart']),
         ...mapGetters(['user']),
-        fields: function () {
-            let data = [
-                {key: 'photo_url', label: ''},
-                {key: 'name', sortable: true},
-                'description',
-                {key: 'price', label: 'Unit price'}
-            ]
-            if (this.user) {
-                data.push({key: 'action', label: ''})
-            }
-            return data
-        },
         filteredList: function () {
             return this.items ? this.items.filter(i => i.type === this.type && (!this.search || i.name.toLowerCase().includes(this.search.toLowerCase()))) : []
         }
-
     },
     methods: {
         addToCart(product) {
@@ -84,7 +69,7 @@ export default {
                 this.$toasted.error("Quantity inserted is not a number")
             } else {
                 this.$toasted.success(`Added ${product.name} to the cart`)
-                this.$store.dispatch('addCart', product)
+                this.$store.commit('addToCart', product)
             }
         },
     }
@@ -110,13 +95,21 @@ export default {
 
 @media (min-width: 35em) {
     .card-columns {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+    }
+}
+
+@media (min-width: 48em) {
+    .card-columns {
         -webkit-column-count: 2;
         -moz-column-count: 2;
         column-count: 2;
     }
 }
 
-@media (min-width: 48em) {
+@media (min-width: 62em) {
     .card-columns {
         -webkit-column-count: 3;
         -moz-column-count: 3;
@@ -124,25 +117,17 @@ export default {
     }
 }
 
-@media (min-width: 62em) {
+@media (min-width: 75em) {
     .card-columns {
         -webkit-column-count: 4;
         -moz-column-count: 4;
         column-count: 4;
     }
 }
-
-@media (min-width: 75em) {
-    .card-columns {
-        -webkit-column-count: 5;
-        -moz-column-count: 5;
-        column-count: 5;
-    }
-}
 .nav-link {
     cursor: pointer;
 }
-#first {
+.row {
     margin-top: 1%;
 }
 #search {

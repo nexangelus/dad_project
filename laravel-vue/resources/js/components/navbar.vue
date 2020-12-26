@@ -16,20 +16,6 @@
             </ul>
             <div class="my-2 my-lg-0 navbar-borders">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0 navbar-borders">
-                    <li class="navbar-nav">
-                        <b-button id="popover" v-on:click.prevent class="nav-link" to="menu"><font-awesome-icon icon="shopping-cart"/></b-button>
-                        <b-popover target="popover" triggers="click" placement="top">
-                            <div class="text-center">
-                                <h2>Shopping Cart</h2>
-                                <b-table :items="$store.state.cart"> <!-- filtro -->
-
-                                </b-table>
-                                <b-button @click="onClose" size="sm" variant="danger">Cancel</b-button>
-                                <b-button @click="onOk" size="sm" variant="primary">Ok</b-button>
-                            </div>
-
-                        </b-popover>
-                    </li>
                     <li class="nav-item dropdown" v-if="$store.state.user">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
