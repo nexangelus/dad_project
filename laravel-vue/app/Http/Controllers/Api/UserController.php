@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Utils\SocketIO;
 use Illuminate\Http\Request;
-use App\Http\Resources\User as UserResource;
+use App\Http\Resources\UserResource;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;

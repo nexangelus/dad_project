@@ -15,7 +15,7 @@ class OrderForManagerResource extends JsonResource {
         /* @var \App\Models\Order $this */
         return [
             'id' => $this->id,
-            'customer' => new User($this->customer->user),
+            'customer' => new UserResource($this->customer->user),
             'opened_at' => $this->opened_at,
             'cook' => $this->cook,
             'deliveryman' => $this->delivery,

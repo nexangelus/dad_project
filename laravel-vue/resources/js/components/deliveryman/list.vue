@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Orders</h2>
+        <h2>Deliveryman</h2>
         <div class="row">
             <div class="col-sm-7">
                 <b-form-input v-model="filter" type="search" placeholder="Type to Search" size="sm" class="col-sm-10 offset-sm-1" />
@@ -18,16 +18,16 @@
                         :options="pageOptions"
                         class="col-sm-8"
                         size="sm"
-                     />
+                    />
                 </b-form-group>
             </div>
 
         </div>
 
         <b-table striped hover :items="list" :fields="fields" :per-page="perPage" :current-page="currentPage"
-                 :filter="filter" @filtered="onFiltered" show-empty responsive="" sort-by="current_status_at">
+                 :filter="filter" @filtered="onFiltered" show-empty responsive="">
             <template #cell(working)="data">
-                <font-awesome-icon v-bind:icon="data.item.working.type === 'EC' ? 'utensils' : 'bicycle'" />
+                <font-awesome-icon v-bind:icon="data.item.working.type == 'EC' ? 'utensils' : 'bicycle'" />
                 {{data.item.working.name.split(" ")[0]}}
             </template>
             <template #cell(status)="data">
@@ -77,7 +77,7 @@ export default {
             pageOptions: [5, 10, 20, 50],
             currentPage: 1,
             rows: 1,
-            fields: [{
+            fields: [/*{
                 key: 'id',
                 label: 'ID',
                 sortable: true,
@@ -86,11 +86,7 @@ export default {
                 label: 'Customer',
                 formatter: (value) => value.name.split(" ")[0],
                 sortable: true,
-            },/* {
-                key: 'opened_at',
-                label: 'Created At',
-                formatter: (value) => this.$moment(value).format('L LT')
-            },*/ {
+            }, {
                 key: 'working',
                 label: 'Responsible',
                 sortable: true,
@@ -106,7 +102,7 @@ export default {
             }, {
                 key: 'actions',
                 label: 'Actions'
-            }]
+            }*/]
         }
     },
     mounted() {
@@ -115,9 +111,9 @@ export default {
     watch: {
         'list': function (val) {
             this.rows = val.length;
-            for (let i = 0; i < val.length; i++) {
-                val[i].working = val[i].deliveryman ? val[i].deliveryman : val[i].cook;
-            }
+            /* for (let i = 0; i < val.length; i++) {
+                 val[i].working = val[i].deliveryman ? val[i].deliveryman : val[i].cook;
+             }*/
         }
     },
     methods: {

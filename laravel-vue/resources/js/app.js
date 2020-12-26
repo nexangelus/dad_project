@@ -11,11 +11,15 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBicycle, faUtensils, faInfo, faCartPlus, faShoppingCart, faTimesCircle, faSearch} from '@fortawesome/free-solid-svg-icons'
 library.add(faBicycle, faUtensils, faInfo, faCartPlus, faShoppingCart, faTimesCircle, faSearch)
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import moment from 'moment'
+require('moment/locale/pt');
 
 Vue.use(Toasted, {duration: 3000})
 
 Vue.use(VueRouter);
-Vue.use(require('vue-moment'));
+Vue.use(require('vue-moment'), {
+    moment
+});
 
 
 Vue.use(new VueSocketIO({

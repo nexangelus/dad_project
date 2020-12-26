@@ -39,6 +39,8 @@ Route::middleware('auth:sanctum')->get('cooks/work', [CookController::class, 'ge
 
 //region Manager
 Route::middleware('auth:sanctum')->get('managers/dashboard', [ManagerController::class, 'getDashboardData']);
+Route::middleware('auth:sanctum')->get('managers/dashboard/cooksWorking', [ManagerController::class, 'getCooksWorking']);
+Route::middleware('auth:sanctum')->get('managers/dashboard/cook/{id}', [ManagerController::class, 'getOrderCookIsWorkingOn']);
 //endregion
 
 // middleware, policies, authorization, auth:sanctum obrigatório

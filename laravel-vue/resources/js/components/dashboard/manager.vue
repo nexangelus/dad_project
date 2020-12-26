@@ -1,36 +1,37 @@
 <template>
-    <div class="container">
-        <div class="row mainrow">
-            <div class="col-sm-4 order-sm-12">
-                <div class="container-fuild content row">
-                    <div class="col-sm-12 select" @click="select('orders')"
-                         v-bind:class="{'enabled': selected === 'orders'}">
-                        <h5>Orders</h5>
-                        <h4>{{ orders.length }}</h4>
-                    </div>
-                    <div class="col-sm-6 select" @click="select('cooks')"
-                         v-bind:class="{'enabled': selected === 'cooks'}">
-                        <h6>Cooks</h6>
-                        <h5>{{ cooks.length }}</h5>
-                    </div>
-                    <div class="col-sm-6 select" @click="select('delivery')"
-                         v-bind:class="{'enabled': selected === 'delivery'}">
-                        <h6>Delivery</h6>
-                        <h5>{{ delivs.length }}</h5>
-                    </div>
+    <div class="row mainrow">
+        <div class="col-sm-3 order-sm-12">
+            <div class="container-fuild content row">
+                <div class="col-sm-12 select" @click="select('orders')"
+                     v-bind:class="{'enabled': selected === 'orders'}">
+                    <h5>Orders</h5>
+                    <h4>{{ orders.length }}</h4>
                 </div>
-                <div class="text-center">
-                    <input class="form-check-input" type="checkbox" value="" id="checkShowAll">
-                    <label class="form-check-label" for="checkShowAll">
-                        Show All Data
-                    </label>
+                <div class="col-sm-6 select" @click="select('cooks')"
+                     v-bind:class="{'enabled': selected === 'cooks'}">
+                    <h6>Cooks</h6>
+                    <h5>{{ cooks.length }}</h5>
                 </div>
-
+                <div class="col-sm-6 select" @click="select('delivery')"
+                     v-bind:class="{'enabled': selected === 'delivery'}">
+                    <h6>Delivery</h6>
+                    <h5>{{ delivs.length }}</h5>
+                </div>
             </div>
-            <div class="col-sm-8">
-                <div class="content">
-                    <order-list v-show="selected==='orders'" :list="orders"></order-list>
-                </div>
+            <div class="text-center">
+                <input class="form-check-input" type="checkbox" @change="quantityChanged" v-bind:disabled="isFetchingData" v-model="showAll" id="checkShowAll">
+                <label class="form-check-label" for="checkShowAll">
+                    Show All Data
+                </label>
+                <p v-show="isFetchingData">Fetching Data...</p>
+            </div>
+
+        </div>
+        <div class="col-sm-9">
+            <div class="content">
+                <order-list v-show="selected==='orders'" :list="orders" />
+                <cook-list v-show="selected==='cooks'" :list="cooks" :cooksStatus="cooksStatus"/>
+                <deliveryman-list v-show="selected==='delivery'" :list="delivs"/>
             </div>
         </div>
     </div>
@@ -38,28 +39,46 @@
 
 <script>
 import OrderList from "../order/list";
+import CookList from "../cook/list";
+import DeliverymanList from "../deliveryman/list";
 export default {
     name: "manager",
-    components: {OrderList},
+    components: {CookList, OrderList, DeliverymanList},
     data() {
         return {
             selected: "orders",
             orders: [],
             cooks: [],
             delivs: [],
-
+            showAll: false,
+            isFetchingData: false,
+            cooksStatus: [],
         }
     },
     created() {
-        axios.get('/api/managers/dashboard').then(r => {
-            this.orders = r.data.orders;
-            this.cooks = r.data.cooks;
-            this.delivs = r.data.delivery;
+        this.getData();
+        axios.get('/api/managers/dashboard/cooksWorking').then(r => {
+            this.cooksStatus = r.data;
         })
     },
     methods: {
         select(type) {
             this.selected = type;
+        },
+        quantityChanged() {
+            this.getData();
+        },
+        getData() {
+            this.isFetchingData = true;
+            this.orders = this.cooks = this.delivs = [];
+            axios.get('/api/managers/dashboard' + (this.showAll ? "?all" : "")).then(r => {
+                this.orders = r.data.orders;
+                this.cooks = r.data.cooks;
+                this.delivs = r.data.delivery;
+                this.isFetchingData = false;
+            }).catch(r => {
+                this.isFetchingData = false;
+            })
         }
     }
 }

@@ -1,7 +1,10 @@
 ## Inicialização
 
-Verificar que o `.env` está atualizado, (base de dados, urls) verificar `.env.example`
-Verificar que o `config.js` está atualizado, verificar `config.example.js`
+* Verificar que o `.env` está atualizado, (base de dados, urls) verificar `.env.example`
+* Verificar que o `config.js` está atualizado, verificar `config.example.js`
+* Realizar o link da storage `php artisan storage:link`
+* Definir a cache das configurações: `php artisan config:cache`
+
 
 ## Troubleshooting
 
