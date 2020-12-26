@@ -1,25 +1,37 @@
 <template>
     <div class="sticky-top">
-        <h2>Shopping Cart</h2>
-        <br>
-        <b-table :fields="fields" :items="cart"  thead-class="d-none">
-            <template #cell(quantity)="data">
+        <h2 class="text-center">Shopping Cart</h2>
+        <div class="limited-height">
+            <div v-for="item in cart">
+                <hr/>
+                <p>Name: {{item.name}}</p>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" type="button" @click="decrementProductFromCart(data.item)"><font-awesome-icon icon="minus"/></button>
+                        <button class="btn btn-outline-secondary" type="button" @click="decrementProductFromCart(item)"><font-awesome-icon icon="minus"/></button>
                     </div>
                     <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1"
-                           v-model="data.item.quantity"/>
+                           v-model="item.quantity"/>
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" @click="addToCart(data.item)"><font-awesome-icon icon="plus"/></button>
-                        <b-button variant="danger" @click="removeProduct(data.item)"><font-awesome-icon icon="trash"/></b-button>
+                        <button class="btn btn-outline-secondary" type="button" @click="addToCart(item)"><font-awesome-icon icon="plus"/></button>
+                        <b-button variant="danger" @click="removeProduct(item)"><font-awesome-icon icon="trash"/></b-button>
                     </div>
                 </div>
-            </template>
-            <template #cell(action)="data">
-
-            </template>
-        </b-table>
+                <div class="input-group mb-4">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Price: {{item.price}} €</span>
+                    </div>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">Sub-Total: {{parseFloat(item.price*item.quantity).toFixed(2)}} €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="input-group mb-4">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Total: {{total}} €</span>
+            </div>
+        </div>
         <div v-if="cart.length > 0">
             <b-button @click="deleteCart">Clean Cart</b-button>
             <b-button >Confirm</b-button><!-- TODO -->
@@ -45,6 +57,13 @@ export default {
     },
     computed:{
         ...mapGetters(['cart']),
+        total(){
+            let total = 0.00
+            this.cart.forEach(e => {
+                total+= e.price*e.quantity
+            })
+            return parseFloat(total).toFixed(2)
+        }
     },
     methods: {
         addToCart(product) {
@@ -70,5 +89,8 @@ export default {
 </script>
 
 <style scoped>
-
+.limited-height{
+    max-height: 70vh;
+    overflow: auto;
+}
 </style>

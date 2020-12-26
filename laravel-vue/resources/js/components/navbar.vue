@@ -38,7 +38,10 @@
             <div class="my-2 my-lg-0 navbar-borders">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0 navbar-borders">
                     <li class="nav-item mx-2 mx-lg-0">
-                        <router-link to="#"><font-awesome-icon icon="shopping-cart"/></router-link>
+                        <font-awesome-icon id="popover" icon="shopping-cart"/>
+                        <b-popover id="teste" target="popover" triggers="click">
+                            <ListShoppingCart/>
+                        </b-popover>
                     </li>
                     <li class="nav-item dropdown" v-if="$store.state.user">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -61,8 +64,10 @@
 </template>
 
 <script>
+import ListShoppingCart from "./shopping-cart/list";
 export default {
     name: "navbar",
+    components: {ListShoppingCart},
     methods: {
         logout() {
             axios.post('/api/logout', this.credentials).then(response => {

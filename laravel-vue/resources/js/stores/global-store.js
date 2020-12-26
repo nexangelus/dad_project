@@ -26,7 +26,7 @@ export default new Vuex.Store({
                     return  obj.id === product.id
                 })
                 if (object == null) {
-                    state.cart.push({'id':product.id,'name':product.name, 'quantity': parseInt(product.quantity)})
+                    state.cart.push({'id':product.id,'name':product.name, 'price': product.price, 'quantity': parseInt(product.quantity)})
                 } else {
                     object.quantity += 1
                 }
@@ -37,7 +37,7 @@ export default new Vuex.Store({
             let index = state.cart.findIndex(obj => {
                 return obj.id === product.id
             })
-            state.cart.splice(index)
+            state.cart.splice(index, 1)
             localStorage.setItem('cart', JSON.stringify(state.cart))
         },
         setCart(state, cart) {

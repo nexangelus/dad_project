@@ -1,13 +1,9 @@
 <template>
     <div class="row">
-        <div v-bind:class="[user  ? 'col-9' : 'col-12']">
+        <div class="col-12">
             <List/>
         </div>
-        <div class="col-3" v-if="user">
-            <ListShoppingCart/>
-        </div>
     </div>
-
 </template>
 
 <script>
