@@ -21,6 +21,7 @@
                 v-model="credentials.password"
                 name="password"
                 id="inputPassword"
+                placeholder="Password"
             />
         </div>
         <div class="form-group">
