@@ -1,5 +1,5 @@
 <template>
-    <div>{{$store.state.user.id}}
+    <div>
         <ProfileEdit v-on:finish="finish" :user="this.$store.state.user" :errors="errors" ref="update"></ProfileEdit>
     </div>
 </template>
