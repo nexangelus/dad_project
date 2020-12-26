@@ -1,43 +1,44 @@
 <template>
-    <div>
-        <b-table striped small hover :items="items" :fields="fields">
-            <template #cell(description)="data">
-                <b-button v-b-popover.hover.top="data.item.description" variant="primary">
-                    Description
-                </b-button>
-            </template>
-            <template #cell(price)="data">
-                <p>{{ data.item.price }} €</p>
-            </template>
-            <template #cell(photo_url)="data">
-                <div v-if="data.item.photo_url!=null">
-                    <img class="rounded img-fluid" :src="`${data.item.photo_url}`">
+    <div id="first">
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link" v-bind:class="{'active' : type === 'hot dish'}" @click="type = 'hot dish'">Hot Dish</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" v-bind:class="{'active' : type === 'cold dish'}" @click="type = 'cold dish'">Cold Dish</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" v-bind:class="{'active' : type === 'drink'}" @click="type = 'drink'">Drinks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" v-bind:class="{'active' : type === 'dessert'}" @click="type = 'dessert'">Dessert</a>
+            </li>
+        </ul>
+        <div class="input-group input-group-lg" id="search">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><font-awesome-icon icon="search"/></span>
+            </div>
+            <b-input v-model="search" class="form-control"/>
+        </div>
+
+        <div class="card-columns">
+            <div class="card " v-for="item in filteredList">
+                <img class="card-img-top" :src="`${item.photo_url}`" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p>Type: {{ item.type }}</p>
+                    <p>{{ item.price }} €</p>
+                    <b-button v-b-popover.hover.bottom="item.description" variant="primary">
+                        Description
+                    </b-button>
+                    <b-button variant="success" v-on:click="addToCart(item)" v-if="user">
+                        <font-awesome-icon icon="cart-plus"/>
+                    </b-button>
                 </div>
-                <div v-else>
-                    <p>No image</p>
-                    <p> available</p>
-                </div>
-            </template>
-            <template #cell(action)="data">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">{{ isNaN(data.item.quantity) ? "0.00" : parseFloat(data.item.price * data.item.quantity).toFixed(2) }} €</span>
-                    </div>
-                    <input v-model="data.item.quantity" placeholder="0" type="number" min="0" step="1"
-                           class="form-control" style="width: 30px">
-                    <div class="input-group-append">
-                        <b-button variant="success" :disabled="isNaN(data.item.quantity)"
-                                  v-on:click="addToCart(data.item)">
-                            <font-awesome-icon icon="cart-plus"/>
-                        </b-button>
-                        <b-button v-on:click="removeFromCart(data.item)" variant="danger">
-                            <font-awesome-icon icon="times-circle"/>
-                        </b-button>
-                    </div>
-                </div>
-            </template>
-        </b-table>
+            </div>
+        </div>
     </div>
+
 </template>
 
 <script>
@@ -47,13 +48,14 @@ export default {
     name: "list",
     data: function () {
         return {
-            items: null
+            type: 'hot dish',
+            items: null,
+            search: null
         }
     },
     mounted() {
         axios.get('/api/products').then(response => {
             this.items = response.data.data
-            console.log('teste', this.cart)
         })
     },
     computed: {
@@ -64,13 +66,15 @@ export default {
                 {key: 'photo_url', label: ''},
                 {key: 'name', sortable: true},
                 'description',
-                'type',
                 {key: 'price', label: 'Unit price'}
             ]
             if (this.user) {
-                data.push({key:'action', label: ''})
+                data.push({key: 'action', label: ''})
             }
             return data
+        },
+        filteredList: function () {
+            return this.items ? this.items.filter(i => i.type === this.type && (!this.search || i.name.toLowerCase().includes(this.search.toLowerCase()))) : []
         }
 
     },
@@ -79,21 +83,70 @@ export default {
             if (isNaN(product.quantity)) {
                 this.$toasted.error("Quantity inserted is not a number")
             } else {
-                this.$toasted.success(`Added ${product.quantity} x ${product.name}`)
-                this.$store.dispatch('addCart',product)
+                this.$toasted.success(`Added ${product.name} to the cart`)
+                this.$store.dispatch('addCart', product)
             }
         },
-        removeFromCart(product) {
-            this.$store.commit('removeProduct', product);
-        }
     }
-    //TODO filtro e get pela store
 }
 </script>
 
 <style scoped>
-img {
-    max-width: 150px;
+.card-img-top {
+    width: 100%;
+    height: 15vw;
     max-height: 150px;
+    max-width: 150px;
+    object-fit: cover;
+}
+
+@media (min-width: 20em) {
+    .card-columns {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+    }
+}
+
+@media (min-width: 35em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
+
+@media (min-width: 48em) {
+    .card-columns {
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+    }
+}
+
+@media (min-width: 62em) {
+    .card-columns {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+    }
+}
+
+@media (min-width: 75em) {
+    .card-columns {
+        -webkit-column-count: 5;
+        -moz-column-count: 5;
+        column-count: 5;
+    }
+}
+.nav-link {
+    cursor: pointer;
+}
+#first {
+    margin-top: 1%;
+}
+#search {
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
 </style>

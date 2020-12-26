@@ -20,7 +20,8 @@ class ProductClientResource extends JsonResource
             'type' => $this->type,
             'description' => $this->description,
             'photo_url' =>  asset('storage/products/'.$this->photo_url),
-            'price' => $this->price
+            'price' => $this->price,
+            'quantity' => 1
         ];
         return $data;
     }
