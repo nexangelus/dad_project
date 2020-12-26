@@ -10,6 +10,7 @@ const sessions = new SessionManager();
 app.use(express.json());
 
 app.post('/login', (req, res) => {
+    res.json({"status": "OK"})
     if(req.body.user && req.body.socketID) {
         const user = req.body.user;
         sessions.addUserSession(user, req.body.socketID);
@@ -18,12 +19,11 @@ app.post('/login', (req, res) => {
 
         console.log('User Logged: UserID= ' + user.id + ' Socket ID= ' + req.body.socketID)
         console.log('  -> Total Sessions= ' + sessions.users.size)
-        return res.json({"status": "OK"})
     }
-    return res.json({"status": "ERROR"})
 })
 
 app.post('/logout', (req, res) => {
+    res.json({"status": "OK"})
     if(req.body.user) {
         const user = req.body.user;
         const session = sessions.getUserSession(user.id);
@@ -34,12 +34,11 @@ app.post('/logout', (req, res) => {
 
         console.log('User Logged OUT: UserID= ' + user.id + ' Socket ID= ' + session.socketID)
         console.log('  -> Total Sessions= ' + sessions.users.size)
-        return res.json({"status": "OK"})
     }
-    return res.json({"status": "ERROR"})
 })
 
 app.post('/idChanged', (req, res) => {
+    res.json({"status": "OK"})
     if(req.body.user && req.body.socketID) {
         const user = req.body.user;
         sessions.addUserSession(user, req.body.socketID);
@@ -48,9 +47,7 @@ app.post('/idChanged', (req, res) => {
 
         console.log('User ReLogged: UserID= ' + user.id + ' Socket ID= ' + req.body.socketID)
         console.log('  -> Total Sessions= ' + sessions.users.size)
-        return res.json({"status": "OK"})
     }
-    return res.json({"status": "ERROR"})
 })
 
 app.get('/m/:id/:m', (req, res) => {

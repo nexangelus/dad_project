@@ -22,7 +22,7 @@
                 </tr>
                 <tr>
                     <th scope="row">Time since started preparing</th>
-                    <td><time-since :date="+this.$moment(order.current_status_at)"></time-since></td>
+                    <td><time-since :date="order.current_status_at"></time-since></td>
                 </tr>
                 <tr>
                     <th scope="row">Order Items</th>

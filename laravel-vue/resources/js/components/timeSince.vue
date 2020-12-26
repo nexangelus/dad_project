@@ -7,10 +7,13 @@ export default {
     name: "timeSince",
     props: {
         date: {
-            type: Number,
-            default: () => {
-                return 0;
-            }
+            type: String,
+            default: "0"
+        }
+    },
+    computed: {
+        dateFormatted() {
+            return +this.$moment(this.date);
         }
     },
     data() {
@@ -25,7 +28,7 @@ export default {
         update() {
 
             const dateNow = +new Date();
-            const difference = (dateNow - this.date)/1000;
+            const difference = (dateNow - this.dateFormatted)/1000;
             if(difference === 0) {
                 this.num = "now";
             } else {

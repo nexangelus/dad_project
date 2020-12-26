@@ -38,17 +38,25 @@ class ManagerController extends Controller {
         $orders = $orders->get();
         $employees = $employees->get();
 
-        foreach ($employees as $i => $cook) {
-            if($cook->logged_at != null && $cook->type == "EC") {
-                $order = Order::query()->where(['prepared_by' => $cook->id])->orderBy('id', "desc")->limit(1)->first();
-                if($order != null && $order->status == 'P') {
-                    $employees[$i]['status'] = "busy";
-                } else {
-                    $employees[$i]['status'] = "wait";
+        foreach ($employees as $i => $employee) {
+            if($employee->logged_at != null) {
+                if($employee->type == "EC") {
+                    $order = Order::query()->where(['prepared_by' => $employee->id])->orderBy('id', "desc")->limit(1)->first();
+                    if ($order != null && $order->status == 'P') {
+                        $employees[$i]['status'] = "busy";
+                    } else {
+                        $employees[$i]['status'] = "wait";
+                    }
+                } else if($employee->type == "ED") {
+                    $order = Order::query()->where(['delivered_by' => $employee->id])->orderBy('id', "desc")->limit(1)->first();
+                    if ($order != null && $order->status == 'T') {
+                        $employees[$i]['status'] = "busy";
+                    } else {
+                        $employees[$i]['status'] = "wait";
+                    }
                 }
             }
         }
-
 
         return ["orders" => OrderForManagerResource::collection($orders), "employees" => EmployeesForManagerResource::collection($employees)];
     }
@@ -75,6 +83,11 @@ class ManagerController extends Controller {
 
     public function getOrderCookIsWorkingOn($id) {
         $order = Order::query()->where(['prepared_by' => $id, "status" => "P"])->first();
+        return new OrderResource($order);
+    }
+
+    public function getOrderDeliverymanIsWorkingOn($id) {
+        $order = Order::query()->where(['delivered_by' => $id, "status" => "T"])->first();
         return new OrderResource($order);
     }
 }
