@@ -61,14 +61,23 @@ export default {
         }
     },
     mounted() {
-        axios.get('/api/cooks/work', this.credentials).then(response => {
-            this.order = response.data.data
-        })
+        this.getOrder();
     },
     methods: {
+        getOrder() {
+            axios.get('/api/cooks/work', this.credentials).then(response => {
+                this.order = response.data.data
+            })
+        },
         finishOrder() {
-            // TODO US 11, #15
-        }
+            axios.patch('/api/cooks/ready').then(r => {
+                Vue.toasted.success("This order has been submitted to transport successfully.")
+                this.getOrder();
+            }).catch(r => {
+                Vue.toasted.error("An error occurred while trying to mark this as ready. Try again later.")
+            })
+        },
+
     }
 }
 </script>

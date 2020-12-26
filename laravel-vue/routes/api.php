@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     //region Cook
     Route::get('cooks/work', [CookController::class, 'getWorkToDo']);
+    Route::patch('cooks/ready', [CookController::class, 'setOrderReady']);
     //endregion
 
 
