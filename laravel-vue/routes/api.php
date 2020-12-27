@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CookController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
     //region Order
     Route::post('order', [OrderController::class, 'postOrder']);
+    //endregion
+
+    //region Customer
+    Route::get('customer/order', [CustomerController::class, 'getOrders']);
     //endregion
 
     //region Cook

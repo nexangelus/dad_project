@@ -87,4 +87,7 @@ export default {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
+.navbar{
+    margin-bottom: 5px;
+}
 </style>
