@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderForManagerResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -67,6 +68,10 @@ class OrderController extends Controller
         if($order->prepared_by) {
             SocketIO::notifyNewOrder($order->prepared_by);
         }
+
+        $order = Order::find($order->id);
+
+        SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($order));
 
         return $order;
     }

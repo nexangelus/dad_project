@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EmployeesForManagerResource;
+use App\Http\Resources\OrderForManagerResource;
 use App\Models\Order;
 use App\Models\User;
+use App\Utils\SocketIO;
 use Illuminate\Http\Request;
 use App\Http\Resources\OrderResource;
 use Illuminate\Support\Facades\Log;
@@ -39,6 +42,9 @@ class CookController extends Controller {
             $user->available_at = new \DateTime();
             $user->save();
         }
+
+        SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource(Order::find($amPreparing->id)));
+        //TODO SocketIO::notifyUserUpdatedFormManagers
     }
 
     private function checkWorkAndAssign($userId) {
@@ -49,6 +55,10 @@ class CookController extends Controller {
             $orderToDo->status = 'P';
             //TODO resto do update
             $orderToDo->save();
+
+
+            SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource(Order::find($orderToDo->id)));
+            SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource(Order::find($userId)));
             return new OrderResource($orderToDo);
         }
         return null;

@@ -23,11 +23,22 @@ class SocketIO {
         self::postHTTP('newOrderForCustomer', ['cookID' => $cookID]);
     }
 
+    public static function notifyUpdateOrdersTableManager($order) {
+        self::postHTTP('updateOrdersTableManager', ['order' => $order]);
+    }
+
+    public static function notifyUpdatedEmployeeForManagers($user) {
+        self::postHTTP('updatedEmployeeForManagers', ['user' => $user]);
+    }
+
 
     ////////////
     private static function postHTTP($endpoint, $data) {
         $url = config('app.websocketUrl') . "" . $endpoint;
         Http::post($url, $data);
     }
+
+
+
 
 }

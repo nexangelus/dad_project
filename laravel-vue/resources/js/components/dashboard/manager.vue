@@ -67,6 +67,19 @@ export default {
                 this.isFetchingData = false;
             })
         }
+    },
+    sockets: {
+        updateOrdersTable(order) {
+            const i = this.orders.findIndex(o => o.id === order.id)
+            if(i >= 0) {
+                Vue.set(this.orders, i, order);
+            } else {
+                this.orders.push(order);
+            }
+        },
+        updatedEmployee(user) {
+
+        }
     }
 }
 </script>

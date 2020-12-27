@@ -3,16 +3,16 @@
         <h1>Order Items</h1>
         <b-table :items="cart" :fields="fields">
             <template #cell(price)="data">
-                {{data.item.price}} €
+                {{ data.item.price }} €
             </template>
             <template #cell(Sub-Total)="data">
-                {{data.item.price*data.item.quantity}} €
+                {{ data.item.price * data.item.quantity }} € <!-- TODO Formatar este valor (testar com 3x Alheiras) -->
             </template>
         </b-table>
-        <hr/>
+        <hr />
         <h3>Notes</h3>
-        <b-form-textarea v-model="note"/>
-        <p/>
+        <b-form-textarea v-model="note" />
+        <p />
         <b-button @click="order">Order</b-button>
 
     </div>
@@ -20,6 +20,7 @@
 
 <script>
 import {mapGetters} from "vuex";
+
 export default {
     auth: {
         required: true
@@ -33,20 +34,20 @@ export default {
             note: null
         }
     },
-    computed:{
+    computed: {
         ...mapGetters(['cart']),
     },
     methods: {
-        order(){
+        order() {
             axios.post('api/order', {
                 note: this.note,
                 cart: this.cart
             }).then(response => {
-                if(response.status===201){
+                if (response.status === 200) {
                     this.$store.commit('clearCart')
                     this.$toasted.success('Order completed')
                     this.$router.push({name: 'dashboard'})
-                }else{
+                } else {
                     this.$toasted.error('Something went wrong')
                 }
             })

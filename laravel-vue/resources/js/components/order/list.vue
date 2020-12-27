@@ -27,8 +27,14 @@
         <b-table striped hover :items="list" :fields="fields" :per-page="perPage" :current-page="currentPage"
                  :filter="filter" @filtered="onFiltered" show-empty responsive="" sort-by="current_status_at">
             <template #cell(working)="data">
-                <icon-user-type :type="data.item.working.type" />
-                {{data.item.working.name.split(" ")[0]}}
+                <template v-if="data.item.working">
+                    <icon-user-type :type="data.item.working.type" />
+                    {{data.item.working.name.split(" ")[0]}}
+                </template>
+                <template v-else>
+                    <small><em>waiting</em></small>
+                </template>
+
             </template>
             <template #cell(status)="data">
                 <status-banner :status="data.item.status" />

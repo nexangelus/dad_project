@@ -12,49 +12,67 @@ app.use(express.json());
 app.post('/login', (req, res) => {
     res.json({"status": "OK"})
     if(req.body.user && req.body.socketID) {
+        console.log(`[/login] ID: '${req.body.user.id}', Type: '${user.type}', SocketID: ${req.body.socketID}`);
+
         const user = req.body.user;
         sessions.addUserSession(user, req.body.socketID);
 
         io.sockets.connected[req.body.socketID].join(user.type);
-
-        console.log('User Logged: UserID= ' + user.id + ' Socket ID= ' + req.body.socketID)
-        console.log('  -> Total Sessions= ' + sessions.users.size)
     }
 })
 
 app.post('/logout', (req, res) => {
     res.json({"status": "OK"})
     if(req.body.user) {
+        console.log(`[/logout] ID: '${req.body.user.id}', SocketID: ${req.body.socketID}`);
+
         const user = req.body.user;
         const session = sessions.getUserSession(user.id);
         console.log(sessions.users)
         io.sockets.connected[session.socketID].leave(user.type);
 
         sessions.removeUserSession(user.id);
-
-        console.log('User Logged OUT: UserID= ' + user.id + ' Socket ID= ' + session.socketID)
-        console.log('  -> Total Sessions= ' + sessions.users.size)
     }
 })
 
 app.post('/idChanged', (req, res) => {
     res.json({"status": "OK"})
     if(req.body.user && req.body.socketID) {
+        console.log(`[/idChanged] ID: '${req.body.user.id}', Type: '${req.body.user.type}', SocketID: ${req.body.socketID}`);
+
         const user = req.body.user;
         sessions.addUserSession(user, req.body.socketID);
 
         io.sockets.connected[req.body.socketID].join(user.type);
 
-        console.log('User ReLogged: UserID= ' + user.id + ' Socket ID= ' + req.body.socketID)
-        console.log('  -> Total Sessions= ' + sessions.users.size)
     }
 })
 
 app.post('/newOrderForCustomer', (req, res) => {
     res.json({"status": "OK"})
     if(req.body.cookID) {
+        console.log(`[/newOrderForCustomer] CookID: '${req.body.cookID}'`);
         const session = sessions.getUserSession(parseInt(req.body.cookID))
         io.to(session.socketID).emit("newOrder");
+        console.log(`[/newOrderForCustomer] io.to(${session.socketID}).emit('newOrder')`);
+    }
+})
+
+app.post('/updateOrdersTableManager', (req, res) => {
+    res.json({"status": "OK"})
+    if(req.body.order) {
+        console.log(`[/updateOrdersTableManager] OrderID: '${req.body.order.id}'`);
+        io.to('EM').emit("updateOrdersTable", req.body.order);
+        console.log(`[/updateOrdersTableManager] io.to('EM').emit("updateOrdersTable", ${JSON.stringify(req.body.order)});`);
+    }
+})
+
+app.post('/updatedEmployeeForManagers', (req, res) => {
+    res.json({"status": "OK"})
+    if(req.body.user) {
+        console.log(`[/updatedEmployeeForManagers] UserID: '${req.body.user.id}'`);
+        io.to('EM').emit("updatedEmployee", req.body.user);
+        console.log(`[/updatedEmployeeForManagers] io.to('EM').emit("updatedEmployee", ${JSON.stringify(req.body.user)});`);
     }
 })
 
@@ -68,7 +86,7 @@ app.get('/m/:id/:m', (req, res) => {
 
 
 io.on('connection', function (socket) {
-    console.log('Client has connected. Socket ID = ' + socket.id)
+    console.log(`[new connection] SocketID: ${socket.id}`);
     /*socket.on('user_logged', (user) => {
         if (user) {
             sessions.addUserSession(user, socket.id)
