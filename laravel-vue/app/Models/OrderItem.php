@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class OrderItem extends Model {
     use HasFactory;
 
+    public $timestamps = false;
+
     public function __construct($object = null) {
         if($object != null) {
             foreach($object as $property => $value) {

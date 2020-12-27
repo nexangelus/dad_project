@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CookController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('users/socketID', [UserController::class, 'notifyNewSocketID']);
     //endregion
 
+    //region Order
+    Route::post('order', [OrderController::class, 'postOrder']);
+    //endregion
 
     //region Cook
     Route::middleware("checkUserCook")->group(function() {

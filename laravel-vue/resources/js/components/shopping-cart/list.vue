@@ -34,14 +34,13 @@
         </div>
         <div v-if="cart.length > 0">
             <b-button @click="deleteCart">Clean Cart</b-button>
-            <b-button >Confirm</b-button><!-- TODO -->
+            <router-link to="order"><b-button>Confirm</b-button></router-link>
         </div>
     </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
-
 export default {
     name: "list-shopping-cart",
     data: function (){
