@@ -6,12 +6,14 @@ import Toasted from 'vue-toasted';
 import VueRouter from 'vue-router';
 import store from './stores/global-store';
 import VueSocketIO from "vue-socket.io";
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {fas} from '@fortawesome/free-solid-svg-icons'
+
 library.add(fas)
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import moment from 'moment'
+
 require('moment/locale/pt');
 
 Vue.use(Toasted, {duration: 3000})
@@ -85,12 +87,9 @@ const app = new Vue({
     },
     sockets: {
         connect() {
-            // TODO não deveria estar aqui só no login
-           // axios.get('/sanctum/csrf-cookie').then(() => {
-                if(this.$store.state.user) {
-                    axios.post('/api/users/socketID', {"socketID": this.$socket.id})
-                }
-            //});
+            if (this.$store.state.user) {
+                axios.post('/api/users/socketID', {"socketID": this.$socket.id})
+            }
         },
         connect_error(e) {
             this.$toasted.error("Could not connect to Socket Server, trying again..", {duration: 1000})

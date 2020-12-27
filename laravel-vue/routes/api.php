@@ -39,19 +39,24 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
     //region Cook
-    Route::get('cooks/work', [CookController::class, 'getWorkToDo']);
-    Route::patch('cooks/ready', [CookController::class, 'setOrderReady']);
+    Route::middleware("checkUserCook")->group(function() {
+        Route::get('cooks/work', [CookController::class, 'getWorkToDo']);
+        Route::patch('cooks/ready', [CookController::class, 'setOrderReady']);
+    });
+
     //endregion
 
 
     //region Manager
-    Route::get('managers/dashboard', [ManagerController::class, 'getDashboardData']);
-    Route::get('managers/dashboard/cook/{id}', [ManagerController::class, 'getOrderCookIsWorkingOn']);
-    Route::get('managers/dashboard/delivery/{id}', [ManagerController::class, 'getOrderDeliverymanIsWorkingOn']);
+    Route::middleware("checkUserManager")->group(function() {
+        Route::get('managers/dashboard', [ManagerController::class, 'getDashboardData']);
+        Route::get('managers/dashboard/cook/{id}', [ManagerController::class, 'getOrderCookIsWorkingOn']);
+        Route::get('managers/dashboard/delivery/{id}', [ManagerController::class, 'getOrderDeliverymanIsWorkingOn']);
+    });
     //endregion
+
 });
 
-// middleware, policies, authorization, auth:sanctum obrigatório
 //Product
 Route::get('products', [ProductController::class, 'getAllProducts']);
 Route::get('test', [UserController::class, 'test']);

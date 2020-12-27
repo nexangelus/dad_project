@@ -25,7 +25,6 @@ class ManagerController extends Controller {
      * - apagar um cliente
      */
 
-    // TODO apenas o manager pode aceder a isto
     public function getDashboardData(Request $request) {
         $orders = Order::query();
         $employees = User::query()->whereIn("type", ["EM", "ED", "EC"]);
