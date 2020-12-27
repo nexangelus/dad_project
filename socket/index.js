@@ -76,6 +76,18 @@ app.post('/updatedEmployeeForManagers', (req, res) => {
     }
 })
 
+app.post('/updateCustomerOrder', (req, res) => {
+    res.json({"status": "OK"})
+    if(req.body.order) {
+        console.log(`[/updateCustomerOrder] OrderID: '${req.body.order.id}'`);
+        const session = sessions.getUserSession(parseInt(req.body.order.customer_id))
+        if (session){
+            io.to(session.socketID).emit("updateOrder", req.body.order);
+            console.log(`[/updateCustomerOrder] io.to(${session.socketID}).emit("updateOrder", ${JSON.stringify(req.body.order)});`);
+        }
+    }
+})
+
 app.get('/m/:id/:m', (req, res) => {
     const session = sessions.getUserSession(parseInt(req.params.id))
     console.log(session);

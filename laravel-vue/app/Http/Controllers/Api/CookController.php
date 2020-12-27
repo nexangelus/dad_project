@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeesForManagerResource;
+use App\Http\Resources\OrderForCustomerResource;
 use App\Http\Resources\OrderForManagerResource;
 use App\Models\Order;
 use App\Models\User;
@@ -39,11 +40,13 @@ class CookController extends Controller {
             $amPreparing->preparation_time = $timeSpent;
             $amPreparing->save();
         } else {
+            //TODO vai ter sempre uma ordem a preparar
             $user->available_at = new \DateTime();
             $user->save();
         }
-
-        SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource(Order::find($amPreparing->id)));
+        $savedOrder = Order::find($amPreparing->id);
+        SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($savedOrder));
+        SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($savedOrder));
         //TODO SocketIO::notifyUserUpdatedFormManagers
     }
 
@@ -55,9 +58,9 @@ class CookController extends Controller {
             $orderToDo->status = 'P';
             //TODO resto do update
             $orderToDo->save();
-
-
-            SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource(Order::find($orderToDo->id)));
+            $savedOrder = Order::find($orderToDo->id);
+            SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($savedOrder));
+            SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($savedOrder));
             SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource(Order::find($userId)));
             return new OrderResource($orderToDo);
         }

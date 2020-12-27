@@ -31,6 +31,9 @@ class SocketIO {
         self::postHTTP('updatedEmployeeForManagers', ['user' => $user]);
     }
 
+    public static function notifyUpdatedOrder($order) {
+        self::postHTTP('updateCustomerOrder', ['order'=>$order]);
+    }
 
     ////////////
     private static function postHTTP($endpoint, $data) {

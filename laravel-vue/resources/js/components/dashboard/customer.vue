@@ -70,6 +70,16 @@ export default {
                 this.orders = response.data.data
             })
         },
+    },
+    sockets: {
+        updateOrder(order) {
+            const i = this.orders.findIndex(o => o.id === order.id)
+            if (i >= 0) {
+                Vue.set(this.orders, i, order);
+            } else {
+                this.orders.push(order);
+            }
+        }
     }
 }
 </script>

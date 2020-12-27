@@ -25,6 +25,7 @@ class OrderForCustomerResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'customer_id' => $this->customer_id,
             'opened_at' => $this->opened_at,
             'current_status_at' => $this->current_status_at,
             'status' => $this->status,
