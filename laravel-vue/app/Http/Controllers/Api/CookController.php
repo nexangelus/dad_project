@@ -7,15 +7,17 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\OrderResource;
+use Illuminate\Support\Facades\Log;
 
 class CookController extends Controller {
 
     public function getWorkToDo(Request $request) {
 
         $user = $request->user();
-        $amPreparing = Order::query()->where(['prepared_by' => $user->id, 'status' => 'P'])->first();
-        if ($amPreparing == null) {
 
+        $amPreparing = Order::query()->where(['prepared_by' => $user->id, 'status' => 'P'])->first();
+
+        if ($amPreparing == null) {
             return $this->checkWorkAndAssign($user->id);
         }
         return new OrderResource($amPreparing);
@@ -47,8 +49,9 @@ class CookController extends Controller {
             $orderToDo->status = 'P';
             //TODO resto do update
             $orderToDo->save();
+            return new OrderResource($orderToDo);
         }
-        return $orderToDo;
+        return null;
     }
 
 
