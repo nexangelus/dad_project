@@ -19,6 +19,10 @@ class SocketIO {
         self::postHTTP('idChanged', ["user" => $user, "socketID" => $socketID]);
     }
 
+    public static function notifyNewOrder($cookID) {
+        self::postHTTP('newOrderForCustomer', ['cookID' => $cookID]);
+    }
+
 
     ////////////
     private static function postHTTP($endpoint, $data) {

@@ -50,6 +50,14 @@ app.post('/idChanged', (req, res) => {
     }
 })
 
+app.post('/newOrderForCustomer', (req, res) => {
+    res.json({"status": "OK"})
+    if(req.body.cookID) {
+        const session = sessions.getUserSession(parseInt(req.body.cookID))
+        io.to(session.socketID).emit("newOrder");
+    }
+})
+
 app.get('/m/:id/:m', (req, res) => {
     const session = sessions.getUserSession(parseInt(req.params.id))
     console.log(session);

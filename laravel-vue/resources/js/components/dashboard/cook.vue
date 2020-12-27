@@ -77,7 +77,14 @@ export default {
                 Vue.toasted.error("An error occurred while trying to mark this as ready. Try again later.")
             })
         },
-
+    },
+    sockets: {
+        newOrder() {
+            axios.get('/api/cooks/work', this.credentials).then(response => {
+                const sound = (new Audio('/sound/pop.mp3')).play();
+                this.order = response.data.data
+            })
+        }
     }
 }
 </script>
