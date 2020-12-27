@@ -38,7 +38,16 @@ export default {
             axios.post('api/order', {
                 note: this.note,
                 cart: this.cart
-            }).then()
+            }).then(response => {
+                if(response.status===201){
+                    this.$store.commit('clearCart')
+                    this.$toasted.success('Order completed')
+                    this.$router.push({name: 'dashboard'})
+                }else{
+                    this.$toasted.error('Something went wrong')
+                }
+                console.log(response)
+            })
         }
     }
 }
