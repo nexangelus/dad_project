@@ -49,7 +49,6 @@ export default {
                 }else{
                     this.$toasted.error('Something went wrong')
                 }
-                console.log(response)
             })
         }
     }
