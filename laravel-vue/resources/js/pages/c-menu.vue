@@ -14,7 +14,7 @@ export default {
     auth: {
         required: false
     },
-    name: "menu",
+    name: "c-menu",
     components: {ListShoppingCart, List},
     computed: {
         ...mapGetters(['user']),
