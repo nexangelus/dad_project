@@ -12,9 +12,9 @@ app.use(express.json());
 app.post('/login', (req, res) => {
     res.json({"status": "OK"})
     if(req.body.user && req.body.socketID) {
-        console.log(`[/login] ID: '${req.body.user.id}', Type: '${user.type}', SocketID: ${req.body.socketID}`);
-
         const user = req.body.user;
+
+        console.log(`[/login] ID: '${req.body.user.id}', Type: '${user.type}', SocketID: ${req.body.socketID}`);
         sessions.addUserSession(user, req.body.socketID);
 
         io.sockets.connected[req.body.socketID].join(user.type);
@@ -28,10 +28,12 @@ app.post('/logout', (req, res) => {
 
         const user = req.body.user;
         const session = sessions.getUserSession(user.id);
-        console.log(sessions.users)
-        io.sockets.connected[session.socketID].leave(user.type);
-
-        sessions.removeUserSession(user.id);
+        if(session) {
+            io.sockets.connected[session.socketID].leave(user.type);
+            sessions.removeUserSession(user.id);
+        } else {
+            console.log(`[/logout] UserID '${user.id}' logged out without session to socket.`);
+        }
     }
 })
 
@@ -53,8 +55,12 @@ app.post('/newOrderForCustomer', (req, res) => {
     if(req.body.cookID) {
         console.log(`[/newOrderForCustomer] CookID: '${req.body.cookID}'`);
         const session = sessions.getUserSession(parseInt(req.body.cookID))
-        io.to(session.socketID).emit("newOrder");
-        console.log(`[/newOrderForCustomer] io.to(${session.socketID}).emit('newOrder')`);
+        if(session) {
+            io.to(session.socketID).emit("newOrder");
+            console.log(`[/newOrderForCustomer] io.to(${session.socketID}).emit('newOrder')`);
+        } else {
+            console.error(`[/newOrderForCustomer] No session for Cook with ID: ${req.body.cookID}`);
+        }
     }
 })
 
@@ -84,6 +90,8 @@ app.post('/updateCustomerOrder', (req, res) => {
         if (session){
             io.to(session.socketID).emit("updateOrder", req.body.order);
             console.log(`[/updateCustomerOrder] io.to(${session.socketID}).emit("updateOrder", ${JSON.stringify(req.body.order)});`);
+        } else {
+            console.error(`[/updateCustomerOrder] No session for Customer with ID: ${req.body.order.customer_id}`);
         }
     }
 })

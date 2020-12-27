@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EmployeesForManagerResource;
 use App\Http\Resources\OrderForCustomerResource;
 use App\Http\Resources\OrderForManagerResource;
 use App\Models\Order;
@@ -68,6 +69,7 @@ class OrderController extends Controller
 
         if($order->prepared_by) {
             SocketIO::notifyNewOrder($order->prepared_by);
+            SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource(User::find($order->prepared_by)));
         }
 
         $order = Order::find($order->id);

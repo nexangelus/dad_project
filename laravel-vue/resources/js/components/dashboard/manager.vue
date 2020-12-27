@@ -71,13 +71,31 @@ export default {
     sockets: {
         updateOrdersTable(order) {
             const i = this.orders.findIndex(o => o.id === order.id)
-            if(i >= 0) {
-                Vue.set(this.orders, i, order);
+            if(!order.__remove) {
+                if(i >= 0) {
+                    Vue.set(this.orders, i, order);
+                } else {
+                    this.orders.push(order);
+                }
             } else {
-                this.orders.push(order);
+                if(i >= 0) {
+                    this.orders.splice(i, 1);
+                }
             }
         },
         updatedEmployee(user) {
+            const i = this.employees.findIndex(e => e.id === user.id)
+            if(!user.__remove) { // definido pela API para remover o item da lista
+                if(i >= 0) {
+                    Vue.set(this.employees, i, user);
+                } else {
+                    this.employees.push(user);
+                }
+            } else {
+                if(i >= 0) {
+                    this.employees.splice(i, 1);
+                }
+            }
 
         }
     }

@@ -22,7 +22,7 @@ class CookController extends Controller {
         $amPreparing = Order::query()->where(['prepared_by' => $user->id, 'status' => 'P'])->first();
 
         if ($amPreparing == null) {
-            return $this->checkWorkAndAssign($user->id);
+            return $this->checkWorkAndAssign($user);
         }
         return new OrderResource($amPreparing);
     }
@@ -39,29 +39,33 @@ class CookController extends Controller {
             $amPreparing->current_status_at = $timeNow;
             $amPreparing->preparation_time = $timeSpent;
             $amPreparing->save();
-        } else {
-            //TODO vai ter sempre uma ordem a preparar
+
             $user->available_at = new \DateTime();
             $user->save();
         }
+
         $savedOrder = Order::find($amPreparing->id);
         SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($savedOrder));
         SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($savedOrder));
-        //TODO SocketIO::notifyUserUpdatedFormManagers
+        SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource(User::find($user->id)));
     }
 
-    private function checkWorkAndAssign($userId) {
+    private function checkWorkAndAssign($user) {
         /* @var Order $orderToDo*/
         $orderToDo = Order::query()->where(['status' => 'H'])->orderBy('created_at', 'ASC')->first();
         if ($orderToDo != null) {
-            $orderToDo->prepared_by = $userId;
+            $orderToDo->prepared_by = $user->id;
             $orderToDo->status = 'P';
             //TODO resto do update
             $orderToDo->save();
+
+            $user->available_at = null;
+            $user->save();
+
             $savedOrder = Order::find($orderToDo->id);
             SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($savedOrder));
             SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($savedOrder));
-            SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource(Order::find($userId)));
+            SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource(User::find($user->id)));
             return new OrderResource($orderToDo);
         }
         return null;

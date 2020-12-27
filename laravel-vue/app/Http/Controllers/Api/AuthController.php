@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EmployeesForManagerResource;
 use App\Http\Resources\UserResource;
 use App\Models\Order;
 use App\Models\User;
@@ -29,7 +30,16 @@ class AuthController extends Controller {
 
             $user->logged_at = new \DateTime();
             $user->save();
+
+            $user = User::find($user->id);
+
             SocketIO::notifyLogin($user, $request->socketID);
+
+            if($user->type != "C") {
+                SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource($user));
+            }
+
+
             return new UserResource($user);
         } else {
             return response()->json(['message' => 'Invalid Credentials'], 401);
@@ -44,6 +54,8 @@ class AuthController extends Controller {
         $user->logged_at = null;
         $user->available_at = null;
         $user->save();
+
+        SocketIO::notifyUpdatedEmployeeForManagers(["id" => $user->id, "__remove" => true]);
 
         Auth::guard('web')->logout(); //check if Auth::logout(); works
         return response()->json(['msg' => 'User session closed'], 200);
