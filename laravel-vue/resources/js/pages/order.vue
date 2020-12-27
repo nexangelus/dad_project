@@ -21,6 +21,9 @@
 <script>
 import {mapGetters} from "vuex";
 export default {
+    auth: {
+        required: true
+    },
     name: "order",
     data: function () {
         return {
