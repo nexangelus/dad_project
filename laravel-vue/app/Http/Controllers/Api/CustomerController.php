@@ -11,11 +11,7 @@ class CustomerController extends Controller
 {
     public function getOrders(Request $request){
         $user = $request->user();
-        $orders = Order::all()->where('customer_id', $user->id)->whereNull('closed_at')->whereNotIn('status', ['D','C'])->all();
-        echo ">";
-        var_dump($orders);
-        echo "<";
-        die();
+        $orders = Order::query()->where('customer_id', $user->id)->whereNull('closed_at')->whereNotIn('status', ['D','C'])->get();
         return OrderForCustomerResource::collection($orders);
     }
 }

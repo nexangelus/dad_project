@@ -16,9 +16,8 @@ class OrderItemResource extends JsonResource
     {
         /* @var \App\Models\OrderItem $this */
         return [
-            'product' => $this->product->name,
+            'name' => $this->product->name,
             'quantity' => $this->quantity,
-
         ];
     }
 }

@@ -16,9 +16,11 @@ class OrderForCustomerResource extends JsonResource
     public function toArray($request)
     {
         /* @var \App\Models\Order $this */
-        $list = [];
-        foreach ($this->orderItems as $item){
-            $list[] = new OrderItem($item);
+        $responsible = '';
+        if ($this->prepared_by!=null){
+            $responsible = $this->cook->name;
+        }else if($this->delivered_by!=null){
+            $responsible = $this->delivery->name;
         }
 
         return [
@@ -28,8 +30,8 @@ class OrderForCustomerResource extends JsonResource
             'status' => $this->status,
             'notes' => $this->notes,
             'total_price' => $this->total_price,
-            'order_items' => $list,
-            'teste' =>$this->orderItems()
+            'order_items' => OrderItemResource::collection($this->orderItems),
+            'responsible' => $responsible
         ];
     }
 }
