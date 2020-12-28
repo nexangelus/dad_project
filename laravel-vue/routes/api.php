@@ -41,25 +41,26 @@ Route::middleware('auth:sanctum')->group(function() {
     //endregion
 
     //region Order
-    Route::post('order', [OrderController::class, 'postOrder']);
+    Route::post('orders', [OrderController::class, 'postOrder']);
     //endregion
     //TODO Check singular up and down
     //region Customer
-    Route::get('customer/order', [CustomerController::class, 'getOrders']);
-    Route::get('customer/history', [CustomerController::class, 'getOrderHistory']);
+    Route::get('customers/order', [CustomerController::class, 'getOrders']);
+    Route::get('customers/history', [CustomerController::class, 'getOrderHistory']);
     //endregion
 
     //region Cook
     Route::middleware("checkUserCook")->group(function() {
-        Route::get('cooks/work', [DelivererController::class, 'getWorkToDo']);
-        Route::patch('cooks/ready', [DelivererController::class, 'setOrderReady']);
+        Route::get('cooks/work', [CookController::class, 'getWorkToDo']);
+        Route::patch('cooks/ready', [CookController::class, 'setOrderReady']);
     });
     //endregion
 
     //region Deliverer
     Route::middleware("checkUserDeliverer")->group(function() {
-        Route::get('deliverers/work', [CookController::class, 'getWorkToDo']);
-        Route::patch('deliverers/ready', [CookController::class, 'setOrderReady']);
+        Route::get('deliverers/work', [DelivererController::class, 'getWorkToDo']);
+        Route::get('deliverers/orders', [DelivererController::class, 'getReadyOrders']);
+        Route::patch('deliverers/ready', [DelivererController::class, 'setOrderReady']);
     });
     //endregion
 

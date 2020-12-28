@@ -39,7 +39,7 @@ export default {
     },
     methods: {
         order() {
-            axios.post('api/order', {
+            axios.post('api/orders', {
                 note: this.note,
                 cart: this.cart
             }).then(response => {

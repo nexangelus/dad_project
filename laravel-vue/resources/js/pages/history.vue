@@ -107,7 +107,7 @@ export default {
         }
     },
     mounted() {
-        axios.get('/api/customer/history').then(r => {
+        axios.get('/api/customers/history').then(r => {
             this.orders = r.data.data;
         }).catch(r => {
             this.isFetchingData = false;
