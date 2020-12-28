@@ -26,7 +26,7 @@ export default {
     width: 100%;
     height: 100%;
     left: 0;
-    margin: 0;
+    margin: -5px 0 0;
 }
 
 .col-4 {

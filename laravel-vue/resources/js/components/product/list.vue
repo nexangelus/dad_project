@@ -31,7 +31,7 @@
                     <b-button v-b-popover.hover.bottom="item.description" variant="primary">
                         Description
                     </b-button>
-                    <b-button variant="success" v-on:click="addToCart(item)" v-if="user">
+                    <b-button variant="success" v-on:click="addToCart(item)" v-if="user && user.type === 'C'">
                         <font-awesome-icon icon="cart-plus"/>
                     </b-button>
                 </div>

@@ -1,31 +1,6 @@
 <template>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <router-link class="navbar-brand" to="/">Food@Home</router-link>
-        <!-- <div class="d-flex order-sm-1 order-md-1 order-lg-1 ml-auto pr-2">
-            <ul class="navbar-nav flex-row">
-                <li class="nav-item mx-2 mx-lg-0">
-                    <router-link to="#"><font-awesome-icon icon="shopping-cart"/></router-link>
-                </li>
-                <li class="nav-item dropdown" v-if="$store.state.user">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Profile
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <router-link class="dropdown-item" to="profile">My Profile</router-link>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" @click.prevent="logout()" href="#">Logout</a>
-                    </div>
-                </li>
-                <li class="nav-item" v-else>
-                    <router-link class="nav-link" to="login">Login</router-link>
-                </li>
-            </ul>
-        </div>-->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"
-                aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
         <div class="collapse navbar-collapse" id="mainNavbar"> <!-- LIMIT OF 10 ITEMS IN THIS MENU -->
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0 navbar-borders">
                 <li class="nav-item" v-if="$store.state.user">
@@ -37,12 +12,6 @@
             </ul>
             <div class="my-2 my-lg-0 navbar-borders">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0 navbar-borders">
-                    <li class="nav-item mx-2 mx-lg-0">
-                        <font-awesome-icon id="popover" icon="shopping-cart"/>
-                        <b-popover id="teste" target="popover" triggers="click">
-                            <ListShoppingCart/>
-                        </b-popover>
-                    </li>
                     <li class="nav-item dropdown" v-if="$store.state.user">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -59,6 +28,17 @@
                     </li>
                 </ul>
             </div>
+        </div>
+        <div class="ml-auto">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <template v-if="$store.state.user && $store.state.user.type === 'C'">
+                <button class="btn nav-cart-icon" id="popover"><font-awesome-icon icon="shopping-cart"/></button>
+                <ListShoppingCart />
+            </template>
+
         </div>
     </nav>
 </template>
@@ -89,5 +69,8 @@ export default {
 }
 .navbar{
     margin-bottom: 5px;
+}
+.nav-cart-icon {
+    color: rgba(255, 255, 255, 0.5)
 }
 </style>
