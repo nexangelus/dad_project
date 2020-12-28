@@ -42,9 +42,10 @@ Route::middleware('auth:sanctum')->group(function() {
     //region Order
     Route::post('order', [OrderController::class, 'postOrder']);
     //endregion
-
+    //TODO Check singular up and down
     //region Customer
     Route::get('customer/order', [CustomerController::class, 'getOrders']);
+    Route::get('customer/history', [CustomerController::class, 'getOrderHistory']);
     //endregion
 
     //region Cook

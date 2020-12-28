@@ -10,6 +10,7 @@ export default [
     {name: 'profile', path: '/profile', component: require('./pages/profile').default},
     {name: 'c-menu', path: '/menu', component: require('./pages/c-menu').default},
     {name: 'order', path: '/order', component: require('./pages/order').default},
+    {name: 'history', path: '/history', component: require('./pages/history').default},
 
 
 
