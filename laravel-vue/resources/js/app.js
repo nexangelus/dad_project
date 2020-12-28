@@ -14,7 +14,7 @@ library.add(fas)
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import moment from 'moment'
 
-require('moment/locale/pt');
+require('moment/locale/en-gb'); //TODO changed from pt
 
 Vue.use(Toasted, {duration: 3000})
 

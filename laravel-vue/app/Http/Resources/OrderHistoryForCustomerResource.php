@@ -24,7 +24,6 @@ class OrderHistoryForCustomerResource extends JsonResource
             'status' => $this->status,
             'notes' => $this->notes,
             'total_price' => $this->total_price,
-            'closed_at' => $this->closed_at,
             'preparation_time' => $this->preparation_time,
             'delivery_time' => $this->delivery_time,
             'total_time' => $this->total_time,

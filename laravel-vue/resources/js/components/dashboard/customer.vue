@@ -21,7 +21,7 @@
                                     </tr>
                                     <tr>
                                         <th>Order at:</th>
-                                        <td>{{order.opened_at}}</td>
+                                        <td>{{order.opened_at | moment('L LT')}}</td>
                                     </tr>
                                     <tr>
                                         <th>Time waited:</th>

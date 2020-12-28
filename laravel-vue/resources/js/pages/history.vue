@@ -28,8 +28,7 @@
         <b-table striped hover :items="orders" :fields="fields" :per-page="perPage" :current-page="currentPage"
                  :filter="filter" @filtered="onFiltered" show-empty responsive="" sort-by="current_status_at">
             <template #cell(status)="data">
-                <p v-if="data.item.status === 'D'">Delivered</p>
-                <p v-else>Canceled</p>
+                <status-banner :status="data.item.status" />
             </template>
             <template #cell(actions)="data">
                 <b-button size="sm" @click="data.toggleDetails">
@@ -43,9 +42,10 @@
                 <b-card>
                     <ul>
                         <li>Cooker: {{ row.item.cook }}</li>
+                        <li>Cooking Time: {{ $moment.duration(row.item.preparation_time, 'seconds').humanize() }}</li>
                         <li>Deliveryman: {{ row.item.deliveryman }}</li>
-                        <li>Closed At: {{ row.item.closed_at }}</li>
-                        <li>Notes: {{ row.item.notes }}</li>
+                        <li>Delivery Time: {{ $moment.duration(row.item.delivery_time , 'seconds').humanize()  }}</li>
+                        <li v-if="row.item.notes">Notes: {{ row.item.notes }}</li>
                     </ul>
                     Order Items:
                     <b-table :items="row.item.order_items">
@@ -64,8 +64,10 @@
 </template>
 
 <script>
+import StatusBanner from "../components/badges-status/order-status-banner";
 export default {
     name: "history",
+    components: {StatusBanner},
     auth: {
         required: true
     },
@@ -88,6 +90,9 @@ export default {
             }, {
                 key: 'total_price',
                 label: 'Total Price'
+            },{
+                key: 'total_time',
+                formatter: (value) => this.$moment.duration(value, 'seconds').humanize()
             }, {
                 key: 'status',
                 label: 'Status',
@@ -107,6 +112,12 @@ export default {
         }).catch(r => {
             this.isFetchingData = false;
         })
+    },
+    methods: {
+        onFiltered(filtered) {
+            this.rows = filtered.length;
+            this.currentPage = 1;
+        }
     }
 }
 </script>

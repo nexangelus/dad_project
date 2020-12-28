@@ -47,6 +47,7 @@
             <template #row-details="row">
                 <b-card>
                     <ul>
+                        <!--TODO passar datas pelo moment-->
                         <li>Customer: {{row.item.customer.name}}</li>
                         <li>Customer Phone Number: {{row.item.customer.phone}}</li>
                         <li>Order Created: {{row.item.opened_at}}</li>
