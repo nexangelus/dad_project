@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\CookController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\DelivererController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,12 +51,17 @@ Route::middleware('auth:sanctum')->group(function() {
 
     //region Cook
     Route::middleware("checkUserCook")->group(function() {
-        Route::get('cooks/work', [CookController::class, 'getWorkToDo']);
-        Route::patch('cooks/ready', [CookController::class, 'setOrderReady']);
+        Route::get('cooks/work', [DelivererController::class, 'getWorkToDo']);
+        Route::patch('cooks/ready', [DelivererController::class, 'setOrderReady']);
     });
-
     //endregion
 
+    //region Deliverer
+    Route::middleware("checkUserDeliverer")->group(function() {
+        Route::get('deliverers/work', [CookController::class, 'getWorkToDo']);
+        Route::patch('deliverers/ready', [CookController::class, 'setOrderReady']);
+    });
+    //endregion
 
     //region Manager
     Route::middleware("checkUserManager")->group(function() {
