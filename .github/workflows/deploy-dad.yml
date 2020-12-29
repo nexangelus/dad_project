@@ -14,5 +14,5 @@ jobs:
         run: git pull
       - name: Build VUE
         run: cd laravel-vue && npm run prod
-      - name: Test
-        run: pwd
+      - name: Restart Socket
+        run: cd socket && forever restart index.js
