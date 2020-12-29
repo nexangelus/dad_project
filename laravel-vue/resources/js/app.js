@@ -100,7 +100,7 @@ const app = new Vue({
         userBlocked() {
             this.$store.commit('clearUser');
             if(this.$route.name !== 'main') {
-                this.$router.push({'name': 'main'});
+                this.$router.push({name: 'main'});
             }
             this.$toasted.error("Your account has been disabled by a manager.");
         }

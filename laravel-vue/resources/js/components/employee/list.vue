@@ -45,6 +45,7 @@
             </template>
             <template #row-details="row">
                 <b-card>
+                    <b-button variant="danger" @click="blockUser(row.item.id)"><font-awesome-icon icon="ban"/></b-button>
                     <ul>
                         <li>Full Name: {{row.item.name}}</li>
                         <li>Email: {{row.item.email}}</li>
@@ -152,6 +153,9 @@ export default {
             axios.get(`/api/managers/dashboard/${type}/${id}`).then(r => {
                 this.details = r.data.data;
             })
+        },
+        blockUser(id) {
+            axios.patch(`/api/users/${id}/status/block`)
         }
     }
 }

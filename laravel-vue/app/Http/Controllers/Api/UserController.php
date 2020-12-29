@@ -83,7 +83,7 @@ class UserController extends Controller {
     }
 
     public function notifyNewSocketID(Request $request) {
-        $validated = $request->validate([
+        $request->validate([
             'socketID' => 'required'
         ]);
 

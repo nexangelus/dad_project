@@ -22,8 +22,9 @@ export default {
     methods: {
         create() {
             const user = this.$refs.register.user;
+            const socketID = this.$socket ? this.$socket.id : null;
             axios.post('/api/register', user).then(r => {
-                axios.post('/api/login', {email: user.email, password: user.password}).then(response => {
+                axios.post('/api/login', {email: user.email, password: user.password, socketID: socketID}).then(response => {
                     this.$store.commit('setUser', response.data.data);
                     if(this.$refs.register.file) {
                         let formData = new FormData();

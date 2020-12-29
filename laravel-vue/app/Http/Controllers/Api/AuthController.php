@@ -21,9 +21,17 @@ class AuthController extends Controller {
                 return response()->json(['message' => 'Forbidden: Account is blocked.'], 403);
             }
 
-            if($user->type === "EC") {
-                $order = $amPreparing = Order::query()->where(['prepared_by' => $user->id, 'status' => 'P'])->first();
-                if(!$order) {
+            // se for um cook ou deliveryman então vai ser preciso verificar se eles têm pedidos para não atualizar a data de available at
+            if($user->type === "EC" || $user->type === "ED") {
+                $query = null;
+                if($user->type === "EC") {
+                    $query = ['prepared_by' => $user->id, 'status' => 'P'];
+                } else {
+                    $query = ['delivered_by' => $user->id, 'status' => 'T'];
+                }
+                // buscar o primeiro pedido preparado/a entregar pelo employee
+                $order = $amPreparing = Order::query()->where($query)->first();
+                if(!$order) { // se não houver definir o available_at
                     $user->available_at = new \DateTime();
                 }
             }
@@ -34,11 +42,6 @@ class AuthController extends Controller {
             $user = User::find($user->id);
 
             SocketIO::notifyLogin($user, $request->socketID);
-
-            if($user->type != "C") {
-                SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource($user));
-            }
-
 
             return new UserResource($user);
         } else {
@@ -55,7 +58,10 @@ class AuthController extends Controller {
         $user->available_at = null;
         $user->save();
 
-        SocketIO::notifyUpdatedEmployeeForManagers(["id" => $user->id, "__remove" => true]);
+        // TODO Perguntar como é que isto é suposto funcionar a 100%. Se eu importar o pedido para o postman e tentar
+        //  fazer um pedido após fazer logout ainda deixa fazer pedidos, se eu fizer login novamente também permite
+        //  ainda fazer pedidos com o token antigo.
+
 
         Auth::guard('web')->logout(); //check if Auth::logout(); works
         return response()->json(['msg' => 'User session closed'], 200);

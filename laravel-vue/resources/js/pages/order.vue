@@ -6,7 +6,7 @@
                 {{ data.item.price }} €
             </template>
             <template #cell(Sub-Total)="data">
-                {{ data.item.price * data.item.quantity }} € <!-- TODO Formatar este valor (testar com 3x Alheiras) -->
+                {{ (data.item.price * data.item.quantity).toFixed(2) }} €
             </template>
         </b-table>
         <hr />
