@@ -32,13 +32,25 @@ export default {
         },
         setTransit(id){
             axios.patch(`api/deliverers/orders/${id}/transit`).then(response => {
-                this.order = response.data.data
+                if(response.status === 200){
+                    this.$toasted.success('Delivery set to transit')
+                    this.order = response.data.data
+                }else{
+                    this.$toasted.success('Something went wrong')
+                }
+
             })
         },
         setDelivered(id){
             axios.patch(`api/deliverers/orders/${id}/delivered`).then(response => {
-                this.order = null
-                this.getOrder()
+                if(response.status === 200){
+                    this.$toasted.success('Delivery has been completed')
+                    this.order = null
+                    this.getOrder()
+                }else{
+                    this.$toasted.success('Something went wrong')
+                }
+
             })
         }
     },

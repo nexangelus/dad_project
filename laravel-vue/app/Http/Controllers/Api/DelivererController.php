@@ -40,6 +40,8 @@ class DelivererController extends Controller {
             $order->delivered_by = $user->id;
             $order->current_status_at = new \DateTime();
             $order->save();
+
+            $order = Order::find($id);
             SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($order));
             SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($order));
             return new OrderForDelivererResource($order);
@@ -60,6 +62,8 @@ class DelivererController extends Controller {
             $order->closed_at = $timeNow;
             $order->delivery_time = $timeSpent;
             $order->save();
+
+            $order = Order::find($id);
             SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($order));
             SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($order));
         }

@@ -1,7 +1,7 @@
 <template>
     <div class="card w-100">
         <div class="card-body" v-if="order"> <!-- if order exits  -->
-            <h2 class="card-title text-center">Order to be prepared</h2>
+            <h2 class="card-title text-center">Order to Deliver</h2>
             <table class="table table-striped">
                 <tbody>
                 <tr>
@@ -20,13 +20,13 @@
                     <th scope="row">Costumer Phone</th>
                     <td>{{ order.phone }}</td>
                 </tr>
-                <tr>
+                <tr v-if="order.photo!=null">
                     <th scope="row">Costumer Photo</th>
                     <td><img v-bind:src="order.photo"/> </td>
                 </tr>
                 <tr v-if="order.notes">
                     <th scope="row">Notes</th>
-                    <td><img v-bind:src="order.notes"/> </td>
+                    <td>{{order.notes}} </td>
                 </tr>
                 <tr>
                     <th scope="row">Time delivery started</th>
@@ -66,7 +66,7 @@ export default {
     name: "cardOrder",
     props: {
         order: {
-            type: Array,
+            type: Object,
         }
     },
     methods: {

@@ -18,7 +18,7 @@
                             Profile
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <router-link class="dropdown-item" to="history">My Order History</router-link>
+                            <router-link class="dropdown-item" to="history" v-if="$store.state.user && $store.state.user.type === 'C'">My Order History</router-link>
                             <router-link class="dropdown-item" to="profile">My Profile</router-link>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" @click.prevent="logout()" href="#">Logout</a>

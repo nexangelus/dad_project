@@ -1,44 +1,61 @@
 <template>
     <div>
-        <div class="row mt-5" v-for="order in orders">
+        <h2 class="text-center">Orders in process</h2>
+        <div v-if="orders.length">
+            <div class="row mt-5" v-for="order in orders" >
+                <div class="col-12">
+                    <b-card>
+                        <b-card-text>
+                            <div class="row text-center">
+                                <div class="col-md-4 custom-border">
+                                    <table class="table b-table fds">
+                                        <tr>
+                                            <th class="no-border-top">ID:</th>
+                                            <td class="no-border-top">{{order.id}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status:</th>
+                                            <td><order-status-banner :status="order.status"/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Responsible:</th>
+                                            <td>{{order.responsible}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Order at:</th>
+                                            <td>{{order.opened_at | moment('L LT')}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Time waited:</th>
+                                            <td><TimeSince :date="order.opened_at"/></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-4 custom-border padding-small" >
+                                    <h2>Notes:</h2>
+                                    <p>{{order.notes}}</p>
+                                </div>
+                                <div class="col-md-4 padding-small">
+                                    <h3>Products Ordered</h3>
+                                    <div class="limited-height">
+                                        <b-table :items="order.order_items"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </b-card-text>
+                    </b-card>
+                </div>
+            </div>
+        </div>
+
+        <div v-else>
             <div class="col-12">
                 <b-card>
                     <b-card-text>
-                        <div class="row text-center">
-                            <div class="col-md-4 custom-border">
-                                <table class="table b-table fds">
-                                    <tr>
-                                        <th class="no-border-top">ID:</th>
-                                        <td class="no-border-top">{{order.id}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Status:</th>
-                                        <td><order-status-banner :status="order.status"/></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Responsible:</th>
-                                        <td>{{order.responsible}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Order at:</th>
-                                        <td>{{order.opened_at | moment('L LT')}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Time waited:</th>
-                                        <td><TimeSince :date="order.opened_at"/></td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="col-md-4 custom-border padding-small" >
-                                <h2>Notes:</h2>
-                                <p>{{order.notes}}</p>
-                            </div>
-                            <div class="col-md-4 padding-small">
-                                <h3>Products Ordered</h3>
-                                <div class="limited-height">
-                                    <b-table :items="order.order_items"/>
-                                </div>
-                            </div>
+                        <div class="text-center">
+                            <p>You current don't have orders in process</p>
+                            <router-link to="menu"><b-button variant="primary">Create new Order</b-button></router-link>
+                            <router-link to="history"><b-button variant="primary">See my order history</b-button></router-link>
                         </div>
                     </b-card-text>
                 </b-card>
@@ -55,7 +72,7 @@ export default {
     components: {OrderStatusBanner, TimeSince},
     data: function () {
         return {
-            orders: null,
+            orders: [],
             time: null,
             fields: [ 'order.id', 'order.status'],
             statusName : ['Holding','Preparing','Ready','Transit'],
