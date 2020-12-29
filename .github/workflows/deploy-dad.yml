@@ -10,5 +10,10 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Test
+        run: |
+          echo $HOME
+          pwd
+          whoami
       - name: Pull Changes
         run: git pull
