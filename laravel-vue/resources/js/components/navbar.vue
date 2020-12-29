@@ -54,7 +54,7 @@ export default {
             axios.post('/api/logout', this.credentials).then(response => {
                 this.$store.commit("clearUser");
                 Vue.toasted.success(`${response.data.msg}`)
-                this.$router.push({name: 'main'})
+                this.$router.push({name: 'main'}) // TODO não é preciso fazer push para a main se já tiver na main
             }).catch(error => {
                 Vue.toasted.error(error.response.data.message)
             })
