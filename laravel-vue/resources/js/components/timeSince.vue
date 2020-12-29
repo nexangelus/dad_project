@@ -9,6 +9,14 @@ export default {
         date: {
             type: String,
             default: "0"
+        },
+        stop: {
+            type: Boolean,
+            default: false
+        },
+        showPrefix: {
+            type: Boolean,
+            default: true
         }
     },
     computed: {
@@ -41,11 +49,16 @@ export default {
 
                 let msg = `${d!==0?`${d}d`:""} ${h!==0?`${h}h`:""} ${m!==0?`${m}m`:""} ${s!==0?`${s}s`:""}`;
 
-                this.num = (after ? "" : "in ") + msg + (after ? " ago" : "");
+                if(this.showPrefix) {
+                    this.num = (after ? "" : "in ") + msg + (after ? " ago" : "");
+                } else {
+                    this.num = msg;
+                }
 
             }
 
-            setTimeout(this.update, 1000);
+            if(!this.stop)
+                setTimeout(this.update, 1000);
         }
     }
 }

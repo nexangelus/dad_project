@@ -96,6 +96,20 @@ app.post('/updateCustomerOrder', (req, res) => {
     }
 })
 
+app.post('/userBlocked', (req, res) => {
+    res.json({"status": "OK"})
+    if(req.body.userID) {
+        console.log(`[/userBlocked] User ID: '${req.body.userID}'`);
+        const session = sessions.getUserSession(parseInt(req.body.userID))
+        if (session){
+            io.to(session.socketID).emit("userBlocked");
+            console.log(`[/userBlocked] io.to(${session.socketID}).emit("userBlocked");`);
+        } else {
+            console.error(`[/userBlocked] No session for User ID: ${req.body.userID}`);
+        }
+    }
+})
+
 app.get('/m/:id/:m', (req, res) => {
     const session = sessions.getUserSession(parseInt(req.params.id))
     console.log(session);

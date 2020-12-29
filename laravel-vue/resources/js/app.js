@@ -14,7 +14,7 @@ library.add(fas)
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import moment from 'moment'
 
-require('moment/locale/en-gb'); //TODO changed from pt
+require('moment/locale/en-gb');
 
 Vue.use(Toasted, {duration: 3000})
 
@@ -96,6 +96,13 @@ const app = new Vue({
         },
         pm(msg) {
             this.$toasted.info(msg);
+        },
+        userBlocked() {
+            this.$store.commit('clearUser');
+            if(this.$route.name !== 'main') {
+                this.$router.push({'name': 'main'});
+            }
+            this.$toasted.error("Your account has been disabled by a manager.");
         }
     }
 })

@@ -35,12 +35,15 @@ class SocketIO {
         self::postHTTP('updateCustomerOrder', ['order'=>$order]);
     }
 
+    public static function notifyUserBlocked($id) {
+        self::postHTTP('userBlocked', ['userID' => $id]);
+    }
+
     ////////////
     private static function postHTTP($endpoint, $data) {
         $url = config('app.websocketUrl') . "" . $endpoint;
         Http::post($url, $data);
     }
-
 
 
 

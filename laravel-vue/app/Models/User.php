@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Listeners\UserSaveListener;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @property integer $id
@@ -38,6 +40,8 @@ class User extends Authenticatable {
             }
         }
     }
+
+    protected $dispatchesEvents = ['saved' => UserSaveListener::class];
 
     /**
      * The attributes that are mass assignable.

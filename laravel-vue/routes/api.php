@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\ManagerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CookController;
 use App\Http\Controllers\Api\ProductController;
@@ -70,6 +69,8 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('managers/dashboard', [ManagerController::class, 'getDashboardData']);
         Route::get('managers/dashboard/cook/{id}', [ManagerController::class, 'getOrderCookIsWorkingOn']);
         Route::get('managers/dashboard/delivery/{id}', [ManagerController::class, 'getOrderDeliverymanIsWorkingOn']);
+
+        Route::patch('users/{id}/status/{status}', [ManagerController::class, 'blockUser']); // TODO Integrar este pedido na interface
     });
     //endregion
 
