@@ -17,7 +17,6 @@ export default {
         return {
             user: {},
             errors: {},
-            file: null,
         }
     },
     methods: {
@@ -26,9 +25,9 @@ export default {
             axios.post('/api/register', user).then(r => {
                 axios.post('/api/login', {email: user.email, password: user.password}).then(response => {
                     this.$store.commit('setUser', response.data.data);
-                    if(this.file) {
+                    if(this.$refs.register.file) {
                         let formData = new FormData();
-                        formData.append("file", this.file)
+                        formData.append("file", this.$refs.register.file)
                         axios.post('/api/users/photo', formData, {headers: {"Content-Type": "multipart/form-data"}}).then(r => {
                             this.finishedRegister(response.data.data);
                         })
@@ -41,9 +40,6 @@ export default {
                 this.errors = error.response.data.errors;
                 Vue.toasted.error(error.response.data.message)
             })
-        },
-        fileChanged(e) {
-            this.file = e.target.files[0];
         },
         finishedRegister(user) {
             Vue.toasted.success(`Logged in successfully: ${user.name}`)
