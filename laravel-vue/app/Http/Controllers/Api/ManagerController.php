@@ -75,4 +75,40 @@ class ManagerController extends Controller {
         }
         return null;
     }
+
+    public function blockUser(Request $request, $id, string $status) {
+        /* @var User $manager */ /* @var User $user */
+        $manager = $request->user();
+        if($manager->id == $id) {
+            return response()->json(['message' => "You can't block yourself"], 403);
+        }
+
+        // TODO como se deve invalidar o token do utilizador que foi bloqueado? Porque pedidos diretos à API
+        //  ainda funcionam (importar o pedido para o postman e tentar fazer um pedido de obter dados depois de bloquear)
+
+        $block = -1;
+        switch ($status) {
+            case 'block':
+            case 'blocked':
+                $block = 1;
+                break;
+            case 'unblock':
+            case 'unblocked':
+                $block = 0;
+                break;
+        }
+
+        if($block == -1) {
+            return response()->json(['message' => "The status '$status' was not recognized"], 403);
+        }
+
+        $user = User::find($id);
+
+        $user->blocked = $block;
+        $user->save();
+
+        $msg = $user->blocked == 1 ? 'blocked' : 'unblocked';
+
+        return response()->json(['message' => "User has been ${msg}"]);
+    }
 }
