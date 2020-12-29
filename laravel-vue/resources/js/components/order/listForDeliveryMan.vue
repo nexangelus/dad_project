@@ -28,6 +28,9 @@
 
         <b-table striped hover :items="orders" :fields="fields" :per-page="perPage" :current-page="currentPage"
                  :filter="filter" @filtered="onFiltered" show-empty responsive="" sort-by="current_status_at">
+            <template #cell(action)="data">
+                <b-button @click.prevent="setTransit(data.item.id)">Set Transit</b-button>
+            </template>
             <template #empty>
                 <h3 class="text-center">No orders are ready to be delivered</h3>
             </template>
@@ -67,8 +70,8 @@ export default {
                 formatter: (value) => this.$moment(value).format('L LT'),
                 sortable: true,
             }, {
-                key: 'actions',
-                label: 'Actions'
+                key: 'action',
+                label: 'Action'
             }]
         }
     },
@@ -79,6 +82,9 @@ export default {
         onFiltered(filtered) {
             this.rows = filtered.length;
             this.currentPage = 1;
+        },
+        setTransit(id){
+            this.$emit('childSetTransit', id)
         }
     }
 }

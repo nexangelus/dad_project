@@ -1,7 +1,7 @@
 <template>
     <div class="card w-100">
-        <CardOrder v-if="order != null" :order="order"/>
-        <OrderListForDeliveryMan v-else :orders="orders"/>
+        <CardOrder v-on:childSetDelivered="setDelivered" v-if="order != null" :order="order"/>
+        <OrderListForDeliveryMan v-on:childSetTransit="setTransit" v-else :orders="orders"/>
     </div>
 </template>
 
@@ -30,14 +30,17 @@ export default {
                 }
             })
         },
-        finishOrder() {
-            axios.patch('/api/deliverers/ready').then(r => {
-                Vue.toasted.success("This order has been submitted to transport successfully.")
-                this.getOrder();
-            }).catch(r => {
-                Vue.toasted.error("An error occurred while trying to mark this as ready. Try again later.")
+        setTransit(id){
+            axios.patch(`api/deliverers/orders/${id}/transit`).then(response => {
+                this.order = response.data.data
             })
         },
+        setDelivered(id){
+            axios.patch(`api/deliverers/orders/${id}/delivered`).then(response => {
+                this.order = null
+                this.getOrder()
+            })
+        }
     },
     mounted() {
         this.getOrder();

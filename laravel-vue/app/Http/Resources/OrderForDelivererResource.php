@@ -22,7 +22,7 @@ class OrderForDelivererResource extends JsonResource
             'address' => $this->customer->address,
             'phone' => $this->customer->phone,
             'email' => $this->customer->user->email,
-            'photo' => $this->current_status_at,
+            'photo' => asset('storage/fotos/'.$this->photo_url),
             'time_delivery' => $this->current_status_at,
             'notes' => $this->notes,
             'order_items' => OrderItemResource::collection($this->orderItems)

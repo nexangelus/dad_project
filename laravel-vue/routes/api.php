@@ -60,7 +60,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::middleware("checkUserDeliverer")->group(function() {
         Route::get('deliverers/work', [DelivererController::class, 'getWorkToDo']);
         Route::get('deliverers/orders', [DelivererController::class, 'getReadyOrders']);
-        Route::patch('deliverers/ready', [DelivererController::class, 'setOrderReady']);
+        Route::patch('deliverers/orders/{id}/transit', [DelivererController::class, 'setOrderTransit']);
+        Route::patch('deliverers/orders/{id}/delivered', [DelivererController::class, 'setOrderDelivered']);
     });
     //endregion
 

@@ -10,15 +10,27 @@
                 </tr>
                 <tr>
                     <th scope="row">Costumer Name</th>
-                    <td>{{ order.customerName }}</td>
+                    <td>{{ order.name }}</td>
                 </tr>
                 <tr>
-                    <th scope="row">Started at</th>
-                    <td>{{ order.current_status_at | moment("L LT") }}</td>
+                    <th scope="row">Costumer Email</th>
+                    <td>{{ order.email }}</td>
                 </tr>
                 <tr>
-                    <th scope="row">Time since started preparing</th>
-                    <td><time-since v-if="order.current_status_at" :date="order.current_status_at"/></td>
+                    <th scope="row">Costumer Phone</th>
+                    <td>{{ order.phone }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Costumer Photo</th>
+                    <td><img v-bind:src="order.photo"/> </td>
+                </tr>
+                <tr v-if="order.notes">
+                    <th scope="row">Notes</th>
+                    <td><img v-bind:src="order.notes"/> </td>
+                </tr>
+                <tr>
+                    <th scope="row">Time delivery started</th>
+                    <td>{{ order.time_delivery | moment('L LT') }} </td>
                 </tr>
                 <tr>
                     <th scope="row">Order Items</th>
@@ -39,7 +51,7 @@
                 </tbody>
             </table>
             <div class="text-center">
-                <a href="#" class="btn btn-primary align-items-center" @click.prevent="finishOrder()">Finish</a>
+                <a href="#" class="btn btn-primary align-items-center" @click.prevent="setDelivered(order.id)">Finish</a>
             </div>
         </div>
         <div class="card-body text-center" v-else> <!-- if order exits  -->
@@ -55,6 +67,11 @@ export default {
     props: {
         order: {
             type: Array,
+        }
+    },
+    methods: {
+        setDelivered(id){
+            this.$emit('childSetDelivered', id)
         }
     }
 }
