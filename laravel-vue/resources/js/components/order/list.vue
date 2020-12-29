@@ -47,14 +47,13 @@
             <template #row-details="row">
                 <b-card>
                     <ul>
-                        <!--TODO passar datas pelo moment-->
                         <li>Customer: {{row.item.customer.name}}</li>
                         <li>Customer Phone Number: {{row.item.customer.phone}}</li>
-                        <li>Order Created: {{row.item.opened_at}}</li>
+                        <li>Order Created: {{row.item.opened_at | moment("L LT")}}</li>
                         <li>Assigned Cook: {{row.item.cook ? row.item.cook.name : "{no cook assigned}"}}</li>
                         <li>Assigned Deliveryman: {{row.item.deliveryman ? row.item.deliveryman.name : "{no deliveryman assigned}"}}</li>
-                        <li>Current Status: {{row.item.current_status_at}}</li>
-                        <li>Closed At: {{row.item.closed_at}}</li>
+                        <li>Current Status: <template v-if="row.item.current_status_at">{{row.item.current_status_at | moment("L LT")}}</template></li>
+                        <li>Closed At: <template v-if="row.item.closed_at">{{row.item.closed_at | moment("L LT")}}</template></li>
                         <li>Notes: {{row.item.notes}}</li>
                     </ul>
                 </b-card>
