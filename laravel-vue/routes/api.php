@@ -23,7 +23,6 @@ use App\Http\Controllers\Api\DelivererController;
 |
 */
 
-
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
 
@@ -42,7 +41,7 @@ Route::middleware('auth:sanctum')->group(function() {
     //region Order
     Route::post('orders', [OrderController::class, 'postOrder']);
     //endregion
-    //TODO Check singular up and down
+
     //region Customer
     Route::get('customers/order', [CustomerController::class, 'getOrders']);
     Route::get('customers/history', [CustomerController::class, 'getOrderHistory']);
@@ -78,5 +77,4 @@ Route::middleware('auth:sanctum')->group(function() {
 
 //Product
 Route::get('products', [ProductController::class, 'getAllProducts']);
-Route::get('test', [UserController::class, 'test']);
 

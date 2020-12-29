@@ -56,12 +56,10 @@ class CookController extends Controller {
         if ($orderToDo != null) {
             $orderToDo->prepared_by = $user->id;
             $orderToDo->status = 'P';
-            //TODO resto do update
+            $orderToDo->current_status_at = $timeNow = new \DateTime();
             $orderToDo->save();
-
             $user->available_at = null;
             $user->save();
-
             $savedOrder = Order::find($orderToDo->id);
             SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($savedOrder));
             SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($savedOrder));
