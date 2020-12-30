@@ -8,6 +8,15 @@ class SessionManager {
         return this.users.get(userID)
     }
 
+    getUserBySessionID(sessionID) {
+        for (let [userID, userSession] of this.users) {
+            if (userSession.socketID === sessionID) {
+                return userID;
+            }
+        }
+        return null
+    }
+
     addUserSession(user, socketID) {
 
         // If already exists a session for this user ID, reuse the session

@@ -26,6 +26,8 @@ use App\Http\Controllers\Api\DelivererController;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
 
+Route::post('socket-logout', [AuthController::class, 'socketLogout'])->withoutMiddleware(['csrf']);
+
 Route::middleware('auth:sanctum')->group(function() {
 
     //region User
@@ -72,6 +74,8 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::patch('managers/order/{id}/cancel', [ManagerController::class, 'cancelOrder']);
 
         Route::patch('users/{id}/status/{status}', [ManagerController::class, 'blockUser']); // TODO Integrar este pedido na interface
+
+        Route::get('users/{id}', [UserController::class, 'getUser'])->where('id', '[0-9]+');
     });
     //endregion
 

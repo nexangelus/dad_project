@@ -1,13 +1,25 @@
 const express = require("express");
+const axios = require("axios");
 const app = express();
 const httpServer = require('http').Server(app);
 const io = require('socket.io')(httpServer);
 const port = 8080;
+const config = require('./config');
+const PASSWORD_LARAVELAPI_SOCKET = config.API_PW;
 
 const SessionManager = require("./SessionManager.js")
 const sessions = new SessionManager();
 
 app.use(express.json());
+
+app.use((req, res, next) => {
+    if(req.body.pw && req.body.pw === PASSWORD_LARAVELAPI_SOCKET){
+        next();
+    } else {
+        console.error(`[REQUEST] PASSWORD NOT PRESENT OR WRONG. URL ${req.url}, PASSWORD: ${req.body.pw}`);
+        res.end("PW is not correct.");
+    }
+});
 
 app.post('/login', (req, res) => {
     res.json({"status": "OK"})
@@ -137,6 +149,17 @@ io.on('connection', function (socket) {
             console.log('  -> Total Sessions= ' + sessions.users.size)
         }
     })*/
+
+    socket.on('disconnect', (reason) => {
+        console.log(socket.id);
+        if(reason === "transport close") {
+            let clientID = sessions.getUserBySessionID(socket.id);
+            if(clientID)
+                axios.post(`${config.API_URL}api/socket-logout`, {pw: config.API_PW, id: clientID}).then(r => {
+                    console.log(r);
+                });
+        }
+    })
 })
 
 

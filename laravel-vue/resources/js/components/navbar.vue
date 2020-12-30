@@ -6,6 +6,9 @@
                 <li class="nav-item" v-if="$store.state.user">
                     <router-link class="nav-link" :to="{name: 'dashboard'}">Dashboard</router-link>
                 </li>
+                <li class="nav-item" v-if="$store.state.user && $store.state.user.type === 'EM'">
+                    <router-link class="nav-link" :to="{name: 'users'}">Accounts</router-link>
+                </li>
                 <li class="nav-item">
                     <router-link class="nav-link" :to="{name: 'c-menu'}">Menu</router-link>
                 </li>

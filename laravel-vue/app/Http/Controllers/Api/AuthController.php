@@ -20,6 +20,9 @@ class AuthController extends Controller {
             if($user['blocked']) {
                 return response()->json(['message' => 'Forbidden: Account is blocked.'], 403);
             }
+            if($user['deleted_at']) {
+                return response()->json(['message' => 'Forbidden: Your account has been deleted.'], 403);
+            }
 
             // se for um cook ou deliveryman então vai ser preciso verificar se eles têm pedidos para não atualizar a data de available at
             if($user->type === "EC" || $user->type === "ED") {
@@ -58,12 +61,19 @@ class AuthController extends Controller {
         $user->available_at = null;
         $user->save();
 
-        // TODO Perguntar como é que isto é suposto funcionar a 100%. Se eu importar o pedido para o postman e tentar
-        //  fazer um pedido após fazer logout ainda deixa fazer pedidos, se eu fizer login novamente também permite
-        //  ainda fazer pedidos com o token antigo.
-
-
         Auth::guard('web')->logout(); //check if Auth::logout(); works
         return response()->json(['msg' => 'User session closed'], 200);
+    }
+
+    public function socketLogout(Request $request) {
+        if($request->pw === config('app.websocketPW') && $request->id) {
+            /* @var User $user*/
+            $user = User::find($request->id);
+            $user->available_at = null;
+            $user->logged_at = null;
+            $user->save();
+            return $user;
+        }
+        return "FAIL, no PW or no ID";
     }
 }

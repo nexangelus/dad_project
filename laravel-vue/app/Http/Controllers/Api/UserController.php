@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Order;
 use App\Utils\SocketIO;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
@@ -42,10 +43,38 @@ class UserController extends Controller {
             $file = $request->file->store('/public/fotos');
             $user->photo_url = basename($file);
             $user->save();
+
+            return asset('storage/fotos/'.$user->photo_url);
         }
+
+        return response()->json(["message" => "Error, no file was uploaded"], 403);
     }
 
     public function me(Request $request) {
+        /* @var User $user */
+        $user = $request->user();
+        if($user->logged_at == null) {
+            $user->logged_at = new \DateTime();
+
+            // se for um cook ou deliveryman então vai ser preciso verificar se eles têm pedidos para não atualizar a data de available at
+            if($user->type === "EC" || $user->type === "ED") {
+                $query = null;
+                if($user->type === "EC") {
+                    $query = ['prepared_by' => $user->id, 'status' => 'P'];
+                } else {
+                    $query = ['delivered_by' => $user->id, 'status' => 'T'];
+                }
+                // buscar o primeiro pedido preparado/a entregar pelo employee
+                $order = $amPreparing = Order::query()->where($query)->first();
+                if(!$order) { // se não houver definir o available_at
+                    $user->available_at = new \DateTime();
+                }
+            }
+
+            $user->save();
+
+            $user = User::find($user->id);
+        }
         return new UserResource($request->user());
     }
 
@@ -69,7 +98,7 @@ class UserController extends Controller {
     }
 
     public function update(UpdateUserRequest $request) {
-        $user = $request->user();
+        $user = $request->user(); // TODO user id must be the same
         $user->fill($request->validated());
         $user->save();
 
@@ -92,5 +121,10 @@ class UserController extends Controller {
         SocketIO::notifySocketIDChanged($request->user(), $socketID);
 
         return ["status" => "OK"];
+    }
+
+    public function getUser(Request $request, int $id) {
+        $user = User::find($id);
+        return new UserResource($user);
     }
 }

@@ -42,7 +42,7 @@ class SocketIO {
     ////////////
     private static function postHTTP($endpoint, $data) {
         $url = config('app.websocketUrl') . "" . $endpoint;
-        Http::post($url, $data);
+        Http::post($url, array_merge(["pw" => config('app.websocketPW')], $data));
     }
 
 

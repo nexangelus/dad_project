@@ -78,9 +78,16 @@ export default new Vuex.Store({
                     console.log("[store.rebuildData] success: ", r);
                     context.commit('setUser', r.data.data);
                 }).catch(r => {
-                    console.error("[store.rebuildData] failed: ", r);
-                    context.commit('clearUser');
-                    this.$router.push({name: 'main'});
+                    if(r.response.status === 401) {
+                        context.commit('clearUser');
+                        if(vue.$route.matched && vue.$route.matched[0].components.default.auth && vue.$route.matched[0].components.default.auth.required === true) {
+                            vue.$router.push({name: 'main'})
+                        }
+                    } else {
+                        console.error("[store.rebuildData] failed: ", r);
+                    }
+
+
                 })
             }
         },

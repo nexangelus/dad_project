@@ -98,11 +98,14 @@ const app = new Vue({
             this.$toasted.info(msg);
         },
         userBlocked() {
-            this.$store.commit('clearUser');
-            if(this.$route.name !== 'main') {
-                this.$router.push({name: 'main'});
-            }
-            this.$toasted.error("Your account has been disabled by a manager.");
+            axios.post('/api/logout').finally(() => {
+                this.$store.commit('clearUser');
+                if(this.$route.name !== 'main') {
+                    this.$router.push({name: 'main'});
+                }
+                this.$toasted.error("Your account has been disabled by a manager.");
+            })
+
         }
     }
 })

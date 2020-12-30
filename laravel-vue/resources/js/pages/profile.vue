@@ -29,7 +29,8 @@ export default {
                 if(this.$refs.update.file) {
                     let formData = new FormData();
                     formData.append("file", this.$refs.update.file)
-                    axios.post('/api/users/photo', formData, {headers: {"Content-Type": "multipart/form-data"}}).then(_ => {
+                    axios.post('/api/users/photo', formData, {headers: {"Content-Type": "multipart/form-data"}}).then(image => {
+                        r.data.data.photo_url = image.data;
                         this.finishUpdating(r.data.data);
                     })
                 } else {
@@ -43,6 +44,7 @@ export default {
         finishUpdating(user) {
             Vue.toasted.success("Details have been changed.");
             this.$store.commit('setUser', user);
+
             this.errors = {};
         }
     }

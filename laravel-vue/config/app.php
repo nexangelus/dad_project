@@ -3,6 +3,7 @@
 return [
 
     'websocketUrl' => env('WEBSOCKET_URL', "DEFAULT URL"),
+    'websocketPW' => env('WEBSOCKET_PW', "DEFAULT PW"),
 
     /*
     |--------------------------------------------------------------------------
