@@ -1,7 +1,7 @@
 <template>
     <div class="jumbotron">
         <h2>Register Account</h2>
-        <router-link to="/login">Login</router-link>
+        <router-link :to="{name: 'login'}">Login</router-link>
         <editProfile v-on:finish="create" :errors="errors" ref="register"></editProfile>
     </div>
 </template>
@@ -44,7 +44,7 @@ export default {
         },
         finishedRegister(user) {
             Vue.toasted.success(`Logged in successfully: ${user.name}`)
-            this.$router.push('dashboard')
+            this.$router.push({name: 'dashboard'})
         }
     }
 }

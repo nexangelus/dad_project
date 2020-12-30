@@ -35,7 +35,7 @@
             </div>
             <div v-if="cart.length > 0">
                 <b-button @click="deleteCart">Clean Cart</b-button>
-                <router-link to="order"><b-button @click="$refs.popovercart.$emit('close')">Confirm</b-button></router-link>
+                <router-link :to="{name: 'order'}"><b-button @click="$refs.popovercart.$emit('close')">Confirm</b-button></router-link>
             </div>
         </div>
     </b-popover>

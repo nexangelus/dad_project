@@ -1,13 +1,13 @@
 <template>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <router-link class="navbar-brand" to="/">Food@Home</router-link>
+        <router-link class="navbar-brand" :to="{name: 'main'}">Food@Home</router-link>
         <div class="collapse navbar-collapse" id="mainNavbar"> <!-- LIMIT OF 10 ITEMS IN THIS MENU -->
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0 navbar-borders">
                 <li class="nav-item" v-if="$store.state.user">
-                    <router-link class="nav-link" to="dashboard">Dashboard</router-link>
+                    <router-link class="nav-link" :to="{name: 'dashboard'}">Dashboard</router-link>
                 </li>
-                <li class="nav-item" >
-                    <router-link class="nav-link" to="menu">Menu</router-link>
+                <li class="nav-item">
+                    <router-link class="nav-link" :to="{name: 'c-menu'}">Menu</router-link>
                 </li>
             </ul>
             <div class="my-2 my-lg-0 navbar-borders">
@@ -18,14 +18,14 @@
                             Profile
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <router-link class="dropdown-item" to="history" v-if="$store.state.user && $store.state.user.type === 'C'">My Order History</router-link>
-                            <router-link class="dropdown-item" to="profile">My Profile</router-link>
+                            <router-link class="dropdown-item" :to="{name: 'history'}" v-if="$store.state.user && $store.state.user.type === 'C'">My Order History</router-link>
+                            <router-link class="dropdown-item" :to="{name: 'profile'}">My Profile</router-link>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" @click.prevent="logout()" href="#">Logout</a>
                         </div>
                     </li>
                     <li class="nav-item" v-else>
-                        <router-link class="nav-link" to="login">Login</router-link>
+                        <router-link class="nav-link" :to="{name: 'login'}">Login</router-link>
                     </li>
                 </ul>
             </div>

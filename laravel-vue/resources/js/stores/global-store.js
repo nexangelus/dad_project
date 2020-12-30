@@ -80,7 +80,7 @@ export default new Vuex.Store({
                 }).catch(r => {
                     console.error("[store.rebuildData] failed: ", r);
                     context.commit('clearUser');
-                    this.$router.push("/");
+                    this.$router.push({name: 'main'});
                 })
             }
         },

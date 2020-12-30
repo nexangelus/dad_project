@@ -1,7 +1,7 @@
 <template>
     <div class="jumbotron">
         <h2>Login</h2>
-        <router-link to="/register">Create an account</router-link>
+        <router-link :to="{name: 'register'}">Create an account</router-link>
         <div class="form-group">
             <label for="inputEmail">Email</label>
             <input
@@ -68,7 +68,7 @@ export default {
                 axios.post('/api/login', this.credentials).then(response => {
                     this.$store.commit('setUser', response.data.data);
                     Vue.toasted.success(`Logged in successfully: ${response.data.data.name}`)
-                    this.$router.push('dashboard')
+                    this.$router.push({name: 'dashboard'})
                 }).catch(error => {
                     Vue.toasted.error(error.response.data.message)
                 })

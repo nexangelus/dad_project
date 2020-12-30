@@ -54,8 +54,8 @@
                     <b-card-text>
                         <div class="text-center">
                             <p>You current don't have orders in process</p>
-                            <router-link to="menu"><b-button variant="primary">Create new Order</b-button></router-link>
-                            <router-link to="history"><b-button variant="primary">See my order history</b-button></router-link>
+                            <router-link :to="{name: 'menu'}"><b-button variant="primary">Create new Order</b-button></router-link>
+                            <router-link :to="{name: 'history'}"><b-button variant="primary">See my order history</b-button></router-link>
                         </div>
                     </b-card-text>
                 </b-card>
