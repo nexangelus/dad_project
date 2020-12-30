@@ -4,3 +4,5 @@
 laravel-vue/config.js
 
 laravel-vue/public/css/
+
+socket/config.js
