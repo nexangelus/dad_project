@@ -69,6 +69,8 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('managers/dashboard/cook/{id}', [ManagerController::class, 'getOrderCookIsWorkingOn']);
         Route::get('managers/dashboard/delivery/{id}', [ManagerController::class, 'getOrderDeliverymanIsWorkingOn']);
 
+        Route::patch('managers/order/{id}/cancel', [ManagerController::class, 'cancelOrder']);
+
         Route::patch('users/{id}/status/{status}', [ManagerController::class, 'blockUser']); // TODO Integrar este pedido na interface
     });
     //endregion

@@ -40,8 +40,11 @@
                 <status-banner :status="data.item.status" />
             </template>
             <template #cell(actions)="data">
-                <b-button size="sm" @click="data.toggleDetails">
+                <b-button variant="primary" size="sm" @click="data.toggleDetails">
                     <font-awesome-icon icon="info"/>
+                </b-button>
+                <b-button variant="danger" size="sm" @click.prevent="cancelOrder(data.item.id)">
+                    <font-awesome-icon icon="ban"/>
                 </b-button>
             </template>
             <template #row-details="row">
@@ -131,6 +134,9 @@ export default {
         onFiltered(filtered) {
             this.rows = filtered.length;
             this.currentPage = 1;
+        },
+        cancelOrder(id){
+            this.$emit('childSetCancelOrder', id)
         }
     }
 }

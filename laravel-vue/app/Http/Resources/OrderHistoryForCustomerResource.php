@@ -18,8 +18,8 @@ class OrderHistoryForCustomerResource extends JsonResource
         return [
             'id' => $this->id,
             'opened_at' => $this->opened_at,
-            'cook' => $this->cook->name,
-            'deliveryman' => $this->delivery->name,
+            'cook' => $this->cook ? $this->cook->name: null,
+            'deliveryman' => $this->delivery ? $this->delivery->name : null,
             'current_status_at' => $this->current_status_at,
             'status' => $this->status,
             'notes' => $this->notes,

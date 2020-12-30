@@ -31,7 +31,7 @@
                 <status-banner :status="data.item.status" />
             </template>
             <template #cell(actions)="data">
-                <b-button size="sm" @click="data.toggleDetails">
+                <b-button size="sm" @click="data.toggleDetails" variant="primary">
                     <font-awesome-icon icon="info"/>
                 </b-button>
             </template>

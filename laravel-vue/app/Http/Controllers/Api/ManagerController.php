@@ -76,6 +76,20 @@ class ManagerController extends Controller {
         return null;
     }
 
+    public function cancelOrder($id){
+        /* @var Order $order */
+        $order = Order::find($id);
+        if($order != null){
+            $order->status = 'C';
+            $time = new \DateTime();
+            $order->current_status_at = $time;
+            $order->closed_at = $time;
+            //TODO que valores são para ser alterados quando é cancelado na BD esta todos preenchidos
+            $order->save();
+        }
+        return null;
+    }
+
     public function blockUser(Request $request, $id, string $status) {
         /* @var User $manager */ /* @var User $user */
         $manager = $request->user();

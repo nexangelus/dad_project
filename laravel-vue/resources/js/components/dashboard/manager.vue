@@ -23,7 +23,7 @@
         </div>
         <div class="col-sm-9">
             <div class="content">
-                <order-list v-show="selected==='orders'" :list="orders" />
+                <order-list v-on:childSetCancelOrder="setCancelOrder" v-show="selected==='orders'" :list="orders" />
                 <employee-list v-show="selected==='employees'" :list="employees"/>
             </div>
         </div>
@@ -66,6 +66,15 @@ export default {
             }).catch(r => {
                 this.isFetchingData = false;
             })
+        },
+        setCancelOrder(id){
+            axios.patch(`/api/managers/order/${id}/cancel`).then(response => {
+                if(response.status === 200){
+                    this.$toasted.success('Order canceled')
+                } else {
+                    this.$toasted.error('Something went wrong')
+                }
+            })
         }
     },
     sockets: {
@@ -98,6 +107,7 @@ export default {
             }
 
         }
+        //TODO socket to receive cancel orders
     }
 }
 </script>
