@@ -83,8 +83,6 @@ class ManagerController extends Controller {
             $order->status = 'C';
             $time = new \DateTime();
             $order->current_status_at = $time;
-            $order->closed_at = $time;
-            //TODO que valores são para ser alterados quando é cancelado na BD esta todos preenchidos
             $order->save();
         }
         return null;
