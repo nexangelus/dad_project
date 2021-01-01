@@ -17,7 +17,7 @@ class ProductClientResource extends JsonResource
         $data = [
             'id' => $this->id,
             'name' => $this->name,
-            'type' => $this->type,
+            'type' => ucwords($this->type),
             'description' => $this->description,
             'photo_url' =>  asset('storage/products/'.$this->photo_url),
             'price' => $this->price,

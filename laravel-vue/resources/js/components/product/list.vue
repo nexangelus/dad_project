@@ -60,7 +60,7 @@ export default {
     computed: {
         ...mapGetters(['user']),
         filteredList: function () {
-            return this.items ? this.items.filter(i => i.type === this.type && (!this.search || i.name.toLowerCase().includes(this.search.toLowerCase()))) : []
+            return this.items ? this.items.filter(i => i.type.toLowerCase() === this.type && (!this.search || i.name.toLowerCase().includes(this.search.toLowerCase()))) : []
         }
     },
     methods: {
