@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Concerns\Filterable;
 use App\Listeners\UserSaveListener;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +33,7 @@ use Illuminate\Support\Facades\Log;
  * @property Order[] $ordersPrepared
  */
 class User extends Authenticatable {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Filterable, SoftDeletes;
 
     public function __construct($object = null) {
         if($object != null) {
@@ -48,7 +50,7 @@ class User extends Authenticatable {
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'email_verified_at', 'photo_url',];
+    protected $fillable = ['name', 'email', 'password', 'type', 'email_verified_at', 'photo_url'];
 
     /**
      * The attributes that should be hidden for arrays.

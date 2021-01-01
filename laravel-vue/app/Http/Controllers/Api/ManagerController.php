@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeesForManagerResource;
 use App\Http\Resources\OrderForManagerResource;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\UserResource;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -118,8 +119,6 @@ class ManagerController extends Controller {
         $user->logged_at = null;
         $user->save();
 
-        $msg = $user->blocked == 1 ? 'blocked' : 'unblocked';
-
-        return response()->json(['message' => "User has been ${msg}"]);
+        return new UserResource(User::find($user->id));
     }
 }

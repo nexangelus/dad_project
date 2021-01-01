@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\UserFilter;
+use App\Http\Requests\StoreEmployeeRequest;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Utils\SocketIO;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
-use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +24,7 @@ class UserController extends Controller {
         return new UserResource($a);
     }
 
-    public function register(StoreUserRequest $request) {
+    public function register(StoreCustomerRequest $request) {
         $user = new User();
         $user->fill($request->validated());
         $user->password = bcrypt($user->password);
@@ -127,4 +129,55 @@ class UserController extends Controller {
         $user = User::find($id);
         return new UserResource($user);
     }
+
+    public function getAll(UserFilter $filter) {
+        $users = User::filter($filter)->paginate(10)->withQueryString()->onEachSide(0);
+        return UserResource::collection($users);
+    }
+
+    public function saveNewPhotoForUser(Request $request, int $id) {
+        if($request->file('file')) {
+            $file = $request->file->store('/public/fotos');
+            $user = User::find($id);
+            $user->photo_url = basename($file);
+            $user->save();
+
+            return asset('storage/fotos/'.$user->photo_url);
+        }
+
+        return response()->json(["message" => "Error, no file was uploaded"], 403);
+    }
+
+    public function newEmployee(StoreEmployeeRequest $request) {
+        $user = new User();
+        $user->fill($request->validated());
+        $user->password = bcrypt($user->password);
+        $user->save();
+
+        $user = User::find($user->id);
+
+        return new UserResource($user);
+    }
+
+    public function updateUser(UpdateUserRequest $request, int $id) {
+        $user = User::find($id);
+        $user->fill($request->validated());
+        $user->save();
+
+        return new UserResource(User::find($id));
+    }
+
+    public function deleteUser(Request $request, int $id) {
+        /* @var User $user */
+        if($request->user()->id != $id) {
+            $user = User::find($id);
+            if($user->type == "C") {
+                $user->customer->delete();
+            }
+            $user->delete();
+        }
+
+        return new UserResource($user);
+    }
+
 }

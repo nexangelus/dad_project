@@ -13,6 +13,7 @@ export default [
     {name: 'history', path: '/history', component: require('./pages/history').default},
 
     {name: 'users', path: '/users', component: require('./pages/users/index').default},
+    {name: 'users-create', path: '/users/create', component: require('./pages/users/new').default},
     {name: 'users-view', path: '/users/:id', component: require('./pages/users/view-edit-user').default},
     {name: 'users-edit', path: '/users/:id/edit', component: require('./pages/users/view-edit-user').default},
 

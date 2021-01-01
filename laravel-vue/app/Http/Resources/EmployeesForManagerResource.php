@@ -38,7 +38,7 @@ class EmployeesForManagerResource extends JsonResource {
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'photo_url' => asset('storage/fotos/'.$this->photo_url),
+            'photo_url' => $this->photo_url ? asset('storage/fotos/'.$this->photo_url) : asset('img/default.png'),
             'blocked' => $this->blocked,
             'type' => $this->type,
             'available_at' => $this->available_at,

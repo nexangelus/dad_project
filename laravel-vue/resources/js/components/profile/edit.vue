@@ -4,9 +4,9 @@
         <form class="">
             <div class="row">
                 <div class="col-md-2">
-                    <img class="img-fluid" :src="user.photo_url" alt="">
+                    <img class="img-fluid" :src="photoUrl" alt="">
                     <label v-if="isEditing" for="photo"><small>Select a Photo</small></label>
-                    <input type="file" id="photo" v-on:change="fileChanged" accept="image/*" style="display: none;">
+                    <input type="file" id="photo" v-on:change="fileChanged" accept="image/*" style="display: none;" ref="photo">
                 </div>
                 <div class="col-md-10">
                     <div class="form-group">
@@ -50,10 +50,10 @@
             </div>
             <div v-else>
                 <b-button @click="$router.go(-1)"><font-awesome-icon icon="arrow-left"/> Go Back</b-button>
-                <b-button variant="primary" :to="{name: 'users-edit', params: {id: user.id}}"><font-awesome-icon icon="pen" /> Edit User</b-button>
-                <b-button variant="danger" @click="actions(`block-${1 - user.blocked}`)"><font-awesome-icon icon="ban" />
+                <b-button variant="primary" v-if="user.type !== 'C'" :to="{name: 'users-edit', params: {id: user.id}}"><font-awesome-icon icon="pen" /> Edit User</b-button>
+                <b-button variant="danger" @click="actions(`block-${1 - user.blocked}`)" :disabled="user.deleted_at || user.id === $store.state.user.id"><font-awesome-icon icon="ban" />
                     {{ user.blocked ? "Unblock" : "Block" }} User</b-button>
-                <b-button variant="danger" @click="actions('delete')" v-if="!user.deleted_at"><font-awesome-icon icon="trash"/> Delete User</b-button>
+                <b-button variant="danger" @click="actions('delete')" :disabled="user.deleted_at || user.id === $store.state.user.id"><font-awesome-icon icon="trash"/> Delete User</b-button>
             </div>
         </form>
         <div v-if="!isNew && isEditing">
@@ -94,7 +94,8 @@ export default {
                 new1: "",
                 new2: "",
             },
-            errorsP: {}
+            errorsP: {},
+            rawImage: "",
         }
     },
     props: {
@@ -122,6 +123,18 @@ export default {
         },
         isNew() {
             return !this.user.id
+        },
+        photoUrl() {
+            return this.user.photo_url || this.rawImage;
+        },
+    },
+    watch: {
+        'errors': function(val){
+            console.log("ERRORS");
+            console.log(this.user.photo_url);
+            if(!this.user.photo_url) {
+                this.fileChanged()
+            }
         }
     },
     methods: {
@@ -129,11 +142,13 @@ export default {
             delete this.user.photo_url;
             this.$emit("finish")
         },
-        fileChanged(e) {
-            this.file = e.target.files[0];
+        fileChanged() {
+            this.file = this.$refs.photo.files[0];
             const reader = new FileReader();
             reader.onload = (ev => {
-                this.user.photo_url = ev.target.result;
+                this.rawImage = ev.target.result;
+                this.user.photo_url = null;
+                //this.user.photo_url = ev.target.result;
             })
             reader.readAsDataURL(this.file);
         },
@@ -147,7 +162,7 @@ export default {
             })
         },
         actions(type) {
-            alert(type);
+            this.$emit('action', type);
         }
     }
 }

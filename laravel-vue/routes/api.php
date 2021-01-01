@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ManagerController;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\UserController;
@@ -75,7 +76,12 @@ Route::middleware('auth:sanctum')->group(function() {
 
         Route::patch('users/{id}/status/{status}', [ManagerController::class, 'blockUser']); // TODO Integrar este pedido na interface
 
+        Route::get('users', [UserController::class, 'getAll'])->withoutMiddleware(ThrottleRequests::class);
         Route::get('users/{id}', [UserController::class, 'getUser'])->where('id', '[0-9]+');
+        Route::post('users', [UserController::class, 'newEmployee']);
+        Route::post('users/{id}/photo', [UserController::class, 'saveNewPhotoForUser']);
+        Route::put('users/{id}', [UserController::class, 'updateUser']);
+        Route::delete('users/{id}', [UserController::class, 'deleteUser']);
     });
     //endregion
 

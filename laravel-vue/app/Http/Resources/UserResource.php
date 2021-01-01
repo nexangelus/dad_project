@@ -25,7 +25,7 @@ class UserResource extends JsonResource
             'deleted_at' => $this->deleted_at,
             'blocked' => $this->blocked,
             'type' => $this->type,
-            'photo_url' => asset('storage/fotos/'.$this->photo_url),
+            'photo_url' => $this->photo_url ? asset('storage/fotos/'.$this->photo_url) : asset('img/default.png'),
         ];
         if($this->type === "C") {
             $data['address'] = $this->customer->address;

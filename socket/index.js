@@ -151,13 +151,10 @@ io.on('connection', function (socket) {
     })*/
 
     socket.on('disconnect', (reason) => {
-        console.log(socket.id);
         if(reason === "transport close") {
             let clientID = sessions.getUserBySessionID(socket.id);
             if(clientID)
-                axios.post(`${config.API_URL}api/socket-logout`, {pw: config.API_PW, id: clientID}).then(r => {
-                    console.log(r);
-                });
+                axios.post(`${config.API_URL}api/socket-logout`, {pw: config.API_PW, id: clientID})
         }
     })
 })

@@ -32,7 +32,7 @@ class SocketIO {
     }
 
     public static function notifyUpdatedOrder($order) {
-        self::postHTTP('updateCustomerOrder', ['order'=>$order]);
+        self::postHTTP('updateCustomerOrder', ['order' => $order]);
     }
 
     public static function notifyUserBlocked($id) {
