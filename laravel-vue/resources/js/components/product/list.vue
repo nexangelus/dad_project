@@ -26,7 +26,7 @@
                 <img class="card-img-top" :src="`${item.photo_url}`" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">{{ item.name }}</h5>
-                    <p>Type: {{ item.type }}</p>
+                    <p>Type: {{ item.typeFormatted }}</p>
                     <p>Unit Price: {{ item.price }} €</p>
                     <b-button v-b-popover.hover.bottom="item.description" variant="primary">
                         Description
@@ -60,7 +60,7 @@ export default {
     computed: {
         ...mapGetters(['user']),
         filteredList: function () {
-            return this.items ? this.items.filter(i => i.type.toLowerCase() === this.type && (!this.search || i.name.toLowerCase().includes(this.search.toLowerCase()))) : []
+            return this.items ? this.items.filter(i => i.type === this.type && (!this.search || i.name.toLowerCase().includes(this.search.toLowerCase()))) : []
         }
     },
     methods: {
