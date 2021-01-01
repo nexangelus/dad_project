@@ -27,9 +27,43 @@ class StatisticsController extends Controller {
     //  Tempo medio de conzinhar por dia, por mes
     //
 
-    public function getStatisticsProducts() {
+    public function getEmployersStats() {
+        $orders = Order::query()
+            ->selectRaw('AVG(total_time) as average')
+            ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+            ->where(['status'=>'D'])
+            ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
+            ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
+            ->groupBy( 'week')
+            ->orderBy('week', 'ASC')
+            ->get();
+        return $orders;
+    }
 
+    public function getCookersStats(){
+        $orders = Order::query()
+            ->selectRaw('AVG(preparation_time) as average')
+            ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+            ->where(['status'=>'D'])
+            ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
+            ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
+            ->groupBy( 'week')
+            ->orderBy('week', 'ASC')
+            ->get();
+        return $orders;
+    }
 
+    public function getDeliverersStats(){
+        $orders = Order::query()
+            ->selectRaw('AVG(delivery_time) as average')
+            ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+            ->where(['status'=>'D'])
+            ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
+            ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
+            ->groupBy( 'week')
+            ->orderBy('week', 'ASC')
+            ->get();
+        return $orders;
     }
 
 
@@ -44,6 +78,7 @@ class StatisticsController extends Controller {
             ->selectRaw('SUM(order_items.quantity) as sum')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->join('products', 'product_id', '=', 'products.id')
+            ->where(['status'=>'D'])
             ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
             ->groupBy( 'month')
             ->orderBy('month', 'ASC')
@@ -61,7 +96,7 @@ class StatisticsController extends Controller {
                 ->selectRaw('SUM(order_items.quantity) as sum')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
                 ->join('products', 'product_id', '=', 'products.id')
-                ->where(['product_id' => $findProduct->id])
+                ->where(['product_id' => $findProduct->id, 'status'=>'D'])
                 ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
                 ->groupBy( 'month', 'product_id')
                 ->orderBy('month', 'ASC')
@@ -79,6 +114,7 @@ class StatisticsController extends Controller {
             ->selectRaw('SUM(order_items.quantity) as sum')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->join('products', 'product_id', '=', 'products.id')
+            ->where(['status'=>'D'])
             ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
             ->groupBy( 'week')
             ->orderBy('week', 'ASC')
@@ -96,7 +132,7 @@ class StatisticsController extends Controller {
                 ->selectRaw('SUM(order_items.quantity) as sum')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
                 ->join('products', 'product_id', '=', 'products.id')
-                ->where(['product_id' => $findProduct->id])
+                ->where(['product_id' => $findProduct->id, 'status'=>'D'])
                 ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 12 Month)')
                 ->groupBy( 'week', 'product_id')
                 ->orderBy('week', 'ASC')

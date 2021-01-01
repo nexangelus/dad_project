@@ -4,9 +4,9 @@
         <b-form-select label-field="Product" v-model="selected_time" :options="time" @change="getLastMonthProduct"/>
         <b-form-select label-field="Product" v-model="selected_product_id" :options="items" @change="getLastMonthProduct"/>
         <h2>Quantity of Products Sold</h2>
-        <apexchart width="500" type="line" :options="options" :series="chart_quantity"></apexchart>
+        <apexchart width="500" type="bar" :options="options" :series="chart_quantity"></apexchart>
         <h2>Money earned</h2>
-        <apexchart width="500" type="line" :options="options2" :series="chart_earn"></apexchart>
+        <apexchart width="500" type="bar" :options="options2" :series="chart_earn"></apexchart>
     </div>
 </template>
 

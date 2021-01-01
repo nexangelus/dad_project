@@ -103,14 +103,15 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('managers/statistics/last2Years/products', [StatisticsController::class , 'getLast2YearsMonthsAllProductsSales']);
         Route::get('managers/statistics/last2Years/products/{id}', [StatisticsController::class , 'getLast2YearsMonthsProductSales']);
 
-
-
         Route::get('managers/statistics/lastMonth/deliverers', [StatisticsController::class , 'getLastMonthDeliverers']);
 
         //endregion
 
-
-        Route::get('managers/statistics/daily/products', [StatisticsController::class , 'getDailyAllProductSales']);
+        //region Employers
+        Route::get('managers/statistics/employers', [StatisticsController::class , 'getEmployersStats']);
+        Route::get('managers/statistics/employers/cookers', [StatisticsController::class , 'getCookersStats']);
+        Route::get('managers/statistics/employers/deliverers', [StatisticsController::class , 'getDeliverersStats']);
+        //endregion
 
 
 
