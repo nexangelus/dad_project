@@ -18,7 +18,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text"><font-awesome-icon icon="search"/></span>
             </div>
-            <b-input v-model="search" class="form-control"/>
+            <b-input v-model="search" class="form-control" placeholder="Search for a product"/>
         </div>
 
         <div class="card-columns">
