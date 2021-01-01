@@ -13,9 +13,11 @@ import {fas} from '@fortawesome/free-solid-svg-icons'
 library.add(fas)
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import moment from 'moment'
+import VueApexCharts from 'vue-apexcharts'
+
 
 require('moment/locale/en-gb');
-
+Vue.use(VueApexCharts)
 Vue.use(Toasted, {duration: 3000})
 
 Vue.use(VueRouter);
@@ -34,6 +36,7 @@ Vue.use(IconsPlugin)
 
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('apexchart', VueApexCharts)
 Vue.config.productionTip = false
 
 import NavbarComponent from './components/navbar'

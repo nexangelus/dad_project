@@ -15,6 +15,9 @@
             </ul>
             <div class="my-2 my-lg-0 navbar-borders">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0 navbar-borders">
+                    <li class="nav-item" v-if="$store.state.user && $store.state.user.type === 'EM'">
+                        <router-link class="nav-link" :to="{name: 'statistics'}">Statistics</router-link>
+                    </li>
                     <li class="nav-item dropdown" v-if="$store.state.user">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -12,4 +12,8 @@ class ProductController extends Controller {
     public function getAllProducts(){
         return ProductClientResource::collection(Product::all());
     }
+
+    public function getAllProductsWithDeleted(){
+        return ProductClientResource::collection(Product::withTrashed()->get());
+    }
 }

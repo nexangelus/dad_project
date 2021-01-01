@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DelivererController;
+use App\Http\Controllers\Api\StatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
     //region Manager
     Route::middleware("checkUserManager")->group(function() {
+        Route::get('managers/products', [ProductController::class, 'getAllProductsWithDeleted']);
+
         Route::get('managers/dashboard', [ManagerController::class, 'getDashboardData']);
         Route::get('managers/dashboard/cook/{id}', [ManagerController::class, 'getOrderCookIsWorkingOn']);
         Route::get('managers/dashboard/delivery/{id}', [ManagerController::class, 'getOrderDeliverymanIsWorkingOn']);
@@ -82,6 +85,36 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::post('users/{id}/photo', [UserController::class, 'saveNewPhotoForUser']);
         Route::put('users/{id}', [UserController::class, 'updateUser']);
         Route::delete('users/{id}', [UserController::class, 'deleteUser']);
+
+        //region Statistics
+
+
+        //region Products
+
+        Route::get('managers/statistics/currentMonth/products', [StatisticsController::class , 'getCurrentMonthAllProductsSales']);
+        Route::get('managers/statistics/currentMonth/products/{id}', [StatisticsController::class , 'getCurrentMonthProductSales']);
+
+        Route::get('managers/statistics/lastMonth/products', [StatisticsController::class , 'getLastMonthAllProductsSales']);
+        Route::get('managers/statistics/lastMonth/products/{id}', [StatisticsController::class , 'getLastMonthProductSales']);
+
+        Route::get('managers/statistics/last6Months/products', [StatisticsController::class , 'getLast6MonthsAllProductsSales']);
+        Route::get('managers/statistics/last6Months/products/{id}', [StatisticsController::class , 'getLast6MonthsProductSales']);
+
+        Route::get('managers/statistics/last2Years/products', [StatisticsController::class , 'getLast2YearsMonthsAllProductsSales']);
+        Route::get('managers/statistics/last2Years/products/{id}', [StatisticsController::class , 'getLast2YearsMonthsProductSales']);
+
+
+
+        Route::get('managers/statistics/lastMonth/deliverers', [StatisticsController::class , 'getLastMonthDeliverers']);
+
+        //endregion
+
+
+        Route::get('managers/statistics/daily/products', [StatisticsController::class , 'getDailyAllProductSales']);
+
+
+
+        //endregion
     });
     //endregion
 
