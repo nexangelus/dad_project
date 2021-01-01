@@ -57,10 +57,12 @@ class DelivererController extends Controller {
             $order->status = 'D';
             $timeDeliverStarted = new \DateTime($order->current_status_at);
             $timeNow = new \DateTime();
+            $timePrep = $order->preparation_time;
             $timeSpent = $timeNow->getTimestamp() - $timeDeliverStarted->getTimestamp();
             $order->current_status_at = $timeNow;
             $order->closed_at = $timeNow;
             $order->delivery_time = $timeSpent;
+            $order->total_time = $timeSpent + $timePrep;
             $order->save();
 
             $order = Order::find($id);
