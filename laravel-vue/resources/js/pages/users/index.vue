@@ -22,7 +22,7 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">Blocked:</div>
                     </div>
-                    <b-form-select v-model="filtering.blocked" :options="[{value: null, text: 'All'},{value: 1, text: 'Blocked'}, {value: 0, text: 'Not Blocked'}]"/>
+                    <b-form-select v-model="filtering.blocked" :options="[{value: null, text: 'All'},{value: 1, text: 'Blocked'}, {value: 0, text: 'Not Blocked'}]" />
                 </div>
             </div>
             <div class="col-sm-4 my-2" v-if="type === 'employees'">
@@ -30,7 +30,7 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">Type:</div>
                     </div>
-                    <b-form-select v-model="filtering.type" :options="[{value: null, text: 'All'},{value: 'EM', text: 'Manager'}, {value: 'EC', text: 'Cook'}, {value: 'ED', text: 'Deliveryman'}]"/>
+                    <b-form-select v-model="filtering.type" :options="[{value: null, text: 'All'},{value: 'EM', text: 'Manager'}, {value: 'EC', text: 'Cook'}, {value: 'ED', text: 'Deliveryman'}]" />
                 </div>
             </div>
         </div>
@@ -48,22 +48,32 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">Logged:</div>
                     </div>
-                    <b-form-select v-model="filtering.logged" :options="[{value: null, text: 'All'},{value: 1, text: 'Logged in'}, {value: 0, text: 'Logged Out'}]"/>
+                    <b-form-select v-model="filtering.logged" :options="[{value: null, text: 'All'},{value: 1, text: 'Logged in'}, {value: 0, text: 'Logged Out'}]" />
                 </div>
             </div>
             <div class="col-sm-1 my-2" v-if="type === 'employees'">
-                <b-button variant="success" class="btn-block" :to="{name: 'users-create'}" title="Create new Employee"><font-awesome-icon icon="plus"/></b-button>
+                <b-button variant="success" class="btn-block" :to="{name: 'users-create'}" title="Create new Employee">
+                    <font-awesome-icon icon="plus" />
+                </b-button>
             </div>
         </div>
-        <b-table striped hover :items="users" :fields="fields" >
+        <b-table striped hover :items="users" :fields="fields" :no-local-sorting="true" :sort-desc.sync="sorting.desc" :sort-by.sync="sorting.by" :busy="tableBusy">
             <template #cell(photo_url)="data">
                 <img class="img-fluid" :src="data.value" />
             </template>
             <template #cell(type)="data">
-                <icon-user-type :type="data.item.type"/>
+                <icon-user-type :type="data.item.type" />
             </template>
             <template #cell(actions)="row">
-                <router-link class="btn btn-primary" :to="{name: 'users-view', params: {id: row.item.id}}"><font-awesome-icon icon="info"/></router-link>
+                <router-link class="btn btn-primary" :to="{name: 'users-view', params: {id: row.item.id}}">
+                    <font-awesome-icon icon="info" />
+                </router-link>
+            </template>
+            <template #table-busy>
+                <div class="text-center text-danger my-2">
+                    <b-spinner class="align-middle"></b-spinner>
+                    <strong>Loading...</strong>
+                </div>
             </template>
         </b-table>
         <nav>
@@ -76,6 +86,7 @@
 
 <script>
 import IconUserType from "../../components/iconUserType";
+
 export default {
     components: {IconUserType},
     auth: {
@@ -89,19 +100,19 @@ export default {
             users: [],
             paginationData: [],
             fieldsCustomers: [
-                {key: 'id', label: '#'},
+                {key: 'id', label: '#', sortable: true},
                 {key: 'photo_url', label: 'Photo'},
-                'name',
-                'email',
+                {key: 'name', sortable: true},
+                {key: 'email', sortable: true},
                 'phone',
                 'actions'
             ],
             fieldsEmployees: [
-                {key: 'id', label: '#'},
+                {key: 'id', label: '#', sortable: true},
                 {key: 'photo_url', label: 'Photo'},
-                'type',
-                'name',
-                'email',
+                {key: 'type', sortable: true},
+                {key: 'name', sortable: true},
+                {key: 'email', sortable: true},
                 'actions'
             ],
             filtering: {
@@ -111,6 +122,11 @@ export default {
                 logged: null,
                 type: null,
             },
+            sorting: {
+                desc: false,
+                by: 'id',
+            },
+            tableBusy: false,
             isWaitingToSearch: false
         }
     },
@@ -119,21 +135,26 @@ export default {
             return this.type === 'customers' ? this.fieldsCustomers : this.fieldsEmployees;
         },
         filters() {
-            const filters = [ `${this.type}=1` ];
+            const filters = [`${this.type}=1`];
 
-            if(this.filtering.name != null && this.filtering.name.length > 0){
+            if (this.sorting.by != null && this.sorting.by.length > 0) {
+                filters.push(`sort[by]=${this.sorting.by}`)
+                filters.push(`sort[order]=${this.sorting.desc ? "desc" : "asc"}`)
+            }
+
+            if (this.filtering.name != null && this.filtering.name.length > 0) {
                 filters.push(`name=${this.filtering.name}`)
             }
-            if(this.filtering.email != null && this.filtering.email.length > 0){
+            if (this.filtering.email != null && this.filtering.email.length > 0) {
                 filters.push(`email=${this.filtering.email}`)
             }
-            if(this.filtering.blocked != null){
+            if (this.filtering.blocked != null) {
                 filters.push(`blocked=${this.filtering.blocked}`)
             }
-            if(this.filtering.logged != null){
+            if (this.filtering.logged != null) {
                 filters.push(`logged_at=${this.filtering.logged}`)
             }
-            if(this.filtering.type != null){
+            if (this.filtering.type != null) {
                 filters.push(`type=${this.filtering.type}`)
             }
 
@@ -144,6 +165,7 @@ export default {
     watch: {
         filters: function (val) {
             if (!this.isWaitingToSearch) {
+                this.tableBusy = true;
                 setTimeout(() => {
                     this.getData();
                     this.isWaitingToSearch = false;
@@ -166,6 +188,10 @@ export default {
                 logged: null,
                 type: null,
             };
+            this.sorting = {
+                desc: false,
+                by: 'id',
+            };
             this.getData();
         },
         getData(page = null) {
@@ -173,6 +199,7 @@ export default {
             axios.get(page || defaultPage).then(r => {
                 this.users = r.data.data;
                 this.paginationData = r.data.meta.links;
+                this.tableBusy = false
             })
         }
     }
@@ -183,6 +210,7 @@ export default {
 .page-link {
     cursor: pointer;
 }
+
 img {
     max-height: 70px;
 }
