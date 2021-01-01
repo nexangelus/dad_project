@@ -33,14 +33,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Order extends Model {
     use HasFactory;
 
-    public function __construct($object = null) {
-        if($object != null) {
-            foreach($object as $property => $value) {
-                $this->$property = $value;
-            }
-        }
-    }
-
     protected $dispatchesEvents = ['saved' => OrderSaveListener::class];
 
     /**

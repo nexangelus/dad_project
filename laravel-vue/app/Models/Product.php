@@ -24,14 +24,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model {
     use HasFactory, SoftDeletes;
 
-    public function __construct($object = null) {
-        if($object != null) {
-            foreach($object as $property => $value) {
-                $this->$property = $value;
-            }
-        }
-    }
-
     /**
      * The "type" of the auto-incrementing ID.
      *

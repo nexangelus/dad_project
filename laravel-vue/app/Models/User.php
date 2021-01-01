@@ -35,14 +35,6 @@ use Illuminate\Support\Facades\Log;
 class User extends Authenticatable {
     use HasFactory, Notifiable, Filterable, SoftDeletes;
 
-    public function __construct($object = null) {
-        if($object != null) {
-            foreach($object as $property => $value) {
-                $this->$property = $value;
-            }
-        }
-    }
-
     protected $dispatchesEvents = ['saved' => UserSaveListener::class];
 
     /**
