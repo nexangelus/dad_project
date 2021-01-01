@@ -64,7 +64,7 @@ class CookController extends Controller {
             SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($savedOrder));
             SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($savedOrder));
             SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource(User::find($user->id)));
-            return new OrderResource($orderToDo);
+            return new OrderResource($savedOrder);
         }
         return null;
     }

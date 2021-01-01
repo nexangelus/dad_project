@@ -42,7 +42,7 @@ export default {
     },
     methods: {
         getLastMonthProduct() {
-            axios.get(`/api/managers/statistics/${this.selected_time}/products/${this.selected_product_id}`).then(response => {
+            axios.get(`/api/managers/statistics/${this.selected_time}/products${this.selected_product_id ? "/" + this.selected_product_id : ""}`).then(response => {
                 this.chart_quantity = []
                 this.chart_earn = []
                 this.statistics_quantity = []
@@ -68,8 +68,8 @@ export default {
                 days = new Date().getDate()
             }
             for (let i = 1; i <= days; i++) {
-                this.statistics_quantity.push({y: this.getQuantityFromDay(response, i), x: i})
-                this.statistics_earn.push({y: this.getValueFromDay(response, i), x: i})
+                this.statistics_quantity.push({y: this.getQuantityFromDay(response, i), x: i+""})
+                this.statistics_earn.push({y: this.getValueFromDay(response, i), x: i+""})
             }
         },
         getQuantityFromDay(list, day) {
