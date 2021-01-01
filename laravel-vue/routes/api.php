@@ -86,6 +86,8 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::put('users/{id}', [UserController::class, 'updateUser']);
         Route::delete('users/{id}', [UserController::class, 'deleteUser']);
 
+        Route::get('users/employers', [UserController::class, 'getUserEmployers']);
+
         //region Statistics
 
 
@@ -108,11 +110,14 @@ Route::middleware('auth:sanctum')->group(function() {
         //endregion
 
         //region Employers
-        Route::get('managers/statistics/employers', [StatisticsController::class , 'getEmployersStats']);
-        Route::get('managers/statistics/employers/cookers', [StatisticsController::class , 'getCookersStats']);
-        Route::get('managers/statistics/employers/deliverers', [StatisticsController::class , 'getDeliverersStats']);
+        Route::get('managers/statistics/cookers/{id}', [StatisticsController::class , 'getCookerStats']);
+        Route::get('managers/statistics/deliverers/{id}', [StatisticsController::class , 'getDeliverersStats']);
         //endregion
-
+        //region Global
+        Route::get('managers/statistics/global/employers', [StatisticsController::class , 'getGlobalEmployersStats']);
+        Route::get('managers/statistics/global/cookers', [StatisticsController::class , 'getGlobalCookersStats']);
+        Route::get('managers/statistics/global/deliverers', [StatisticsController::class , 'getGlobalDeliverersStats']);
+        //endregion
 
 
         //endregion

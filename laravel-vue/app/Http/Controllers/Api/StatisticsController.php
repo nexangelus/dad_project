@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,48 @@ class StatisticsController extends Controller {
     //  Tempo medio de conzinhar por dia, por mes
     //
 
-    public function getEmployersStats() {
+    public function getCookerStats($id){
+        /* @var User $cooker */
+        $cooker = User::withTrashed()->find($id);
+        if($cooker != null && $cooker->type === 'EC'){
+            $orders = Order::query()
+                ->selectRaw('AVG(preparation_time) as average')
+                ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+                ->where(['status'=>'D', 'prepared_by'=> $cooker->id])
+                ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
+                ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
+                ->groupBy( 'week')
+                ->orderBy('week', 'ASC')
+                ->get();
+            return $orders;
+        }
+    }
+
+    public function getDeliverersStats($id){
+        /* @var User $cooker */
+        $cooker = User::withTrashed()->find($id);
+        if($cooker != null && $cooker->type === 'ED'){
+            $orders = Order::query()
+                ->selectRaw('AVG(preparation_time) as average')
+                ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+                ->where(['status'=>'D', 'delivered_by'=> $cooker->id])
+                ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
+                ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
+                ->groupBy( 'week')
+                ->orderBy('week', 'ASC')
+                ->get();
+            return $orders;
+        }
+    }
+
+
+
+
+
+    //TODO feitas em baixo
+
+    //region Global
+    public function getGlobalEmployersStats() {
         $orders = Order::query()
             ->selectRaw('AVG(total_time) as average')
             ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
@@ -40,7 +82,7 @@ class StatisticsController extends Controller {
         return $orders;
     }
 
-    public function getCookersStats(){
+    public function getGlobalCookersStats(){
         $orders = Order::query()
             ->selectRaw('AVG(preparation_time) as average')
             ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
@@ -53,7 +95,7 @@ class StatisticsController extends Controller {
         return $orders;
     }
 
-    public function getDeliverersStats(){
+    public function getGlobalDeliverersStats(){
         $orders = Order::query()
             ->selectRaw('AVG(delivery_time) as average')
             ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
@@ -65,10 +107,7 @@ class StatisticsController extends Controller {
             ->get();
         return $orders;
     }
-
-
-
-    //TODO feitas em baixo
+    //endregion
 
     //region Last 2 Years
     public function getLast2YearsMonthsAllProductsSales(){

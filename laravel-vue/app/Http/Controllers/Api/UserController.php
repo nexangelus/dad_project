@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Filters\UserFilter;
 use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Resources\UserEmployerResource;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Utils\SocketIO;
@@ -128,6 +129,13 @@ class UserController extends Controller {
     public function getUser(Request $request, int $id) {
         $user = User::find($id);
         return new UserResource($user);
+    }
+
+    public function getUserEmployers(){
+        $users = array();
+        $users['cookers'] = UserEmployerResource::collection(User::withTrashed()->where(['type' => 'EC'])->get());
+        $users['deliverers'] = UserEmployerResource::collection(User::withTrashed()->where(['type' => 'ED'])->get());
+        return $users;
     }
 
     public function getAll(UserFilter $filter) {

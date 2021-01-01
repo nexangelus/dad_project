@@ -2,13 +2,13 @@
     <div>
         <b-tabs content-class="mt-3" lazy>
             <b-tab title="Global" active>
-                <employers/>
+                <global/>
             </b-tab>
             <b-tab title="Products">
                 <product-sold/>
             </b-tab>
-            <b-tab title="Employers" >
-
+            <b-tab title="Employers">
+                <employers/>
             </b-tab>
         </b-tabs>
     </div>
@@ -18,12 +18,14 @@
 <script>
 import ProductSold from "../components/graphics/product-sold";
 import Employers from "../components/graphics/employers";
+import Global from "../components/graphics/global";
 export default {
     name: "statistics",
     auth: {
-        required: true
+        required: true,
+        allowed: ["EM"],
     },
-    components: {Employers, ProductSold, },
+    components: {Global, Employers, ProductSold},
 }
 </script>
 

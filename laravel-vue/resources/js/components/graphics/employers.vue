@@ -1,16 +1,14 @@
 <template>
     <div class="row">
-        <div class="col-md-12">
-            <h2 class="text-center">Average time to complete order</h2>
-            <apexchart width="100%" type="bar" :options="options" :series="stats"></apexchart>
-        </div>
         <div class="col-md-6">
+            <b-form-select v-model="cooker_id"  :options="cookers" @change="getCookersStats"/>
             <h2 class="text-center">Average cooking time</h2>
-            <apexchart width="500" type="bar" :options="options" :series="cookers"></apexchart>
+            <apexchart width="100%" type="bar" :options="options" :series="cooker_stats"></apexchart>
         </div>
         <div class="col-md-6">
+            <b-form-select v-model="deliver_id" :options="deliverers" @change="getDeliverersStats"/>
             <h2 class="text-center">Average delivering time</h2>
-            <apexchart width="500" type="bar" :options="options" :series="deliverers"></apexchart>
+            <apexchart width="100%" type="bar" :options="options" :series="deliverer_stats"></apexchart>
         </div>
     </div>
 </template>
@@ -21,43 +19,49 @@ export default {
     data: function () {
         return {
             options: {},
-            stats: [],
-            cookers: [],
-            deliverers: [],
+            cookers: [
+                {value: -1, text: 'Cooker', disabled: true}
+            ],
+            deliverers: [
+                {value: -1, text: 'Deliverer', disabled: true}
+            ],
+            cooker_id: -1,
+            deliver_id: -1,
+            cooker_stats: [],
+            deliverer_stats: []
         }
     },
     mounted() {
-        this.getEmployersStats()
-        this.getCookersStats()
-        this.getDeliverersStats()
+        axios.get('api/users/employers').then(response =>{
+            this.cookers.push(...response.data.cookers)
+            this.deliverers.push(...response.data.deliverers)
+
+        })
     },
     methods: {
-        getEmployersStats() {
-            axios.get(`/api/managers/statistics/employers`).then(response => {
-                let array = []
-                for (let data of response.data) {
-                    array.push({y: this.formatTime(data.average), x: this.getWeek(data.week)})
-                }
-                this.stats.push({name: 'Minutes', data: array})
-            })
-        },
         getCookersStats() {
-            axios.get(`/api/managers/statistics/employers/cookers`).then(response => {
-                let array = []
-                for (let data of response.data) {
-                    array.push({y: this.formatTime(data.average), x: this.getWeek(data.week)})
-                }
-                this.cookers.push({name: 'Minutes', data: array})
-            })
+            if(this.cooker_id != null){
+                axios.get(`/api/managers/statistics/cookers/${this.cooker_id}`).then(response => {
+                    this.cooker_stats = []
+                    let array = []
+                    for (let data of response.data) {
+                        array.push({y: this.formatTime(data.average), x: this.getWeek(data.week)})
+                    }
+                    this.cooker_stats.push({name: 'Minutes', data: array})
+                })
+            }
         },
         getDeliverersStats() {
-            axios.get(`/api/managers/statistics/employers/deliverers`).then(response => {
-                let array = []
-                for (let data of response.data) {
-                    array.push({y: this.formatTime(data.average), x: this.getWeek(data.week)})
-                }
-                this.deliverers.push({name: 'Minutes', data: array})
-            })
+            if(this.deliver_id != null){
+                axios.get(`/api/managers/statistics/deliverers/${this.deliver_id}`).then(response => {
+                    this.deliverer_stats = []
+                    let array = []
+                    for (let data of response.data) {
+                        array.push({y: this.formatTime(data.average), x: this.getWeek(data.week)})
+                    }
+                    this.deliverer_stats.push({name: 'Minutes', data: array})
+                })
+            }
         },
         formatTime(average) {
             return (parseInt(average) / 60).toFixed(2)
