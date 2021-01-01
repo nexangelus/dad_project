@@ -1,13 +1,18 @@
 <template>
-    <div>
-        Tempo até entrega em média
-        <apexchart width="500" type="bar" :options="options" :series="stats"></apexchart>
-        Tempo cookers
-        <apexchart width="500" type="bar" :options="options" :series="cookers"></apexchart>
-        Tempo Deliverer
-        <apexchart width="500" type="bar" :options="options" :series="deliverers"></apexchart>
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Average time to complete order</h2>
+            <apexchart width="100%" type="bar" :options="options" :series="stats"></apexchart>
+        </div>
+        <div class="col-md-6">
+            <h2 class="text-center">Average cooking time</h2>
+            <apexchart width="500" type="bar" :options="options" :series="cookers"></apexchart>
+        </div>
+        <div class="col-md-6">
+            <h2 class="text-center">Average delivering time</h2>
+            <apexchart width="500" type="bar" :options="options" :series="deliverers"></apexchart>
+        </div>
     </div>
-
 </template>
 
 <script>
@@ -16,10 +21,9 @@ export default {
     data: function () {
         return {
             options: {},
-            stats : [],
+            stats: [],
             cookers: [],
-            deliverers :[]
-
+            deliverers: [],
         }
     },
     mounted() {
@@ -55,14 +59,14 @@ export default {
                 this.deliverers.push({name: 'Minutes', data: array})
             })
         },
-        formatTime(average){
-            return (parseInt(average)/60).toFixed(2)
+        formatTime(average) {
+            return (parseInt(average) / 60).toFixed(2)
         },
-        getWeek(yearWeek){
+        getWeek(yearWeek) {
             let yearWeekDivided = yearWeek.split('-')
             let year = yearWeekDivided[0]
             let week = yearWeekDivided[1]
-            week = parseInt(week)+1
+            week = parseInt(week) + 1
             return year.toString().concat(`-${week}`)
         },
 

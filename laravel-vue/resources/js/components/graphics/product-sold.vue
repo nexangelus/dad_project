@@ -1,12 +1,35 @@
 <template>
-    <div>
-        <h2>Filters</h2>
-        <b-form-select label-field="Product" v-model="selected_time" :options="time" @change="getLastMonthProduct"/>
-        <b-form-select label-field="Product" v-model="selected_product_id" :options="items" @change="getLastMonthProduct"/>
-        <h2>Quantity of Products Sold</h2>
-        <apexchart width="500" type="bar" :options="options" :series="chart_quantity"></apexchart>
-        <h2>Money earned</h2>
-        <apexchart width="500" type="bar" :options="options2" :series="chart_earn"></apexchart>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Filters</h2>
+            <div class="form-row">
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Time:</div>
+                        </div>
+                        <b-form-select  label-field="Product" v-model="selected_time" :options="time" @change="getLastMonthProduct"/>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Product:</div>
+                        </div>
+                        <b-form-select label-field="Product" v-model="selected_product_id" :options="items" @change="getLastMonthProduct"/>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        </div>
+        <div class="col-md-6">
+            <h2 class="text-center">Quantity of Products Sold</h2>
+            <apexchart width="100%" type="bar" :options="options" :series="chart_quantity"></apexchart>
+        </div>
+        <div class="col-md-6">
+            <h2 class="text-center">Profit from Products Sold</h2>
+            <apexchart width="100%" type="bar" :options="options2" :series="chart_earn"></apexchart>
+        </div>
     </div>
 </template>
 
