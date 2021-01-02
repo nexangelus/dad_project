@@ -47,6 +47,7 @@
 <script>
 import CreateProductModal from "../components/product/createProductModal";
 import ViewEditProductModal from "../components/product/viewEditProductModal";
+import ConfirmationDialog from "../utilities/confirmation-dialog";
 export default {
     components: {ViewEditProductModal, CreateProductModal},
     auth: {
@@ -116,12 +117,16 @@ export default {
             }
         },
         deleteProduct(product) {
-            axios.delete(`/api/products/${product.id}`).then(r => {
-                const savedProductIndex = this.products.findIndex(p => p.id === product.id);
-                this.products.splice(savedProductIndex, 1);
-            }).catch(_ => {
-                Vue.toasted.error("An error occurred while trying to delete.");
-            });
+            ConfirmationDialog.show("Confirm delete", "Are you sure you want to delete this product?", (v) => {
+                if(v === true) {
+                    axios.delete(`/api/products/${product.id}`).then(r => {
+                        const savedProductIndex = this.products.findIndex(p => p.id === product.id);
+                        this.products.splice(savedProductIndex, 1);
+                    }).catch(_ => {
+                        Vue.toasted.error("An error occurred while trying to delete.");
+                    });
+                }
+            }, this);
         }
     }
 }

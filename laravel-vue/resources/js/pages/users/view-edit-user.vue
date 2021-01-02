@@ -4,6 +4,7 @@
 
 <script>
 import EditProfile from "../../components/profile/edit";
+import ConfirmationDialog from "../../utilities/confirmation-dialog";
 export default {
     components: {EditProfile},
     auth: {
@@ -52,12 +53,16 @@ export default {
         },
         action(type) {
             if(type === 'delete') {
-                axios.delete(`/api/users/${this.id}`).then(r => {
-                    this.user.deleted_at = true;
-                    Vue.toasted.success(`The user has been deleted.`);
-                }).catch(r => {
-                    Vue.toasted.error("An error occurred while trying to do this.");
-                })
+                ConfirmationDialog.show("Confirm delete", "Are you sure you want to delete this user?", (v) => {
+                    if(v === true) {
+                        axios.delete(`/api/users/${this.id}`).then(r => {
+                            this.user.deleted_at = true;
+                            Vue.toasted.success(`The user has been deleted.`);
+                        }).catch(r => {
+                            Vue.toasted.error("An error occurred while trying to do this.");
+                        })
+                    }
+                }, this);
             } else {
                 let status = type.split('-');
                 if(status && status.length === 2 && status[1] === "0") {
