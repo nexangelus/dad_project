@@ -1,7 +1,7 @@
 <template>
     <div>
         <edit-profile :user="user" :errors="errors" :is-editing="isEditing" v-on:finish="finish" v-on:action="action" ref="update"></edit-profile>
-        <orders :userType="user.type" :id="id"/>
+        <orders :userType="user.type" :id="id" v-if="['C', 'ED', 'EC'].includes(user.type)"/>
     </div>
 </template>
 

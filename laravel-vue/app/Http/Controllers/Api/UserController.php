@@ -140,9 +140,13 @@ class UserController extends Controller {
         return $users;
     }
 
-    public function getAll(UserFilter $filter) {
-        $users = User::filter($filter)->paginate(10)->withQueryString()->onEachSide(0);
-        return UserResource::collection($users);
+    public function getAll(UserFilter $filter, Request $request) {
+        if($request->has('mini')) {
+            return User::query()->where('type', $request->query('mini'))->orderBy('name')->get(['id as value', 'name as text']);
+        } else {
+            $users = User::filter($filter)->paginate(10)->withQueryString()->onEachSide(0);
+            return UserResource::collection($users);
+        }
     }
 
     public function saveNewPhotoForUser(Request $request, int $id) {
@@ -192,7 +196,7 @@ class UserController extends Controller {
 
     public function getUserOrders(OrderFilter $filter){
         /* @var Order $orders */
-        $orders = Order::filter($filter)->paginate(10)->withQueryString()->onEachSide(0);
+        $orders = Order::filter($filter)->paginate(10)->withQueryString();
         return OrderForManagerResource::collection($orders);
 
     }

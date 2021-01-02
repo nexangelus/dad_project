@@ -50,7 +50,7 @@
             </div>
             <div v-else>
                 <b-button @click="$router.go(-1)"><font-awesome-icon icon="arrow-left"/> Go Back</b-button>
-                <b-button variant="primary" v-if="user.type !== 'C'" :to="{name: 'users-edit', params: {id: user.id}}"><font-awesome-icon icon="pen" /> Edit User</b-button>
+                <b-button variant="primary" v-if="user.type !== 'C'" :to="{name: 'users-edit', params: {id: user.id || 0}}"><font-awesome-icon icon="pen" /> Edit User</b-button>
                 <b-button variant="danger" @click="actions(`block-${1 - user.blocked}`)" :disabled="user.deleted_at || user.id === $store.state.user.id"><font-awesome-icon icon="ban" />
                     {{ user.blocked ? "Unblock" : "Block" }} User</b-button>
                 <b-button variant="danger" @click="actions('delete')" :disabled="user.deleted_at || user.id === $store.state.user.id"><font-awesome-icon icon="trash"/> Delete User</b-button>

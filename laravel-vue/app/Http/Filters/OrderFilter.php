@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 class OrderFilter extends Filter {
 
     public function status(string $value = null): Builder {
-        return $this->builder->whereIn('status', $value);
+        return $this->builder->whereIn('status', explode(',', $value));
     }
 
     public function customer(string $value = null): Builder {
