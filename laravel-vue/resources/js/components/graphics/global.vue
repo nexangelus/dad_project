@@ -19,7 +19,11 @@ export default {
     name: "global",
     data: function () {
         return {
-            options: {},
+            options: {
+                dataLabels: {
+                    enabled: false
+                }
+            },
             stats: [],
             cookers: [],
             deliverers: [],

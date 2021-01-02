@@ -18,12 +18,16 @@ export default {
     name: "employers",
     data: function () {
         return {
-            options: {},
+            options: {
+                dataLabels: {
+                    enabled: false
+                }
+            },
             cookers: [
-                {value: -1, text: 'Cooker', disabled: true}
+                {value: -1, text: 'Select Cook', disabled: true}
             ],
             deliverers: [
-                {value: -1, text: 'Deliverer', disabled: true}
+                {value: -1, text: 'Select Deliverer', disabled: true}
             ],
             cooker_id: -1,
             deliver_id: -1,

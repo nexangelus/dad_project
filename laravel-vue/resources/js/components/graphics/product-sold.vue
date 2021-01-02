@@ -28,7 +28,7 @@
         </div>
         <div class="col-md-6">
             <h2 class="text-center">Profit from Products Sold</h2>
-            <apexchart width="100%" type="bar" :options="options2" :series="chart_earn"></apexchart>
+            <apexchart width="100%" type="bar" :options="options" :series="chart_earn"></apexchart>
         </div>
     </div>
 </template>
@@ -38,8 +38,11 @@ export default {
     name: "product-sold",
     data: function () {
         return {
-            options: {},
-            options2: {},
+            options: {
+                dataLabels: {
+                    enabled: false
+                }
+            },
             statistics_quantity: [],
             statistics_earn: [],
             chart_quantity: [],
