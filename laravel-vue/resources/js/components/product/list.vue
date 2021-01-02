@@ -2,10 +2,12 @@
     <div id="first">
         <ul class="nav nav-pills nav-fill">
             <li class="nav-item">
-                <a class="nav-link" v-bind:class="{'active' : type === 'hot dish'}" @click="type = 'hot dish'">Hot Dish</a>
+                <a class="nav-link" v-bind:class="{'active' : type === 'hot dish'}" @click="type = 'hot dish'">Hot
+                    Dish</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" v-bind:class="{'active' : type === 'cold dish'}" @click="type = 'cold dish'">Cold Dish</a>
+                <a class="nav-link" v-bind:class="{'active' : type === 'cold dish'}" @click="type = 'cold dish'">Cold
+                    Dish</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" v-bind:class="{'active' : type === 'drink'}" @click="type = 'drink'">Drinks</a>
@@ -20,23 +22,25 @@
             </div>
             <b-input v-model="search" class="form-control" placeholder="Search for a product"/>
         </div>
-
-        <div class="card-columns">
-            <div class="card " v-for="item in filteredList">
-                <img class="card-img-top" :src="`${item.photo_url}`" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.name }}</h5>
-                    <p>Type: {{ item.typeFormatted }}</p>
-                    <p>Unit Price: {{ item.price }} €</p>
-                    <b-button v-b-popover.hover.bottom="item.description" variant="primary">
-                        Description
-                    </b-button>
-                    <b-button variant="success" v-on:click="addToCart(item)" v-if="user && user.type === 'C'">
-                        <font-awesome-icon icon="cart-plus"/>
-                    </b-button>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-6" v-for="item in filteredList">
+                <div class="card" >
+                    <img class="card-img-top" :src="`${item.photo_url}`" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p>Type: {{ item.typeFormatted }}</p>
+                        <p>Unit Price: {{ item.price }} €</p>
+                        <b-button v-b-popover.hover.bottom="item.description" variant="primary">
+                            Description
+                        </b-button>
+                        <b-button variant="success" v-on:click="addToCart(item)" v-if="user && user.type === 'C'">
+                            <font-awesome-icon icon="cart-plus"/>
+                        </b-button>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -79,57 +83,23 @@ export default {
 <style scoped>
 .card-img-top {
     width: 100%;
-    height: 15vw;
-    max-height: 150px;
-    max-width: 150px;
+    height: 10rem;
     object-fit: cover;
 }
-
-@media (min-width: 20em) {
-    .card-columns {
-        -webkit-column-count: 1;
-        -moz-column-count: 1;
-        column-count: 1;
-    }
+h5.card-title {
+    height: 42px;
 }
-
-@media (min-width: 35em) {
-    .card-columns {
-        -webkit-column-count: 2;
-        -moz-column-count: 2;
-        column-count: 2;
-    }
-}
-
-@media (min-width: 48em) {
-    .card-columns {
-        -webkit-column-count: 3;
-        -moz-column-count: 3;
-        column-count: 3;
-    }
-}
-
-@media (min-width: 62em) {
-    .card-columns {
-        -webkit-column-count: 4;
-        -moz-column-count: 4;
-        column-count: 4;
-    }
-}
-
-@media (min-width: 75em) {
-    .card-columns {
-        -webkit-column-count: 5;
-        -moz-column-count: 5;
-        column-count: 5;
-    }
+.col-lg-3.col-md-4.col-sm-6{
+    margin-bottom: 10px;
 }
 .nav-link {
     cursor: pointer;
 }
+
 .row {
     margin-top: 1%;
 }
+
 #search {
     margin-top: 1%;
     margin-bottom: 1%;
