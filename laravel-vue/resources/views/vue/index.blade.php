@@ -11,5 +11,5 @@
 
 @endsection
 @section('pagescript')
-<script src="js/app.js"></script>
+<script src="{{ URL::asset('js/app.js') }}"></script>
 @stop

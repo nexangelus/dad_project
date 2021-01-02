@@ -36,7 +36,7 @@ export default {
         }
     },
     mounted() {
-        axios.get('api/users/employers').then(response =>{
+        axios.get('/api/users/employers').then(response =>{
             this.cookers.push(...response.data.cookers)
             this.deliverers.push(...response.data.deliverers)
 
