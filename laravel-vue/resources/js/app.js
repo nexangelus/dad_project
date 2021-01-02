@@ -42,7 +42,10 @@ Vue.config.productionTip = false
 import NavbarComponent from './components/navbar'
 import logger from './utilities/logger'
 
-const router = new VueRouter({routes: require('./routes').default})
+const router = new VueRouter({
+    routes: require('./routes').default,
+    mode: 'history'
+});
 
 router.beforeEach((to, from, next) => {
     let errorMessage = null
