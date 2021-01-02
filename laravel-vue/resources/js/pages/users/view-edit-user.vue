@@ -56,7 +56,6 @@ export default {
                     this.user.deleted_at = true;
                     Vue.toasted.success(`The user has been deleted.`);
                 }).catch(r => {
-                    console.error(r);
                     Vue.toasted.error("An error occurred while trying to do this.");
                 })
             } else {
@@ -71,7 +70,6 @@ export default {
                     this.user = r.data.data;
                     Vue.toasted.success(`The user has been ${status}ed with success.`);
                 }).catch(r => {
-                    console.error(r);
                     Vue.toasted.error("An error occurred while trying to do this.");
                 })
             }

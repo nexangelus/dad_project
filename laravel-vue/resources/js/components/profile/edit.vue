@@ -130,8 +130,6 @@ export default {
     },
     watch: {
         'errors': function(val){
-            console.log("ERRORS");
-            console.log(this.user.photo_url);
             if(!this.user.photo_url) {
                 this.fileChanged()
             }

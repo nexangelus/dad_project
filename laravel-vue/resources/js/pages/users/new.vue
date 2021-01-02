@@ -41,7 +41,6 @@ export default {
                         this.$router.push({name: 'users-view', params: {id: newUser.id}});
                     })
                 } else {
-                    console.log(newUser);
                     this.$router.push({name: 'users-view', params: {id: newUser.id}});
                 }
                 this.errors = {};

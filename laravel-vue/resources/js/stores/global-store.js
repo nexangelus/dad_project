@@ -1,5 +1,6 @@
 import Vue from "vue"
 import Vuex from "vuex"
+import logger from "../utilities/logger"
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -73,9 +74,9 @@ export default new Vuex.Store({
                 context.commit('clearUser')
             } else {
                 //context.commit('setUser', JSON.parse(localStorage.getItem('user')));
-                console.log("[store.rebuildData] checking users me");
+                logger("[store.rebuildData] checking users me");
                 axios.get('/api/users/me').then(r => {
-                    console.log("[store.rebuildData] success: ", r);
+                    logger.log("[store.rebuildData] success: ", r);
                     context.commit('setUser', r.data.data);
                 }).catch(r => {
                     if(r.response.status === 401) {
@@ -84,7 +85,7 @@ export default new Vuex.Store({
                             vue.$router.push({name: 'main'})
                         }
                     } else {
-                        console.error("[store.rebuildData] failed: ", r);
+                        logger.error("[store.rebuildData] failed: ", r);
                     }
 
 

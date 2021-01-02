@@ -27,7 +27,7 @@ Vue.use(require('vue-moment'), {
 
 
 Vue.use(new VueSocketIO({
-    debug: true,
+    debug: process.env.NODE_ENV === "development",
     connection: require('./../../config').default.WEBSOCKET_URL
 }))
 
@@ -40,6 +40,7 @@ Vue.component('apexchart', VueApexCharts)
 Vue.config.productionTip = false
 
 import NavbarComponent from './components/navbar'
+import logger from './utilities/logger'
 
 const router = new VueRouter({routes: require('./routes').default})
 
@@ -49,7 +50,7 @@ router.beforeEach((to, from, next) => {
         const auth = to.matched[0].components.default.auth;
         if (auth.required === true) {
             const user = store.state.user ? store.state.user : JSON.parse(localStorage.getItem('user'));
-            console.log("[routerBeforeEach] user = ", user);
+            logger.log("[routerBeforeEach] user = ", user)
             if (user == null) { // user is not logged in,
                 errorMessage = 'You need to be logged in to access this page'
             } else if (auth.allowed && Array.isArray(auth.allowed)) { // file has specific roles
@@ -66,7 +67,7 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         Vue.toasted.info(`ATTENTION: ROUTE WITHOUT AUTHENTICATION PARAMETERS ${to.fullPath}`)
-        console.error(`ATTENTION: ROUTE WITHOUT AUTHENTICATION PARAMETERS:`, to);
+        logger.error(`ATTENTION: ROUTE WITHOUT AUTHENTICATION PARAMETERS:`, to)
         return next(true);
     }
 
@@ -84,6 +85,11 @@ const app = new Vue({
     methods: {},
     created() {
         this.$store.dispatch('rebuildData', this);
+    },
+    data() {
+        return {
+            isDev: process.env.NODE_ENV === "development",
+        }
     },
     mounted() {
 

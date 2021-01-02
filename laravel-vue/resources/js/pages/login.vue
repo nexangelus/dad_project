@@ -27,7 +27,7 @@
         <div class="form-group">
             <a class="btn btn-default" v-on:click.prevent="login">Login</a>
         </div>
-        <div class="temporary-login">
+        <div class="temporary-login" v-if="$root.isDev">
             <p>Managers:
                 <a class="btn btn-outline-success" v-for="n in 3" v-on:click.prevent="log(`manager_${n}`)">{{ n }}</a>
             </p>
@@ -63,7 +63,7 @@ export default {
     },
     methods: {
         login() {
-           // axios.get('/sanctum/csrf-cookie').then(response => {
+            axios.get('/sanctum/csrf-cookie').then(response => {
                 this.credentials.socketID = this.socketID;
                 axios.post('/api/login', this.credentials).then(response => {
                     this.$store.commit('setUser', response.data.data);
@@ -72,22 +72,13 @@ export default {
                 }).catch(error => {
                     Vue.toasted.error(error.response.data.message)
                 })
-            //})
+            })
         },
         log(user) {
             this.credentials.email = `${user}@mail.pt`
             this.credentials.password = "123"
             this.login()
         }
-        /*,
-        myself() {
-            axios.get('/api/users/me').then(response => {
-                console.log('User currently logged:')
-                console.dir(response.data)
-            }).catch(error => {
-                console.log('Invalid Request')
-            })
-        }*/
     }
 }
 </script>
