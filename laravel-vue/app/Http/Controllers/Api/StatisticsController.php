@@ -34,7 +34,7 @@ class StatisticsController extends Controller {
         if($cooker != null && $cooker->type === 'EC'){
             $orders = Order::query()
                 ->selectRaw('AVG(preparation_time) as average')
-                ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+                ->selectRaw('CONCAT(YEAR(DATE),"-",LPAD(week(DATE),2, 0)) AS week')
                 ->where(['status'=>'D', 'prepared_by'=> $cooker->id])
                 ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
                 ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
@@ -51,7 +51,7 @@ class StatisticsController extends Controller {
         if($cooker != null && $cooker->type === 'ED'){
             $orders = Order::query()
                 ->selectRaw('AVG(preparation_time) as average')
-                ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+                ->selectRaw('CONCAT(YEAR(DATE),"-",LPAD(week(DATE),2, 0)) AS week')
                 ->where(['status'=>'D', 'delivered_by'=> $cooker->id])
                 ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
                 ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
@@ -72,7 +72,7 @@ class StatisticsController extends Controller {
     public function getGlobalEmployersStats() {
         $orders = Order::query()
             ->selectRaw('AVG(total_time) as average')
-            ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+            ->selectRaw('CONCAT(YEAR(DATE),"-",LPAD(week(DATE),2, 0)) AS week')
             ->where(['status'=>'D'])
             ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
             ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
@@ -85,7 +85,7 @@ class StatisticsController extends Controller {
     public function getGlobalCookersStats(){
         $orders = Order::query()
             ->selectRaw('AVG(preparation_time) as average')
-            ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+            ->selectRaw('CONCAT(YEAR(DATE),"-",LPAD(week(DATE),2, 0)) AS week')
             ->where(['status'=>'D'])
             ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
             ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
@@ -98,7 +98,7 @@ class StatisticsController extends Controller {
     public function getGlobalDeliverersStats(){
         $orders = Order::query()
             ->selectRaw('AVG(delivery_time) as average')
-            ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+            ->selectRaw('CONCAT(YEAR(DATE),"-",LPAD(week(DATE),2, 0)) AS week')
             ->where(['status'=>'D'])
             ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 2 Year)')
             ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
@@ -112,7 +112,7 @@ class StatisticsController extends Controller {
     //region Last 2 Years
     public function getLast2YearsMonthsAllProductsSales(){
         $orders = Order::query()
-            ->selectRaw('CONCAT(YEAR(DATE),"-",MONTH(DATE)) AS month')
+            ->selectRaw('CONCAT(YEAR(DATE),"-",LPAD(MONTH(DATE),2, 0)) AS month')
             ->selectRaw('SUM(order_items.sub_total_price) as earn')
             ->selectRaw('SUM(order_items.quantity) as sum')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
@@ -130,7 +130,7 @@ class StatisticsController extends Controller {
         if ($findProduct!=null){
             $orders = Order::query()
                 ->select('name')
-                ->selectRaw('CONCAT(YEAR(DATE),"-",MONTH(DATE)) AS month')
+                ->selectRaw('CONCAT(YEAR(DATE),"-",LPAD(MONTH(DATE),2, 0)) AS month')
                 ->selectRaw('SUM(order_items.sub_total_price) as earn')
                 ->selectRaw('SUM(order_items.quantity) as sum')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
@@ -148,7 +148,7 @@ class StatisticsController extends Controller {
     //region Last 6 Months
     public function getLast6MonthsAllProductsSales(){
         $orders = Order::query()
-            ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+            ->selectRaw('CONCAT(YEAR(DATE),"-",LPAD(week(DATE)+1,2, 0)) AS week')
             ->selectRaw('SUM(order_items.sub_total_price) as earn')
             ->selectRaw('SUM(order_items.quantity) as sum')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
@@ -166,13 +166,13 @@ class StatisticsController extends Controller {
         if ($findProduct!=null){
             $orders = Order::query()
                 ->select('name')
-                ->selectRaw('CONCAT(YEAR(DATE),"-",week(DATE)) AS week')
+                ->selectRaw('CONCAT(YEAR(DATE),"-",LPAD(week(DATE)+1,2, 0)) AS week')
                 ->selectRaw('SUM(order_items.sub_total_price) as earn')
                 ->selectRaw('SUM(order_items.quantity) as sum')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
                 ->join('products', 'product_id', '=', 'products.id')
                 ->where(['product_id' => $findProduct->id, 'status'=>'D'])
-                ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 12 Month)')
+                ->whereRaw('date > DATE_SUB(CURDATE(), INTERVAL 6 Month)')
                 ->groupBy( 'week', 'product_id')
                 ->orderBy('week', 'ASC')
                 ->get();

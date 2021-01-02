@@ -113,16 +113,9 @@ export default {
         },
         weeks(response){
             for (const data of response) {
-                this.statistics_quantity.push({y: data.sum, x: this.getWeek(data.week)})
-                this.statistics_earn.push({y: data.earn, x: this.getWeek(data.week)})
+                this.statistics_quantity.push({y: data.sum, x: data.week})
+                this.statistics_earn.push({y: data.earn, x: data.week})
             }
-        },
-        getWeek(yearWeek){
-            let yearWeekDivided = yearWeek.split('-')
-            let year = yearWeekDivided[0]
-            let week = yearWeekDivided[1]
-            week = parseInt(week)+1
-            return year.toString().concat(`-${week}`)
         },
         months(response){
             for (const data of response) {
