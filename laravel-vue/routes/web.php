@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'vue.index');
-
-Route::view('/tictactoe', 'tictactoe.index');
+Route::any('/{all}', function () {
+    return view('vue.index');
+})->where(['all' => '.*']);

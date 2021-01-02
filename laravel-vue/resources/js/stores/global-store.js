@@ -74,7 +74,7 @@ export default new Vuex.Store({
                 context.commit('clearUser')
             } else {
                 //context.commit('setUser', JSON.parse(localStorage.getItem('user')));
-                logger("[store.rebuildData] checking users me");
+                logger.log("[store.rebuildData] checking users me");
                 axios.get('/api/users/me').then(r => {
                     logger.log("[store.rebuildData] success: ", r);
                     context.commit('setUser', r.data.data);
