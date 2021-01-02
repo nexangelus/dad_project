@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\OrderFilter;
 use App\Http\Filters\UserFilter;
 use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Resources\OrderForManagerResource;
 use App\Http\Resources\UserEmployerResource;
 use App\Models\Customer;
 use App\Models\Order;
@@ -186,6 +188,13 @@ class UserController extends Controller {
         }
 
         return new UserResource($user);
+    }
+
+    public function getUserOrders(OrderFilter $filter){
+        /* @var Order $orders */
+        $orders = Order::filter($filter)->paginate(10)->withQueryString()->onEachSide(0);
+        return OrderForManagerResource::collection($orders);
+
     }
 
 }

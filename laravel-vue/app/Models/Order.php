@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\Filterable;
 use App\Listeners\OrderSaveListener;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property OrderItem[] $orderItems
  */
 class Order extends Model {
-    use HasFactory;
+    use HasFactory, Filterable;
 
     protected $dispatchesEvents = ['saved' => OrderSaveListener::class];
 

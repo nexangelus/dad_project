@@ -1,11 +1,15 @@
 <template>
-    <edit-profile :user="user" :errors="errors" :is-editing="isEditing" v-on:finish="finish" v-on:action="action" ref="update"></edit-profile>
+    <div>
+        <edit-profile :user="user" :errors="errors" :is-editing="isEditing" v-on:finish="finish" v-on:action="action" ref="update"></edit-profile>
+        <orders :userType="user.type" :id="id"/>
+    </div>
 </template>
 
 <script>
 import EditProfile from "../../components/profile/edit";
+import Orders from "../../components/profile/orders";
 export default {
-    components: {EditProfile},
+    components: {Orders, EditProfile},
     auth: {
         required: true,
         allowed: ["EM"],
