@@ -7,7 +7,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="shortcut icon" type="image/png" href="favicon.ico">
         <title>@yield('title')</title>
-        <!-- Latest compiled and minified CSS & JS -->
         <link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
         @yield('extrastyles')
     </head>

@@ -6,18 +6,24 @@
                 <li class="nav-item" v-if="$store.state.user">
                     <router-link class="nav-link" :to="{name: 'dashboard'}">Dashboard</router-link>
                 </li>
-                <li class="nav-item" v-if="$store.state.user && $store.state.user.type === 'EM'">
-                    <router-link class="nav-link" :to="{name: 'users'}">Accounts</router-link>
-                </li>
                 <li class="nav-item">
                     <router-link class="nav-link" :to="{name: 'c-menu'}">Menu</router-link>
                 </li>
             </ul>
             <div class="my-2 my-lg-0 navbar-borders">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0 navbar-borders">
-                    <li class="nav-item" v-if="$store.state.user && $store.state.user.type === 'EM'">
-                        <router-link class="nav-link" :to="{name: 'statistics'}">Statistics</router-link>
-                    </li>
+                    <template v-if="$store.state.user && $store.state.user.type === 'EM'">
+                        <li class="nav-item">
+                            <router-link class="nav-link" :to="{name: 'users'}">Accounts</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" :to="{name: 'products'}">Products</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" :to="{name: 'statistics'}">Statistics</router-link>
+                        </li>
+                    </template>
+
                     <li class="nav-item dropdown" v-if="$store.state.user">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

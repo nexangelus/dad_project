@@ -88,6 +88,11 @@ Route::middleware('auth:sanctum')->group(function() {
 
         Route::get('users/employers', [UserController::class, 'getUserEmployers']);
 
+        Route::post('/images/products', [ProductController::class, 'storeImage']);
+        Route::post('/products', [ProductController::class, 'newProduct']);
+        Route::put('/products/{id}', [ProductController::class, 'updateProduct']);
+        Route::delete('/products/{id}', [ProductController::class, 'deleteProduct']);
+
         //region Statistics
 
 
