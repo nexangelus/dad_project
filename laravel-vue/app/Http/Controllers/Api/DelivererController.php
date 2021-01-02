@@ -42,8 +42,7 @@ class DelivererController extends Controller {
             $order->save();
 
             $order = Order::find($id);
-            SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($order));
-            SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($order));
+
             return new OrderForDelivererResource($order);
         }
         return null;
@@ -64,10 +63,6 @@ class DelivererController extends Controller {
             $order->delivery_time = $timeSpent;
             $order->total_time = $timeSpent + $timePrep;
             $order->save();
-
-            $order = Order::find($id);
-            SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($order));
-            SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($order));
         }
         return null;
     }

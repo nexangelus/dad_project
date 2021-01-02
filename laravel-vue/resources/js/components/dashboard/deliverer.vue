@@ -14,7 +14,7 @@ export default {
     data: function () {
         return {
             order: null,
-            orders: null,
+            orders: [],
             time: null,
         }
     },
@@ -57,6 +57,17 @@ export default {
     mounted() {
         this.getOrder();
     },
+    sockets: {
+        newOrder(order) {
+            this.orders.push(order);
+        },
+        alreadyInTransit(id) {
+            const index = this.orders.findIndex(o => o.id == id);
+            if(index >= 0) {
+                this.orders.splice(index, 1);
+            }
+        }
+    }
 }
 </script>
 

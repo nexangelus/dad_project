@@ -43,11 +43,6 @@ class CookController extends Controller {
             $user->available_at = new \DateTime();
             $user->save();
         }
-
-        $savedOrder = Order::find($amPreparing->id);
-        SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($savedOrder));
-        SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($savedOrder));
-        SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource(User::find($user->id)));
     }
 
     private function checkWorkAndAssign($user) {
@@ -61,9 +56,6 @@ class CookController extends Controller {
             $user->available_at = null;
             $user->save();
             $savedOrder = Order::find($orderToDo->id);
-            SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($savedOrder));
-            SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($savedOrder));
-            SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource(User::find($user->id)));
             return new OrderResource($savedOrder);
         }
         return null;

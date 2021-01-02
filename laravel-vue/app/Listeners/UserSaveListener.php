@@ -25,6 +25,10 @@ class UserSaveListener {
         } else if ($user->logged_at == null && $user->getOriginal('logged_at') != null && $user->type != "C") {
             SocketIO::notifyUpdatedEmployeeForManagers(["id" => $user->id, "__remove" => true]); // logout
         }
+
+        if ($user->available_at != null && $user->getOriginal('available_at') == null && $user->type != "C") {
+            SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource($newUser));
+        }
     }
 
 }
