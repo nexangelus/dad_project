@@ -45,7 +45,7 @@ export default {
                     this.cooker_stats = []
                     let array = []
                     for (let data of response.data) {
-                        array.push({y: this.formatTime(data.average), x: this.getWeek(data.week)})
+                        array.push({y: this.formatTime(data.average), x: data.week})
                     }
                     this.cooker_stats.push({name: 'Minutes', data: array})
                 })
@@ -57,7 +57,7 @@ export default {
                     this.deliverer_stats = []
                     let array = []
                     for (let data of response.data) {
-                        array.push({y: this.formatTime(data.average), x: this.getWeek(data.week)})
+                        array.push({y: this.formatTime(data.average), x: data.week})
                     }
                     this.deliverer_stats.push({name: 'Minutes', data: array})
                 })
@@ -66,14 +66,6 @@ export default {
         formatTime(average) {
             return (parseInt(average) / 60).toFixed(2)
         },
-        getWeek(yearWeek) {
-            let yearWeekDivided = yearWeek.split('-')
-            let year = yearWeekDivided[0]
-            let week = yearWeekDivided[1]
-            week = parseInt(week) + 1
-            return year.toString().concat(`-${week}`)
-        },
-
     },
 }
 </script>

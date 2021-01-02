@@ -14,7 +14,6 @@
         </div>
     </div>
 </template>
-
 <script>
 export default {
     name: "global",
@@ -36,7 +35,7 @@ export default {
             axios.get(`/api/managers/statistics/global/employers`).then(response => {
                 let array = []
                 for (let data of response.data) {
-                    array.push({y: this.formatTime(data.average), x: this.getWeek(data.week)})
+                    array.push({y: this.formatTime(data.average), x: data.week})
                 }
                 this.stats.push({name: 'Minutes', data: array})
             })
@@ -45,7 +44,7 @@ export default {
             axios.get(`/api/managers/statistics/global/cookers`).then(response => {
                 let array = []
                 for (let data of response.data) {
-                    array.push({y: this.formatTime(data.average), x: this.getWeek(data.week)})
+                    array.push({y: this.formatTime(data.average), x: data.week})
                 }
                 this.cookers.push({name: 'Minutes', data: array})
             })
@@ -54,7 +53,7 @@ export default {
             axios.get(`/api/managers/statistics/global/deliverers`).then(response => {
                 let array = []
                 for (let data of response.data) {
-                    array.push({y: this.formatTime(data.average), x: this.getWeek(data.week)})
+                    array.push({y: this.formatTime(data.average), x: data.week})
                 }
                 this.deliverers.push({name: 'Minutes', data: array})
             })
@@ -62,14 +61,6 @@ export default {
         formatTime(average) {
             return (parseInt(average) / 60).toFixed(2)
         },
-        getWeek(yearWeek) {
-            let yearWeekDivided = yearWeek.split('-')
-            let year = yearWeekDivided[0]
-            let week = yearWeekDivided[1]
-            week = parseInt(week) + 1
-            return year.toString().concat(`-${week}`)
-        },
-
     },
 }
 </script>
