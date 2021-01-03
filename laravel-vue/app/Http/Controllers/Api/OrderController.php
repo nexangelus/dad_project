@@ -44,6 +44,9 @@ class OrderController extends Controller
                     if(!Order::query()->where(['prepared_by' => $cook->id, 'status' => 'P'])->exists()) { // se não estiver com nenhum pedido
                         $order->prepared_by = $cook->id; // definir que este pedido está a ser preparado por este cook
                         $order->status = 'P';
+
+                        $cook->available_at = null; // colocar que ele não está available
+                        $cook->save();
                         break;
                     }
                 }
@@ -67,15 +70,7 @@ class OrderController extends Controller
             $order_items->save();
         }
 
-        if($order->prepared_by) {
-            SocketIO::notifyNewOrder($order->prepared_by);
-            SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource(User::find($order->prepared_by)));
-        }
-
         $order = Order::find($order->id);
-
-        SocketIO::notifyUpdateOrdersTableManager(new OrderForManagerResource($order));
-        SocketIO::notifyUpdatedOrder(new OrderForCustomerResource($order));
 
         return $order;
     }

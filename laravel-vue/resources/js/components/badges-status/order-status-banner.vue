@@ -35,9 +35,11 @@ export default {
                 case "H":
                     return "secondary";
                 case "P":
+                    return "preparing"
                 case "R":
+                    return "ready"
                 case "T":
-                    return "primary";
+                    return "transit";
                 case "D":
                     return "success";
                 case "C":
@@ -49,5 +51,16 @@ export default {
 </script>
 
 <style scoped>
-
+.badge-preparing {
+    color: #fff;
+    background-color: #ff6500;
+}
+.badge-ready {
+    color: #fff;
+    background-color: #ff0ccf;
+}
+.badge-transit {
+    color: #fff;
+    background-color: #009aff;
+}
 </style>

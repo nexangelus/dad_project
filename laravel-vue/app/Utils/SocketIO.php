@@ -39,6 +39,14 @@ class SocketIO {
         self::postHTTP('userBlocked', ['userID' => $id]);
     }
 
+    public static function notifyOrderInTransitToOtherDelivery(int $id) {
+        self::postHTTP('orderInTransitForDeliverers', ['orderID' => $id]);
+    }
+
+    public static function notifyDeliverymansNewOrder($order) {
+        self::postHTTP('newOrderForDelivery', ['order' => $order]);
+    }
+
     ////////////
     private static function postHTTP($endpoint, $data) {
         $url = config('app.websocketUrl') . "" . $endpoint;

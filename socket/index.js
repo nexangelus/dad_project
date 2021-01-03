@@ -122,6 +122,24 @@ app.post('/userBlocked', (req, res) => {
     }
 })
 
+app.post('/orderInTransitForDeliverers', (req, res) => {
+    res.json({"status": "OK"})
+    if(req.body.orderID) {
+        console.log(`[/orderInTransitForDeliverers] Order ID: '${req.body.orderID}'`);
+        io.to('ED').emit("alreadyInTransit", req.body.orderID);
+        console.log(`[/orderInTransitForDeliverers] io.to('ED').emit("alreadyInTransit", ${req.body.orderID});`)
+    }
+})
+
+app.post('/newOrderForDelivery', (req, res) => {
+    res.json({"status": "OK"})
+    if(req.body.order) {
+        console.log(`[/newOrderForDelivery] Order ID: '${req.body.order}'`);
+        io.to('ED').emit("newOrder", req.body.order);
+        console.log(`[/newOrderForDelivery] io.to('ED').emit("newOrder", ${JSON.stringify(req.body.order)});`)
+    }
+})
+
 app.get('/m/:id/:m', (req, res) => {
     const session = sessions.getUserSession(parseInt(req.params.id))
     console.log(session);
