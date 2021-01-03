@@ -66,21 +66,21 @@ class Order extends Model {
      * @return BelongsTo
      */
     public function customer() {
-        return $this->belongsTo('App\Models\Customer');
+        return $this->belongsTo('App\Models\Customer')->withTrashed();
     }
 
     /**
      * @return BelongsTo
      */
     public function cook() {
-        return $this->belongsTo('App\Models\User', 'prepared_by');
+        return $this->belongsTo('App\Models\User', 'prepared_by')->withTrashed();
     }
 
     /**
      * @return BelongsTo
      */
     public function delivery() {
-        return $this->belongsTo('App\Models\User', 'delivered_by');
+        return $this->belongsTo('App\Models\User', 'delivered_by')->withTrashed();
     }
 
     /**

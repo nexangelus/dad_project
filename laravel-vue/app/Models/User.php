@@ -62,7 +62,7 @@ class User extends Authenticatable {
      * @return HasOne
      */
     public function customer() {
-        return $this->hasOne('App\Models\Customer', 'id');
+        return $this->hasOne('App\Models\Customer', 'id')->withTrashed();
     }
 
     /**

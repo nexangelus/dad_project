@@ -45,7 +45,7 @@ class Customer extends Model {
      * @return BelongsTo
      */
     public function user() {
-        return $this->belongsTo('App\Models\User', 'id');
+        return $this->belongsTo('App\Models\User', 'id')->withTrashed();
     }
 
     /**

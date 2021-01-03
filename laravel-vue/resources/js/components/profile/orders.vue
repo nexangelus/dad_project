@@ -47,7 +47,45 @@
                 </b-form-group>
             </b-col>
         </b-row>
-        <b-table id="my-table" :busy.sync="isBusy" :filter="filter" :current-page="currentPage" :items="myProvider"></b-table>
+        <b-table striped hover id="my-table" :busy.sync="isBusy" :fields="fields" :filter="filter" :current-page="currentPage" :items="myProvider">
+            <template #cell(customer)="data">
+                <first-last-name :name="data.item.customer"/>
+            </template>
+            <template #cell(deliveryman)="data">
+                <first-last-name :name="data.item.deliveryman"/>
+            </template>
+            <template #cell(cook)="data">
+                <first-last-name :name="data.item.cook"/>
+            </template>
+            <template #cell(status)="data">
+                <order-status-banner :status="data.item.status"/>
+            </template>
+            <template #cell(action)="data">
+                <b-button variant="primary" size="sm" @click="data.toggleDetails">
+                    <font-awesome-icon icon="info"/>
+                </b-button>
+            </template>
+            <template #row-details="row">
+                <b-card>
+                    <ul>
+                        <li>Cooking time: <template v-if="row.item.preparation_time">{{ $moment.duration(row.item.preparation_time, 'seconds').humanize()}}</template> </li>
+                        <li>Delivery time: <template v-if="row.item.delivery_time">{{ $moment.duration(row.item.delivery_time, 'seconds').humanize()}}</template> </li>
+                        <li>Current Status: <template v-if="row.item.current_status_at">{{row.item.current_status_at | moment("L LT")}}</template></li>
+                        <li>Closed At: <template v-if="row.item.closed_at">{{row.item.closed_at | moment("L LT")}}</template></li>
+                        <li v-if="row.item.notes">Notes: {{row.item.notes}}</li>
+                    </ul>
+                    Order Items:
+                    <b-table :items="row.item.order_items">
+                        <template #cell(unit_price)="data">
+                            <p>{{data.item.unit_price}} €</p>
+                        </template>
+                        <template #cell(sub_total_price)="data">
+                            <p>{{data.item.sub_total_price}} €</p>
+                        </template>
+                    </b-table>
+                </b-card>
+            </template>
+        </b-table>
         <b-col sm="12" md="12" class="my-1">
             <b-pagination v-model="currentPage" :total-rows="totalRows" align="fill" size="sm" class="my-0"></b-pagination>
         </b-col>
@@ -55,8 +93,11 @@
 </template>
 
 <script>
+import FirstLastName from "../first-last-name";
+import OrderStatusBanner from "../badges-status/order-status-banner";
 export default {
     name: "orders",
+    components: {OrderStatusBanner, FirstLastName},
     data() {
         return {
             isBusy: false,
@@ -72,22 +113,44 @@ export default {
             currentPage: 1,
             totalRows: 0,
             perPage: 10,
+            fields: [{
+                    key: 'id',
+                    label: 'ID',
+                }, {
+                    key: 'customer',
+                }, {
+                    key: 'cook',
+                }, {
+                    key: 'deliveryman',
+                }, {
+                    key: 'current_status_at',
+                    label: 'Last Update',
+                    formatter: (value) => this.$moment(value).format('L LT'),
+                    sortable: true,
+                }, {
+                    key: 'status',
+                    label: 'Status'
+                }, {
+                    key: 'action'
+                }
+            ]
         }
     },
     props: {
-        id: String,
+        id: Number,
         userType: String
     },
     mounted() {
         if(this.userType === "C") {
             this.filter.customer = this.id;
+            this.fields.splice(this.fields.findIndex(f=>f.key === "customer"), 1)
         } else if(this.userType === "EC") {
             this.filter.cook = this.id;
+            this.fields.splice(this.fields.findIndex(f=>f.key === "cook"), 1)
         } else if(this.userType === "ED") {
             this.filter.delivery = this.id;
+            this.fields.splice(this.fields.findIndex(f=>f.key === "deliveryman"), 1)
         }
-
-
         if (this.userType !== 'C') {
             axios.get('/api/users?mini=C').then(r => {
                 this.customerOptions = r.data;
