@@ -2,50 +2,52 @@
     <div>
         <h2 class="text-center">Orders in process</h2>
         <div v-if="orders.length">
-            <div class="row mt-5" v-for="order in orders" >
-                <div class="col-12">
-                    <b-card>
-                        <b-card-text>
-                            <div class="row text-center">
-                                <div class="col-md-4 custom-border">
-                                    <table class="table b-table fds">
-                                        <tr>
-                                            <th class="no-border-top">ID:</th>
-                                            <td class="no-border-top">{{order.id}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Status:</th>
-                                            <td><order-status-banner :status="order.status"/></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Responsible:</th>
-                                            <td>{{order.responsible}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Order at:</th>
-                                            <td>{{order.opened_at | moment('L LT')}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Time waited:</th>
-                                            <td><TimeSince :date="order.opened_at"/></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-md-4 custom-border padding-small" >
-                                    <h2>Notes:</h2>
-                                    <p>{{order.notes}}</p>
-                                </div>
-                                <div class="col-md-4 padding-small">
-                                    <h3>Products Ordered</h3>
-                                    <div class="limited-height">
-                                        <b-table :items="order.order_items"/>
+            <transition-group name="order" tag="div">
+                <div class="row mt-5 order" v-for="order in orders" :key="order.id">
+                    <div class="col-12">
+                        <b-card>
+                            <b-card-text>
+                                <div class="row text-center">
+                                    <div class="col-md-4 custom-border">
+                                        <table class="table b-table fds">
+                                            <tr>
+                                                <th class="no-border-top">ID:</th>
+                                                <td class="no-border-top">{{order.id}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Status:</th>
+                                                <td><order-status-banner :status="order.status"/></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Responsible:</th>
+                                                <td>{{order.responsible}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Order at:</th>
+                                                <td>{{order.opened_at | moment('L LT')}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Time waited:</th>
+                                                <td><TimeSince :date="order.opened_at"/></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-4 custom-border padding-small" >
+                                        <h2>Notes:</h2>
+                                        <p>{{order.notes}}</p>
+                                    </div>
+                                    <div class="col-md-4 padding-small">
+                                        <h3>Products Ordered</h3>
+                                        <div class="limited-height">
+                                            <b-table :items="order.order_items"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </b-card-text>
-                    </b-card>
+                            </b-card-text>
+                        </b-card>
+                    </div>
                 </div>
-            </div>
+            </transition-group>
         </div>
 
         <div v-else>
@@ -93,6 +95,12 @@ export default {
             const i = this.orders.findIndex(o => o.id === order.id)
             if (i >= 0) {
                 Vue.set(this.orders, i, order);
+                if(order.status === "D") {
+                    setTimeout(() => {
+                        const i = this.orders.findIndex(o => o.id === order.id)
+                        this.orders.splice(i, 1);
+                    }, 5000);
+                }
             } else {
                 this.orders.push(order);
             }
@@ -126,5 +134,14 @@ export default {
         max-height: 25vh;
         overflow: auto;
     }
+}
+.order-enter, .order-leave-to {
+    opacity: 0;
+}
+.order-leave-to {
+    transform: opacity(0);
+}
+.order {
+    transition: all 1s;
 }
 </style>

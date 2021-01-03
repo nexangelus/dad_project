@@ -109,6 +109,7 @@ export default {
     mounted() {
         axios.get('/api/customers/history').then(r => {
             this.orders = r.data.data;
+            this.rows = this.orders.length;
         }).catch(r => {
             this.isFetchingData = false;
         })
