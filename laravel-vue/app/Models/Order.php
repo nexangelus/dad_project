@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\Filterable;
 use App\Listeners\OrderSaveListener;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property OrderItem[] $orderItems
  */
 class Order extends Model {
-    use HasFactory;
+    use HasFactory, Filterable;
 
     protected $dispatchesEvents = ['saved' => OrderSaveListener::class];
 
@@ -65,21 +66,21 @@ class Order extends Model {
      * @return BelongsTo
      */
     public function customer() {
-        return $this->belongsTo('App\Models\Customer');
+        return $this->belongsTo('App\Models\Customer')->withTrashed();
     }
 
     /**
      * @return BelongsTo
      */
     public function cook() {
-        return $this->belongsTo('App\Models\User', 'prepared_by');
+        return $this->belongsTo('App\Models\User', 'prepared_by')->withTrashed();
     }
 
     /**
      * @return BelongsTo
      */
     public function delivery() {
-        return $this->belongsTo('App\Models\User', 'delivered_by');
+        return $this->belongsTo('App\Models\User', 'delivered_by')->withTrashed();
     }
 
     /**

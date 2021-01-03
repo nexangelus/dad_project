@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\OrderFilter;
 use App\Http\Filters\UserFilter;
 use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Resources\OrderForManagerResource;
 use App\Http\Resources\UserEmployerResource;
+use App\Http\Resources\UserOrderForManagerResource;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Utils\SocketIO;
@@ -138,9 +141,13 @@ class UserController extends Controller {
         return $users;
     }
 
-    public function getAll(UserFilter $filter) {
-        $users = User::filter($filter)->paginate(10)->withQueryString()->onEachSide(0);
-        return UserResource::collection($users);
+    public function getAll(UserFilter $filter, Request $request) {
+        if($request->has('mini')) {
+            return User::query()->where('type', $request->query('mini'))->orderBy('name')->get(['id as value', 'name as text']);
+        } else {
+            $users = User::filter($filter)->paginate(10)->withQueryString()->onEachSide(0);
+            return UserResource::collection($users);
+        }
     }
 
     public function saveNewPhotoForUser(Request $request, int $id) {
@@ -186,6 +193,12 @@ class UserController extends Controller {
         }
 
         return new UserResource($user);
+    }
+
+    public function getUserOrders(OrderFilter $filter){
+        /* @var Order $orders */
+        $orders = Order::filter($filter)->paginate(10);
+        return UserOrderForManagerResource::collection($orders);
     }
 
 }

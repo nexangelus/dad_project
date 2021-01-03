@@ -85,6 +85,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::post('users/{id}/photo', [UserController::class, 'saveNewPhotoForUser']);
         Route::put('users/{id}', [UserController::class, 'updateUser']);
         Route::delete('users/{id}', [UserController::class, 'deleteUser']);
+        Route::get('users/orders', [UserController::class, 'getUserOrders']);
 
         Route::get('users/employers', [UserController::class, 'getUserEmployers']);
 

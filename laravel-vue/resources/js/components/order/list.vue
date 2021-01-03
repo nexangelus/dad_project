@@ -96,11 +96,7 @@ export default {
                 label: 'Customer',
                 formatter: (value) => value ? value.name.split(" ")[0] : '',
                 sortable: true,
-            },/* {
-                key: 'opened_at',
-                label: 'Created At',
-                formatter: (value) => this.$moment(value).format('L LT')
-            },*/ {
+            }, {
                 key: 'working',
                 label: 'Responsible',
                 sortable: true,
