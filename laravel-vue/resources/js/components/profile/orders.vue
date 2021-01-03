@@ -1,5 +1,6 @@
 <template>
     <b-container fluid>
+        <h3>Order History</h3>
         <b-row>
             <b-col lg="6" class="my-1" v-if="userType !== 'C'">
                 <b-form-group label="Customer" label-for="filter-customer" label-cols-sm="3" label-align-sm="right" label-size="sm" class="mb-0">
@@ -47,7 +48,7 @@
                 </b-form-group>
             </b-col>
         </b-row>
-        <b-table striped hover id="my-table" :busy.sync="isBusy" :fields="fields" :filter="filter" :current-page="currentPage" :items="myProvider">
+        <b-table striped hover id="my-table" :busy.sync="isBusy" :fields="fields" :filter="filter" :current-page="currentPage" :items="myProvider" sort-by="id" :sort-desc="false">
             <template #cell(customer)="data">
                 <first-last-name :name="data.item.customer"/>
             </template>
@@ -75,19 +76,28 @@
                         <li v-if="row.item.notes">Notes: {{row.item.notes}}</li>
                     </ul>
                     Order Items:
-                    <b-table :items="row.item.order_items">
+                    <b-table :items="row.item.order_items" foot-clone>
                         <template #cell(unit_price)="data">
                             <p>{{data.item.unit_price}} €</p>
                         </template>
                         <template #cell(sub_total_price)="data">
                             <p>{{data.item.sub_total_price}} €</p>
                         </template>
+                        <template #foot(name)="data">&nbsp;</template>
+                        <template #foot(unit_price)="data">&nbsp;</template>
+                        <template #foot(quantity)="data">
+                            Total:
+                        </template>
+                        <template #foot(sub_total_price)="data">
+                            {{ row.item.total_price }} €
+                        </template>
                     </b-table>
                 </b-card>
             </template>
+
         </b-table>
-        <b-col sm="12" md="12" class="my-1">
-            <b-pagination v-model="currentPage" :total-rows="totalRows" align="fill" size="sm" class="my-0"></b-pagination>
+        <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" class="my-0" limit="10"></b-pagination>
+        <b-col>
         </b-col>
     </b-container>
 </template>
@@ -114,26 +124,27 @@ export default {
             totalRows: 0,
             perPage: 10,
             fields: [{
-                    key: 'id',
-                    label: 'ID',
-                }, {
-                    key: 'customer',
-                }, {
-                    key: 'cook',
-                }, {
-                    key: 'deliveryman',
-                }, {
-                    key: 'current_status_at',
-                    label: 'Last Update',
-                    formatter: (value) => this.$moment(value).format('L LT'),
-                    sortable: true,
-                }, {
-                    key: 'status',
-                    label: 'Status'
-                }, {
-                    key: 'action'
-                }
-            ]
+                key: 'id',
+                label: 'ID',
+                sortable: true,
+            }, {
+                key: 'customer',
+            }, {
+                key: 'cook',
+            }, {
+                key: 'deliveryman',
+            }, {
+                key: 'current_status_at',
+                label: 'Last Update',
+                formatter: (value) => this.$moment(value).format('L LT'),
+                sortable: true,
+            }, {
+                key: 'status',
+                label: 'Status',
+                sortable: true,
+            }, {
+                key: 'action'
+            }]
         }
     },
     props: {
@@ -182,6 +193,10 @@ export default {
             }
             if(ctx.filter.status.length > 0) {
                 filter.push('status='+ctx.filter.status.join(','));
+            }
+            if(ctx.sortBy) {
+                filter.push(`sort[by]=${ctx.sortBy}`)
+                filter.push(`sort[order]=${ctx.sortDesc ? "desc" : "asc"}`)
             }
 
             let promise = axios.get(`/api/users/orders?${filter.join('&')}`)

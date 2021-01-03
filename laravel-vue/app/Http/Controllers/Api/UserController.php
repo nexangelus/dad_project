@@ -197,7 +197,7 @@ class UserController extends Controller {
 
     public function getUserOrders(OrderFilter $filter){
         /* @var Order $orders */
-        $orders = Order::filter($filter)->paginate(10)->withQueryString();
+        $orders = Order::filter($filter)->paginate(10);
         return UserOrderForManagerResource::collection($orders);
     }
 

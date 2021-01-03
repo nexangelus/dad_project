@@ -1,5 +1,5 @@
 <template>
-    <span>{{finalName}}</span>
+    <span :title="name">{{finalName}}</span>
 </template>
 
 <script>
