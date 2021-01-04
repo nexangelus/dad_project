@@ -77,7 +77,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
         Route::patch('managers/order/{id}/cancel', [ManagerController::class, 'cancelOrder']);
 
-        Route::patch('users/{id}/status/{status}', [ManagerController::class, 'blockUser']); // TODO Integrar este pedido na interface
+        Route::patch('users/{id}/status/{status}', [ManagerController::class, 'blockUser']);
 
         Route::get('users', [UserController::class, 'getAll'])->withoutMiddleware(ThrottleRequests::class);
         Route::get('users/{id}', [UserController::class, 'getUser'])->where('id', '[0-9]+');

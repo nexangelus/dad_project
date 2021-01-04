@@ -72,7 +72,7 @@ export default {
             if (isNaN(product.quantity)) {
                 this.$toasted.error("Quantity inserted is not a number")
             } else {
-                this.$toasted.success(`Added ${product.name} to the cart`)
+                this.$toasted.success(`Added ${product.name} to the cart`, {position: "bottom-left"})
                 this.$store.commit('addToCart', product)
             }
         },

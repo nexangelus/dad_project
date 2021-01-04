@@ -12,6 +12,7 @@ const sessions = new SessionManager();
 
 app.use(express.json());
 
+// Para cada pedido a esta API, verificar se existe um campo com a password para comunicação entre API Laravel - Socket
 app.use((req, res, next) => {
     if(req.body.pw && req.body.pw === PASSWORD_LARAVELAPI_SOCKET){
         next();
@@ -140,39 +141,45 @@ app.post('/newOrderForDelivery', (req, res) => {
     }
 })
 
-app.get('/m/:id/:m', (req, res) => {
-    const session = sessions.getUserSession(parseInt(req.params.id))
-    console.log(session);
-    io.to(session.socketID).emit("pm", req.params.m);
-    res.send("ok");
+app.post('/orderCancelled', (req, res) => {
+    res.json({"status": "OK"})
+    if(req.body.userID && req.body.orderID) {
+        console.log(`[/orderCancelled] Order ID: '${req.body.order}', User ID: ${req.body.userID}`);
+        const session = sessions.getUserSession(parseInt(req.body.userID))
+        if (session){
+            io.to(session.socketID).emit("orderCancelled", req.body.orderID);
+            console.log(`[/orderCancelled] io.to(${session.socketID}).emit("orderCancelled", ${req.body.orderID});`);
+        } else {
+            console.error(`[/orderCancelled] No session for Customer with ID: ${req.body.userID}`);
+        }
+    }
 })
-
-
 
 io.on('connection', function (socket) {
     console.log(`[new connection] SocketID: ${socket.id}`);
-    /*socket.on('user_logged', (user) => {
-        if (user) {
-            sessions.addUserSession(user, socket.id)
-            socket.join(user.type)
-            console.log('User Logged: UserID= ' + user.id + ' Socket ID= ' + socket.id)
-            console.log('  -> Total Sessions= ' + sessions.users.size)
-        }
-    })
-    socket.on('user_logged_out', (user) => {
-        if (user) {
-            socket.leave(user.type)
-            sessions.removeUserSession(user.id)
-            console.log('User Logged OUT: UserID= ' + user.id + ' Socket ID= ' + socket.id)
-            console.log('  -> Total Sessions= ' + sessions.users.size)
-        }
-    })*/
+
+    /** O código de emitir os eventos para o Socket é tratado no lado do servidor
+     *  Principalmente na classe App\Listeners\OrderSaveListener e App\Listeners\UserSaveListener
+     *  Que quando algum desses modelos são gravados, é que é enviada a mensagem para as pessoas que são precisas.
+     *  Confirmar também a classe App\Utils\SocketIO que envia todos os pedidos para a API Rest Express do Socket.
+     */
 
     socket.on('disconnect', (reason) => {
         if(reason === "transport close") {
             let clientID = sessions.getUserBySessionID(socket.id);
-            if(clientID)
-                axios.post(`${config.API_URL}api/socket-logout`, {pw: config.API_PW, id: clientID})
+            if(clientID) {
+                sessions.removeSocketIDSession(socket.id);
+                console.log("[SOCKET DISCONNECTED] Waiting 5 minutes to check for reconnect.");
+                setTimeout(() => {
+                    let session = sessions.getUserSession(clientID);
+                    if(session) {
+                        console.log("[SOCKET DISCONNECT] User has reconnected, cancelling logout");
+                    } else {
+                        console.log("[SOCKET DISCONNECT] User has not reconnected. Notifying database of logout.");
+                        axios.post(`${config.API_URL}api/socket-logout`, {pw: config.API_PW, id: clientID})
+                    }
+                }, 1000 * 60 * 5); // miliseconds * 60 (seconds) * 5 (minutes)
+            }
         }
     })
 })

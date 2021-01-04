@@ -26,17 +26,9 @@ class ManagerController extends Controller {
      * - apagar um cliente
      */
 
-    public function getDashboardData(Request $request) {
-        $orders = Order::query();
-        $employees = User::query()->whereIn("type", ["EM", "ED", "EC"]);
-
-        if($request->query('all', true)){
-            $orders = $orders->whereIn("status", ['H', 'P', 'R', 'T']);
-            $employees = $employees->whereNotNull("logged_at");
-        }
-
-        $orders = $orders->get();
-        $employees = $employees->get();
+    public function getDashboardData() {
+        $orders = Order::query()->whereIn("status", ['H', 'P', 'R', 'T'])->get();
+        $employees = User::query()->whereIn("type", ["EM", "ED", "EC"])->whereNotNull("logged_at")->get();
 
         return ["orders" => OrderForManagerResource::collection($orders), "employees" => EmployeesForManagerResource::collection($employees)];
     }

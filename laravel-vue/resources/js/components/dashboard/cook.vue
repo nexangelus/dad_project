@@ -84,6 +84,11 @@ export default {
                 const sound = (new Audio('/sound/pop.mp3')).play();
                 this.order = response.data.data
             })
+        },
+        orderCancelled(orderID) {
+            if(this.order && this.order.id == orderID) {
+                this.getOrder();
+            }
         }
     }
 }

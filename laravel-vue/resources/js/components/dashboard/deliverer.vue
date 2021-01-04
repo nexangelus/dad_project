@@ -66,6 +66,11 @@ export default {
             if(index >= 0) {
                 this.orders.splice(index, 1);
             }
+        },
+        orderCancelled(orderID) {
+            if(this.order && this.order.id == orderID) {
+                this.getOrder();
+            }
         }
     }
 }

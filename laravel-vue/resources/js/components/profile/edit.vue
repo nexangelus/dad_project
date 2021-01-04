@@ -146,7 +146,6 @@ export default {
             reader.onload = (ev => {
                 this.rawImage = ev.target.result;
                 this.user.photo_url = null;
-                //this.user.photo_url = ev.target.result;
             })
             reader.readAsDataURL(this.file);
         },

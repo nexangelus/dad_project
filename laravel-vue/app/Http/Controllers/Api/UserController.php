@@ -104,7 +104,7 @@ class UserController extends Controller {
     }
 
     public function update(UpdateUserRequest $request) {
-        $user = $request->user(); // TODO user id must be the same
+        $user = $request->user();
         $user->fill($request->validated());
         $user->save();
 

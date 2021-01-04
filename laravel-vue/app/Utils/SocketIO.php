@@ -47,6 +47,10 @@ class SocketIO {
         self::postHTTP('newOrderForDelivery', ['order' => $order]);
     }
 
+    public static function notifyOrderCancelled(int $idWorkingOn, int $orderID) {
+        self::postHTTP('orderCancelled', ['userID' => $idWorkingOn, 'orderID' => $orderID]);
+    }
+
     ////////////
     private static function postHTTP($endpoint, $data) {
         $url = config('app.websocketUrl') . "" . $endpoint;

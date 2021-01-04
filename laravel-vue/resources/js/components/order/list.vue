@@ -2,34 +2,30 @@
     <div>
         <h2>Orders</h2>
         <div class="row">
-            <div class="col-sm-7">
-                <b-form-input v-model="filter" type="search" placeholder="Type to Search" size="sm" class="col-sm-10 offset-sm-1" />
-            </div>
-            <div class="col-sm-5">
-                <b-form-group
-                    label="Per page"
-                    label-for="per-page-select"
-                    label-align-sm="right"
-                    label-cols-sm="4"
-                    label-size="sm">
-                    <b-form-select
-                        id="per-page-select"
-                        v-model="perPage"
-                        :options="pageOptions"
-                        class="col-sm-8"
-                        size="sm"
-                     />
+            <b-col lg="7" class="my-1">
+                <b-form-group label="Type " description="Leave all unchecked to show all data" label-cols-sm="2" label-align-sm="right" label-size="sm" class="mb-0">
+                    <b-form-checkbox-group v-model="filter.status" class="mt-1">
+                        <b-form-checkbox value="H">Holding</b-form-checkbox>
+                        <b-form-checkbox value="P">Preparing</b-form-checkbox>
+                        <b-form-checkbox value="R">Ready</b-form-checkbox>
+                        <b-form-checkbox value="T">Transit</b-form-checkbox>
+                    </b-form-checkbox-group>
+                </b-form-group>
+            </b-col>
+            <div class="col-sm-4">
+                <b-form-group label="Per page" label-for="per-page-select" label-align-sm="right" label-cols-sm="4" label-size="sm">
+                    <b-form-select id="per-page-select" v-model="perPage" :options="pageOptions" class="col-sm-8" size="sm" />
                 </b-form-group>
             </div>
 
         </div>
 
-        <b-table striped hover :items="list" :fields="fields" :per-page="perPage" :current-page="currentPage"
-                 :filter="filter" @filtered="onFiltered" show-empty responsive="" sort-by="current_status_at">
+        <b-table v-if="list.length >= 0" striped hover :items="list" :fields="fields" :per-page="perPage" :current-page="currentPage"
+                 :filter="filter" :filter-function="runFilter" show-empty responsive="" sort-by="current_status_at">
             <template #cell(working)="data">
                 <template v-if="data.item.working">
                     <icon-user-type :type="data.item.working.type" />
-                    {{data.item.working.name.split(" ")[0]}}
+                    <first-last-name :name="data.item.working.name" />
                 </template>
                 <template v-else>
                     <small><em>waiting</em></small>
@@ -39,11 +35,14 @@
             <template #cell(status)="data">
                 <status-banner :status="data.item.status" />
             </template>
+            <template #cell(customer)="data">
+                <first-last-name :name="data.item.customer.name"/>
+            </template>
             <template #cell(actions)="data">
                 <b-button variant="primary" size="sm" @click="data.toggleDetails">
                     <font-awesome-icon icon="info"/>
                 </b-button>
-                <b-button variant="danger" size="sm" @click.prevent="cancelOrder(data.item.id)">
+                <b-button variant="danger" title="Cancel this order" size="sm" @click.prevent="cancelOrder(data.item.id)">
                     <font-awesome-icon icon="ban"/>
                 </b-button>
             </template>
@@ -69,9 +68,10 @@
 <script>
 import StatusBanner from "../badges-status/order-status-banner";
 import IconUserType from "../iconUserType";
+import FirstLastName from "../first-last-name";
 export default {
     name: "list",
-    components: {IconUserType, StatusBanner},
+    components: {FirstLastName, IconUserType, StatusBanner},
     props: {
         list: {
             type: Array,
@@ -82,7 +82,9 @@ export default {
     },
     data() {
         return {
-            filter: null,
+            filter: {
+                status: [],
+            },
             perPage: 10,
             pageOptions: [5, 10, 20, 50],
             currentPage: 1,
@@ -94,7 +96,6 @@ export default {
             }, {
                 key: 'customer',
                 label: 'Customer',
-                formatter: (value) => value ? value.name.split(" ")[0] : '',
                 sortable: true,
             }, {
                 key: 'working',
@@ -127,12 +128,19 @@ export default {
         }
     },
     methods: {
-        onFiltered(filtered) {
-            this.rows = filtered.length;
-            this.currentPage = 1;
-        },
         cancelOrder(id){
             this.$emit('childSetCancelOrder', id)
+        },
+        runFilter(row, filter){
+            let status = null;
+
+            if(filter.status.length > 0) {
+                status = filter.status.includes(row.status);
+            }
+
+            status = status == null ? true : status;
+
+            return status;
         }
     }
 }

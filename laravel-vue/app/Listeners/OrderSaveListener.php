@@ -35,6 +35,14 @@ class OrderSaveListener {
         if($order->delivered_by != null && $order->getOriginal('delivered_by') == null) {
             SocketIO::notifyOrderInTransitToOtherDelivery($order->id);
         }
+
+        if($order->status === "C" && $order->getOriginal('status') !== "C") {
+            //               se tiver um deliveryman, notifica o deliveryman  senão se tiver um prepared notifica-o, se não, não manda nada
+            $idWorkingOn = $order->delivered_by != null ? $order->delivered_by : ($order->prepared_by != null ? $order->prepared_by : null);
+            if($idWorkingOn != null) {
+                SocketIO::notifyOrderCancelled($idWorkingOn, $order->id);
+            }
+        }
     }
 
 }

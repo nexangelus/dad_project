@@ -13,13 +13,6 @@
                     <h5>{{ employees.length }}</h5>
                 </div>
             </div>
-            <div class="text-center">
-                <input class="form-check-input" type="checkbox" @change="quantityChanged" v-bind:disabled="isFetchingData" v-model="showAll" id="checkShowAll">
-                <label class="form-check-label" for="checkShowAll">
-                    Show All Data
-                </label>
-                <p v-show="isFetchingData">Fetching Data...</p>
-            </div>
         </div>
         <div class="col-sm-9">
             <div class="content">
@@ -41,7 +34,6 @@ export default {
             selected: "orders",
             orders: [],
             employees: [],
-            showAll: false,
             isFetchingData: false,
             cooksStatus: [],
         }
@@ -53,13 +45,10 @@ export default {
         select(type) {
             this.selected = type;
         },
-        quantityChanged() {
-            this.getData();
-        },
         getData() {
             this.isFetchingData = true;
             this.orders = this.employees = [];
-            axios.get('/api/managers/dashboard' + (this.showAll ? "?all" : "")).then(r => {
+            axios.get('/api/managers/dashboard').then(r => {
                 this.orders = r.data.orders;
                 this.employees = r.data.employees;
                 this.isFetchingData = false;
@@ -80,15 +69,15 @@ export default {
     sockets: {
         updateOrdersTable(order) {
             const i = this.orders.findIndex(o => o.id === order.id)
-            if(!order.__remove) {
+            if(order.__remove || order.status === "C") {
+                if(i >= 0) {
+                    this.orders.splice(i, 1);
+                }
+            } else {
                 if(i >= 0) {
                     Vue.set(this.orders, i, order);
                 } else {
                     this.orders.push(order);
-                }
-            } else {
-                if(i >= 0) {
-                    this.orders.splice(i, 1);
                 }
             }
         },
@@ -105,9 +94,7 @@ export default {
                     this.employees.splice(i, 1);
                 }
             }
-
         }
-        //TODO socket to receive cancel orders
     }
 }
 </script>
