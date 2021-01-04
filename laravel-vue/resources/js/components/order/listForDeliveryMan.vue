@@ -29,7 +29,7 @@
         <b-table striped hover :items="orders" :fields="fields" :per-page="perPage" :current-page="currentPage"
                  :filter="filter" @filtered="onFiltered" show-empty responsive="" sort-by="current_status_at">
             <template #cell(action)="data">
-                <b-button variant="primary" @click.prevent="setTransit(data.item.id)">Set Transit</b-button>
+                <b-button variant="primary" :disabled="data.index !== 0" @click.prevent="setTransit(data.item.id)">Set Transit</b-button>
             </template>
             <template #empty>
                 <h3 class="text-center">No orders are ready to be delivered</h3>

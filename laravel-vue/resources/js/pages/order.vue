@@ -13,7 +13,7 @@
         <h3>Notes</h3>
         <b-form-textarea v-model="note" />
         <p />
-        <b-button @click="order">Order</b-button>
+        <b-button :disabled="cart.length <= 0" @click="order">Order</b-button>
 
     </div>
 </template>
@@ -50,6 +50,8 @@ export default {
                 } else {
                     this.$toasted.error('Something went wrong')
                 }
+            }).catch(r => {
+                this.$toasted.error(r.response.data.message || 'Something went wrong');
             })
         }
     }

@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Date;
 class OrderController extends Controller
 {
     public function postOrder(Request $request){
+        if(!$request->cart || count($request->cart) == 0) {
+            return response()->json(["message" => "You can't create an order with an empty cart."], 403);
+        }
         $items = $request->cart;
         $note = $request->note;
         $total_price = 0;
