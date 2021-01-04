@@ -24,6 +24,9 @@ class OrderController extends Controller
         $note = $request->note;
         $total_price = 0;
         foreach ($items as $item){
+            if($item['quantity'] <= 0) {
+                return response()->json(["message" => "You selected the wrong quantity for a product."], 403);
+            }
             $product = Product::query()->where('id', $item['id'])->first();
             $total_price += $item['quantity']*$product->price;
         }

@@ -1,7 +1,7 @@
 <template>
     <div class="jumbotron">
         <h2>Register Account</h2>
-        <router-link :to="{name: 'login'}">Login</router-link>
+        <router-link :to="{name: 'login'}"><< Login instead</router-link>
         <editProfile v-on:finish="create" :errors="errors" ref="register"></editProfile>
     </div>
 </template>

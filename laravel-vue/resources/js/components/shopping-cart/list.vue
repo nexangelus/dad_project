@@ -10,8 +10,7 @@
                         <div class="input-group-prepend">
                             <button class="btn btn-outline-secondary" type="button" @click="decrementProductFromCart(item)"><font-awesome-icon icon="minus"/></button>
                         </div>
-                        <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1"
-                               v-model="item.quantity"/>
+                        <input type="text" class="form-control" placeholder="" aria-label="" @change="checkQuantity(item)" aria-describedby="basic-addon1" min="0" v-model="item.quantity"/>
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" @click="addToCart(item)"><font-awesome-icon icon="plus"/></button>
                             <b-button variant="danger" @click="removeProduct(item)"><font-awesome-icon icon="trash"/></b-button>
@@ -83,6 +82,11 @@ export default {
         },
         removeProduct(product){
             this.$store.commit('removeProduct', product)
+        },
+        checkQuantity(item) {
+            if(item.quantity <= 0) {
+                item.quantity = 1;
+            }
         }
 
     }

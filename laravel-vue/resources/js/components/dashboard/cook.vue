@@ -82,6 +82,7 @@ export default {
         newOrder() {
             axios.get('/api/cooks/work', this.credentials).then(response => {
                 const sound = (new Audio('/sound/pop.mp3')).play();
+                Vue.toasted.success("New order has arrived.");
                 this.order = response.data.data
             })
         },
