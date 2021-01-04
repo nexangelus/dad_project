@@ -28,6 +28,8 @@ class UserSaveListener {
 
         if ($user->available_at != null && $user->getOriginal('available_at') == null && $user->type != "C") {
             SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource($newUser));
+        } else if ($user->available_at == null && $user->getOriginal('available_at') != null && $user->type != "C") {
+            SocketIO::notifyUpdatedEmployeeForManagers(new EmployeesForManagerResource($newUser));
         }
     }
 
