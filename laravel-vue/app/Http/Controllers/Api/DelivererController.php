@@ -41,6 +41,9 @@ class DelivererController extends Controller {
             $order->current_status_at = new \DateTime();
             $order->save();
 
+            $user->available_at = null;
+            $user->save();
+
             $order = Order::find($id);
 
             return new OrderForDelivererResource($order);
@@ -63,6 +66,9 @@ class DelivererController extends Controller {
             $order->delivery_time = $timeSpent;
             $order->total_time = $timeSpent + $timePrep;
             $order->save();
+
+            $user->available_at = new \DateTime();
+            $user->save();
         }
         return null;
     }
