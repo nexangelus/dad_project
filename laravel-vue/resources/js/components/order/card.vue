@@ -9,19 +9,23 @@
                     <td>{{ order.id }}</td>
                 </tr>
                 <tr>
-                    <th scope="row">Costumer Name</th>
+                    <th scope="row">Customer Name</th>
                     <td>{{ order.name }}</td>
                 </tr>
                 <tr>
-                    <th scope="row">Costumer Email</th>
+                    <th scope="row">Customer Email</th>
                     <td>{{ order.email }}</td>
                 </tr>
                 <tr>
-                    <th scope="row">Costumer Phone</th>
+                    <th scope="row">Customer Address</th>
+                    <td>{{ order.address }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Customer Phone</th>
                     <td>{{ order.phone }}</td>
                 </tr>
                 <tr v-if="order.photo!=null">
-                    <th scope="row">Costumer Photo</th>
+                    <th scope="row">Customer Photo</th>
                     <td><img v-bind:src="order.photo"/> </td>
                 </tr>
                 <tr v-if="order.notes">

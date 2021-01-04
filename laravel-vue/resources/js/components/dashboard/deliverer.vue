@@ -69,6 +69,7 @@ export default {
         },
         orderCancelled(orderID) {
             if(this.order && this.order.id == orderID) {
+                Vue.toasted.error("The order you were working on was cancelled by a manager.");
                 this.getOrder();
             }
         }
