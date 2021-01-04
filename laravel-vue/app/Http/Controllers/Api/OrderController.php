@@ -50,6 +50,7 @@ class OrderController extends Controller
                     if(!Order::query()->where(['prepared_by' => $cook->id, 'status' => 'P'])->exists()) { // se não estiver com nenhum pedido
                         $order->prepared_by = $cook->id; // definir que este pedido está a ser preparado por este cook
                         $order->status = 'P';
+                        $order->save();
 
                         $cook->available_at = null; // colocar que ele não está available
                         $cook->save();
@@ -58,12 +59,13 @@ class OrderController extends Controller
                 }
                 if(!$order->prepared_by)
                     $order->status = 'H'; // não houve ninguém disponível para ficar com este pedido
+                    $order->save();
             } else {
                 $order->status = 'H'; // não havia ninguém online para este pedido
+                $order->save();
             }
         }
 
-        $order->save();
         foreach ($items as $item){
             $product = Product::query()->where('id', $item['id'])->first();
             $sub_total = $item['quantity']*$product->price;

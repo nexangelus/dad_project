@@ -26,8 +26,7 @@
 
                     <li class="nav-item dropdown" v-if="$store.state.user">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Profile
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{ $store.state.user.email }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <router-link class="dropdown-item" :to="{name: 'history'}" v-if="$store.state.user && $store.state.user.type === 'C'">My Order History</router-link>

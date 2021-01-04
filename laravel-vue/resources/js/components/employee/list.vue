@@ -42,7 +42,7 @@
             <template #cell(name)="data">
                 <first-last-name :name="data.item.name"/>
             </template>
-            <template #cell(blocked)="data">
+            <template #cell(status)="data">
                 <employee-status-banner :data="data.item" />
             </template>
             <template #cell(created_at)="data">
@@ -132,7 +132,7 @@ export default {
                 label: 'Name',
                 sortable: true,
             }, {
-                key: 'blocked',
+                key: 'status',
                 label: 'Status',
                 sortable: true,
             }, {
