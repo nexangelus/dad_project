@@ -18,14 +18,14 @@ class EmployeesForManagerResource extends JsonResource {
         $status = null;
         if($this->logged_at != null) {
             if($this->type == "EC") {
-                $order = Order::query()->where(['prepared_by' => $this->id])->orderBy('id', "desc")->limit(1)->first();
+                $order = Order::query()->where(['prepared_by' => $this->id])->orderBy('current_status_at', "desc")->limit(1)->first();
                 if ($order != null && $order->status == 'P') {
                     $status = "busy";
                 } else {
                     $status = "wait";
                 }
             } else if($this->type == "ED") {
-                $order = Order::query()->where(['delivered_by' => $this->id])->orderBy('id', "desc")->limit(1)->first();
+                $order = Order::query()->where(['delivered_by' => $this->id])->orderBy('current_status_at', "desc")->limit(1)->first();
                 if ($order != null && $order->status == 'T') {
                     $status = "busy";
                 } else {
