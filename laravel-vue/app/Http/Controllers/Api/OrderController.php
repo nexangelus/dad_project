@@ -41,6 +41,7 @@ class OrderController extends Controller
         // verificar se existem pedidos à espera (significa que este irá logo para a fila de espera)
         if(Order::query()->where(['status' => 'H'])->count() > 0) {
             $order->status = 'H';
+            $order->save();
         } else {
             /* @var User[] $loggedInCooks */
             // buscar os cooks que têm login feito
@@ -65,6 +66,11 @@ class OrderController extends Controller
                 $order->save();
             }
         }
+
+        if(!$order->id) {
+            $order->save();
+        }
+
 
         foreach ($items as $item){
             $product = Product::query()->where('id', $item['id'])->first();
